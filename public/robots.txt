@@ -1,0 +1,23 @@
+# Robots.txt for Bahujan Kranti Party website
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /.next/
+Disallow: /node_modules/
+
+# Allow specific search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://bharatparty.in/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
