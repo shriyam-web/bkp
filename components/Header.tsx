@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,7 +60,8 @@ export default function Header() {
           ))}
         </div>
 
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-4 lg:items-center">
+          <LanguageSwitcher />
           <Link href="/join">
             <Button className="bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700">
               Join Us
@@ -81,6 +83,9 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            <div className="px-3 py-2">
+              <LanguageSwitcher />
+            </div>
             <Link href="/join" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full mt-2 bg-gradient-to-r from-red-600 to-blue-600">
                 Join Us
