@@ -265,13 +265,19 @@ export default function LeadershipPage() {
                       {STATE_PRESIDENTS[carouselIndex].state}
                     </div>
                     <h3 className="text-4xl font-bold text-gray-900 mb-2">
-                      {STATE_PRESIDENTS[carouselIndex].president[locale]}
+                      {typeof STATE_PRESIDENTS[carouselIndex].president === 'object'
+                        ? STATE_PRESIDENTS[carouselIndex].president[locale]
+                        : STATE_PRESIDENTS[carouselIndex].president}
                     </h3>
                     <p className="text-red-600 font-bold mb-6 text-lg">
-                      {STATE_PRESIDENTS[carouselIndex].position[locale]}
+                      {typeof STATE_PRESIDENTS[carouselIndex].position === 'object'
+                        ? STATE_PRESIDENTS[carouselIndex].position[locale]
+                        : STATE_PRESIDENTS[carouselIndex].position}
                     </p>
                     <p className="text-gray-600 leading-relaxed text-lg mb-8">
-                      {STATE_PRESIDENTS[carouselIndex].bio[locale]}
+                      {typeof STATE_PRESIDENTS[carouselIndex].bio === 'object'
+                        ? STATE_PRESIDENTS[carouselIndex].bio[locale]
+                        : STATE_PRESIDENTS[carouselIndex].bio}
                     </p>
                   </div>
 
