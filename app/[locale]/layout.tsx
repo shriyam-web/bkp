@@ -1,4 +1,4 @@
-import './../../globals.css';
+import '../globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Locale, i18n } from '@/i18n.config';
