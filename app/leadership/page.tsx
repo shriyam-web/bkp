@@ -58,12 +58,12 @@ const STATE_PRESIDENTS = [
 ];
 
 const NATIONAL_COMMITTEE = [
-  { id: 1, name: 'Coming Soon', position: 'Vice President' },
-  { id: 2, name: 'Coming Soon', position: 'General Secretary' },
-  { id: 3, name: 'Coming Soon', position: 'Treasurer' },
-  { id: 4, name: 'Coming Soon', position: 'Joint Secretary' },
-  { id: 5, name: 'Coming Soon', position: 'Spokesperson' },
-  { id: 6, name: 'Coming Soon', position: 'Media Head' },
+  { id: 1, name: 'NandLal', position: 'Vice President (Upadhyaksh)', image: null, bio: null },
+  { id: 2, name: 'Girija Shankar Saroj', position: 'General Secretary (MahaSachiv)', image: null, bio: null },
+  { id: 3, name: 'Virendra Kumar', position: 'National Treasurer', image: null, bio: null },
+  { id: 4, name: 'Indrapaal', position: 'Joint General Secretary (MahaSachiv)', image: null, bio: null },
+  { id: 5, name: 'Mr. Keshava Chandra Pandey', position: 'Spokesperson', image: '/papa.jpg', bio: 'Visionary leader and spokesperson for the national movement' },
+  { id: 6, name: 'Coming Soon', position: 'Media Head', image: null, bio: null },
 ];
 
 export default function LeadershipPage() {
@@ -147,22 +147,41 @@ export default function LeadershipPage() {
                 {NATIONAL_COMMITTEE.map((member, idx) => (
                   <div
                     key={member.id}
-                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 p-6 hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-blue-300"
+                    className={`group relative overflow-hidden rounded-2xl ${member.image ? 'md:col-span-2' : ''} hover:shadow-xl transition-all duration-300 border ${member.image ? 'bg-white' : 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200 hover:border-blue-300'}`}
                   >
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-600/10 to-blue-600/10 rounded-bl-full"></div>
-                    <div className="relative">
-                      <div className="flex items-start gap-4 mb-3">
-                        <div className="flex-shrink-0">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-blue-600 text-white font-bold text-lg">
-                            {idx + 1}
-                          </div>
+                    {member.image ? (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-full">
+                        <div className="md:col-span-1 h-64 md:h-auto overflow-hidden bg-gray-300">
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">{member.position}</p>
-                          <p className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">{member.name}</p>
+                        <div className="md:col-span-2 p-8 flex flex-col justify-center">
+                          <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-2">{member.position}</p>
+                          <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">{member.name}</h4>
+                          <p className="text-gray-600">{member.bio}</p>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <>
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-600/10 to-blue-600/10 rounded-bl-full"></div>
+                        <div className="relative p-6">
+                          <div className="flex items-start gap-4 mb-3">
+                            <div className="flex-shrink-0">
+                              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-blue-600 text-white font-bold text-lg">
+                                {idx + 1}
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">{member.position}</p>
+                              <p className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">{member.name}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
