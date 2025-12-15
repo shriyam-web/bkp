@@ -244,7 +244,7 @@ export default function LeadershipPage() {
                 <div className="lg:col-span-2 h-full min-h-96 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 relative">
                   <img
                     src={STATE_PRESIDENTS[carouselIndex].image}
-                    alt={typeof STATE_PRESIDENTS[carouselIndex].president === 'object' ? STATE_PRESIDENTS[carouselIndex].president[locale] : STATE_PRESIDENTS[carouselIndex].president}
+                    alt={(typeof STATE_PRESIDENTS[carouselIndex].president === 'object' ? STATE_PRESIDENTS[carouselIndex].president[locale] : STATE_PRESIDENTS[carouselIndex].president) as string}
                     className="w-full h-full object-cover transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
