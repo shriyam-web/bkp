@@ -28,5 +28,5 @@ export default function RootLayout({
   );
 }
 
-// Create an admin dashboard from where we can add up / edit / delete the members in national commettie, state commettie, everything i can control from there.Create the admin side with a demo credentials as well.
+
 
