@@ -1,81 +1,69 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const CAROUSEL_IMAGES = [
-  {
-    id: 1,
-    url: '/1.png',
-    alt: 'Bahujan Kranti Party movement',
-  },
-  {
-    id: 2,
-    url: '/2.jpg',
-    alt: 'Community engagement and activism',
-  },
-  {
-    id: 3,
-    url: '/3.jpg',
-    alt: 'Leadership and social change',
-  },
-  {
-    id: 4,
-    url: '/4.jpg',
-    alt: 'Party rally and public gathering',
-  },
-  {
-    id: 5,
-    url: '/5.jpg',
-    alt: 'Citizens united for progress',
-  },
+  { id: 1, url: '/1.png', alt: 'Bahujan Kranti Party movement' },
+  { id: 2, url: '/2.jpg', alt: 'Community engagement and activism' },
+  { id: 3, url: '/3.jpg', alt: 'Leadership and social change' },
+  { id: 4, url: '/4.jpg', alt: 'Party rally and public gathering' },
+  { id: 5, url: '/5.jpg', alt: 'Citizens united for progress' },
 ];
 
 export default function PoliticalCarousel() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoplay, setIsAutoplay] = useState(true);
 
   useEffect(() => {
-    const autoplayInterval = setInterval(() => {
-      setSelectedIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    if (!isAutoplay) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
     }, 5000);
 
-    return () => clearInterval(autoplayInterval);
-  }, []);
+    return () => clearInterval(interval);
+  }, [isAutoplay]);
 
-  const scrollPrev = () => {
-    setSelectedIndex((prev) => (prev - 1 + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length);
+  const goToPrevious = () => {
+    setCurrentSlide((prev) => (prev - 1 + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length);
+    setIsAutoplay(false);
   };
 
-  const scrollNext = () => {
-    setSelectedIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+  const goToNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    setIsAutoplay(false);
   };
 
-  const scrollTo = (index: number) => {
-    setSelectedIndex(index);
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    setIsAutoplay(false);
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-gray-800">
+    <div className="relative w-full h-full bg-gray-900" style={{ height: '600px' }}>
       <div className="relative w-full h-full">
         {CAROUSEL_IMAGES.map((image, index) => (
           <div
             key={image.id}
-            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${
-              index === selectedIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-            }`}
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{
+              opacity: index === currentSlide ? 1 : 0,
+              pointerEvents: index === currentSlide ? 'auto' : 'none',
+            }}
           >
             <img
               src={image.url}
               alt={image.alt}
               className="w-full h-full object-cover"
-              draggable={false}
+              style={{ display: 'block' }}
             />
           </div>
         ))}
       </div>
 
       <button
-        onClick={scrollPrev}
+        onClick={goToPrevious}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/30 p-2 hover:bg-white/50 transition-colors"
         aria-label="Previous slide"
       >
@@ -83,7 +71,7 @@ export default function PoliticalCarousel() {
       </button>
 
       <button
-        onClick={scrollNext}
+        onClick={goToNext}
         className="absolute right-4 top-1/2 -translate-y-1/2 z-20 rounded-full bg-white/30 p-2 hover:bg-white/50 transition-colors"
         aria-label="Next slide"
       >
@@ -94,9 +82,9 @@ export default function PoliticalCarousel() {
         {CAROUSEL_IMAGES.map((_, index) => (
           <button
             key={index}
-            onClick={() => scrollTo(index)}
+            onClick={() => goToSlide(index)}
             className={`h-2 rounded-full transition-all ${
-              index === selectedIndex
+              index === currentSlide
                 ? 'bg-white w-8'
                 : 'bg-white/50 w-2 hover:bg-white/75'
             }`}

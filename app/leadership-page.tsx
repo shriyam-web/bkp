@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Users, Briefcase, MapPin, ChevronLeft, ChevronRight, Star, Award } from 'lucide-react';
+import { useTranslations } from '@/lib/TranslationContext';
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -14,59 +15,67 @@ const INDIAN_STATES = [
   'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
 ];
 
+interface CommitteeMember {
+  id: number;
+  name: { en: string; hi: string };
+  position: string;
+  image: string | null;
+  bio: { en: string; hi: string } | null;
+}
+
 const STATE_PRESIDENTS = [
   {
     id: 1,
     state: 'Uttar Pradesh',
-    president: 'Mr. Keshava Chandra Pandey',
-    position: 'State President - Uttar Pradesh',
+    president: { en: 'Mr. Keshava Chandra Pandey', hi: 'श्री केशव चन्द्र पाण्डेय' },
+    position: { en: 'State President - Uttar Pradesh', hi: 'राज्य अध्यक्ष - उत्तर प्रदेश' },
     image: '/papa.jpg',
-    bio: 'Visionary leader driving the party movement in Uttar Pradesh'
+    bio: { en: 'Visionary leader driving the party movement in Uttar Pradesh', hi: 'उत्तर प्रदेश में पार्टी आंदोलन को आगे बढ़ाने वाले दूरदर्शी नेता' }
   },
   {
     id: 2,
     state: 'Maharashtra',
-    president: 'Coming Soon',
-    position: 'State President - Maharashtra',
+    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
+    position: { en: 'State President - Maharashtra', hi: 'राज्य अध्यक्ष - महाराष्ट्र' },
     image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: 'Building strong grassroots organization across Maharashtra'
+    bio: { en: 'Building strong grassroots organization across Maharashtra', hi: 'महाराष्ट्र में मजबूत जमीनी संगठन बनाना' }
   },
   {
     id: 3,
     state: 'Bihar',
-    president: 'Coming Soon',
-    position: 'State President - Bihar',
+    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
+    position: { en: 'State President - Bihar', hi: 'राज्य अध्यक्ष - बिहार' },
     image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: 'Leading the movement for social change in Bihar'
+    bio: { en: 'Leading the movement for social change in Bihar', hi: 'बिहार में सामाजिक परिवर्तन के लिए आंदोलन का नेतृत्व' }
   },
   {
     id: 4,
     state: 'West Bengal',
-    president: 'Coming Soon',
-    position: 'State President - West Bengal',
+    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
+    position: { en: 'State President - West Bengal', hi: 'राज्य अध्यक्ष - पश्चिम बंगाल' },
     image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: 'Championing inclusive development in West Bengal'
+    bio: { en: 'Championing inclusive development in West Bengal', hi: 'पश्चिम बंगाल में समावेशी विकास का समर्थन' }
   },
   {
     id: 5,
     state: 'Tamil Nadu',
-    president: 'Coming Soon',
-    position: 'State President - Tamil Nadu',
+    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
+    position: { en: 'State President - Tamil Nadu', hi: 'राज्य अध्यक्ष - तमिलनाडु' },
     image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: 'Driving progressive politics in Tamil Nadu'
+    bio: { en: 'Driving progressive politics in Tamil Nadu', hi: 'तमिलनाडु में प्रगतिशील राजनीति को आगे बढ़ाना' }
   }
 ];
 
-const NATIONAL_COMMITTEE = [
-  { id: 1, name: 'NandLal', position: 'Vice President (Upadhyaksh)', image: null, bio: null },
-  { id: 2, name: 'Girija Shankar Saroj', position: 'General Secretary (MahaSachiv)', image: null, bio: null },
-  { id: 3, name: 'Virendra Kumar', position: 'National Treasurer', image: null, bio: null },
-  { id: 4, name: 'Indrapaal', position: 'Joint General Secretary (MahaSachiv)', image: null, bio: null },
-  { id: 5, name: 'Mr. Keshava Chandra Pandey', position: 'Spokesperson', image: '/papa.jpg', bio: 'Visionary leader and spokesperson for the national movement' },
-  { id: 6, name: 'Coming Soon', position: 'Media Head', image: null, bio: null },
+const NATIONAL_COMMITTEE: CommitteeMember[] = [
+  { id: 1, name: { en: 'Nandlal', hi: 'नंदलाल' }, position: 'Vice President (Upadhyaksh)', image: null, bio: null },
+  { id: 2, name: { en: 'Girija Shankar Saroj', hi: 'गिरिजा शंकर सरोज' }, position: 'General Secretary (MahaSachiv)', image: null, bio: null },
+  { id: 3, name: { en: 'Virendra Kumar', hi: 'विरेंद्र कुमार' }, position: 'National Treasurer', image: null, bio: null },
+  { id: 4, name: { en: 'Indrapaal', hi: 'इंद्रपाल' }, position: 'Joint General Secretary (MahaSachiv)', image: null, bio: null },
+  { id: 5, name: { en: 'Mr. Keshava Chandra Pandey', hi: 'श्री केशव चन्द्र पाण्डेय' }, position: 'Spokesperson', image: '/papa.jpg', bio: { en: 'Visionary leader and spokesperson for the national movement', hi: 'राष्ट्रीय आंदोलन के दूरदर्शी नेता और प्रवक्ता' } }
 ];
 
 export default function LeadershipPage() {
+  const { t, locale } = useTranslations();
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -76,6 +85,18 @@ export default function LeadershipPage() {
 
   const prevCarousel = () => {
     setCarouselIndex((prev) => (prev - 1 + STATE_PRESIDENTS.length) % STATE_PRESIDENTS.length);
+  };
+
+  const getPositionText = (position: string) => {
+    if (locale === 'hi') {
+      if (position === 'Vice President (Upadhyaksh)') return t('leadership.vicePresident', 'Vice President');
+      if (position === 'General Secretary (MahaSachiv)') return t('leadership.generalSecretary', 'General Secretary');
+      if (position === 'National Treasurer') return t('leadership.treasurer', 'Treasurer');
+      if (position === 'Joint General Secretary (MahaSachiv)') return t('leadership.jointSecretary', 'Joint Secretary');
+      if (position === 'Spokesperson') return t('leadership.spokesperson', 'Spokesperson');
+      if (position === 'Media Head') return t('leadership.mediaHead', 'Media Head');
+    }
+    return position;
   };
 
   return (
@@ -92,17 +113,17 @@ export default function LeadershipPage() {
           <div className="mb-6 inline-block">
             <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white/80 text-sm font-medium">
               <Star className="h-4 w-4 text-yellow-400" />
-              Meet Our Leaders
+              {t('leadership.meetOurLeaders', 'Meet Our Leaders')}
             </span>
           </div>
           <h1 className="text-5xl sm:text-6xl font-bold text-white mb-6 leading-tight">
-            Visionary Leadership<br />
+            {t('leadership.title', 'Visionary Leadership')}<br />
             <span className="bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent">
-              for a Better India
+              {t('leadership.subtitle', 'for a Better India')}
             </span>
           </h1>
           <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Dedicated individuals united in their mission to create positive change and empower every citizen
+            {t('leadership.description', 'Dedicated individuals united in their mission to create positive change and empower every citizen')}
           </p>
         </div>
       </section>
@@ -117,21 +138,24 @@ export default function LeadershipPage() {
                   <div className="aspect-square overflow-hidden bg-gray-200">
                     <img
                       src="/president.jpg"
-                      alt="National President"
+                      alt={t('leadership.nationalPresident', 'National President')}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-8 text-center">
                     <div className="flex items-center justify-center gap-2 mb-4">
                       <Award className="h-5 w-5 text-red-600" />
-                      <span className="text-red-600 font-bold text-sm uppercase tracking-widest">National President</span>
+                      <span className="text-red-600 font-bold text-sm uppercase tracking-widest">{t('leadership.nationalPresident', 'National President')}</span>
                       <Award className="h-5 w-5 text-red-600" />
                     </div>
                     <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                      Mr. Ranjeet Singh
+                      {locale === 'hi' ? 'श्री रंजीत सिंह' : 'Mr. Ranjeet Singh'}
                     </h3>
+                    <p className="text-gray-700 text-sm mt-1">
+                      {locale === 'hi' ? '(जल्द ही विवरण अपडेट किए जाएंगे)' : '(Details coming soon)'}
+                    </p>
                     <p className="text-gray-500 font-medium">
-                      Leading the Movement
+                      {t('leadership.leadingTheMovement', 'Leading the Movement')}
                     </p>
                   </div>
                 </div>
@@ -140,7 +164,7 @@ export default function LeadershipPage() {
 
             <div className="lg:col-span-2">
               <div className="mb-10">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">National Committee</h2>
+                <h2 className="text-4xl font-bold text-gray-900 mb-4">{t('leadership.nationalCommittee', 'National Committee')}</h2>
                 <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-blue-600 rounded-full"></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -154,14 +178,18 @@ export default function LeadershipPage() {
                         <div className="md:col-span-1 h-64 md:h-auto overflow-hidden bg-gray-300">
                           <img
                             src={member.image}
-                            alt={member.name}
+                            alt={typeof member.name === 'object' ? member.name[locale] : member.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
                         <div className="md:col-span-2 p-8 flex flex-col justify-center">
-                          <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-2">{member.position}</p>
-                          <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">{member.name}</h4>
-                          <p className="text-gray-600">{member.bio}</p>
+                          <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-2">{getPositionText(member.position)}</p>
+                          <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                            {typeof member.name === 'object' ? member.name[locale] : member.name}
+                          </h4>
+                          <p className="text-gray-600">
+                            {typeof member.bio === 'object' && member.bio !== null ? member.bio[locale] : member.bio}
+                          </p>
                         </div>
                       </div>
                     ) : (
@@ -175,8 +203,10 @@ export default function LeadershipPage() {
                               </div>
                             </div>
                             <div className="flex-1">
-                              <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">{member.position}</p>
-                              <p className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">{member.name}</p>
+                              <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">{getPositionText(member.position)}</p>
+                              <p className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                                {typeof member.name === 'object' ? member.name[locale] : member.name}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -196,15 +226,15 @@ export default function LeadershipPage() {
             <div className="mb-6 inline-block">
               <span className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest">
                 <Users className="h-4 w-4" />
-                State Leadership
+                {t('leadership.stateLeadership', 'State Leadership')}
               </span>
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              State Presidents
+              {locale === 'hi' ? 'राज्य अध्यक्ष' : 'State Presidents'}
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-blue-600 mx-auto mb-6 rounded-full"></div>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Visionary leaders driving our movement across India
+              {t('leadership.statePresentTexts', 'Visionary leaders driving our movement across India')}
             </p>
           </div>
 
@@ -214,8 +244,8 @@ export default function LeadershipPage() {
                 <div className="lg:col-span-2 h-full min-h-96 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 relative">
                   <img
                     src={STATE_PRESIDENTS[carouselIndex].image}
-                    alt={STATE_PRESIDENTS[carouselIndex].president}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    alt={typeof STATE_PRESIDENTS[carouselIndex].president === 'object' ? STATE_PRESIDENTS[carouselIndex].president[locale] : STATE_PRESIDENTS[carouselIndex].president}
+                    className="w-full h-full object-cover transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 </div>
@@ -226,13 +256,19 @@ export default function LeadershipPage() {
                       {STATE_PRESIDENTS[carouselIndex].state}
                     </div>
                     <h3 className="text-4xl font-bold text-gray-900 mb-2">
-                      {STATE_PRESIDENTS[carouselIndex].president}
+                      {typeof STATE_PRESIDENTS[carouselIndex].president === 'object'
+                        ? STATE_PRESIDENTS[carouselIndex].president[locale]
+                        : STATE_PRESIDENTS[carouselIndex].president}
                     </h3>
                     <p className="text-red-600 font-bold mb-6 text-lg">
-                      {STATE_PRESIDENTS[carouselIndex].position}
+                      {typeof STATE_PRESIDENTS[carouselIndex].position === 'object'
+                        ? STATE_PRESIDENTS[carouselIndex].position[locale]
+                        : STATE_PRESIDENTS[carouselIndex].position}
                     </p>
                     <p className="text-gray-600 leading-relaxed text-lg mb-8">
-                      {STATE_PRESIDENTS[carouselIndex].bio}
+                      {typeof STATE_PRESIDENTS[carouselIndex].bio === 'object'
+                        ? STATE_PRESIDENTS[carouselIndex].bio[locale]
+                        : STATE_PRESIDENTS[carouselIndex].bio}
                     </p>
                   </div>
 
@@ -242,13 +278,13 @@ export default function LeadershipPage() {
                       className="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                     >
                       <ChevronLeft className="h-5 w-5" />
-                      <span className="hidden sm:inline">Previous</span>
+                      <span className="hidden sm:inline">{t('leadership.previous', 'Previous')}</span>
                     </button>
                     <button
                       onClick={nextCarousel}
                       className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                     >
-                      <span className="hidden sm:inline">Next</span>
+                      <span className="hidden sm:inline">{t('leadership.next', 'Next')}</span>
                       <ChevronRight className="h-5 w-5" />
                     </button>
                   </div>
@@ -265,7 +301,7 @@ export default function LeadershipPage() {
                     ? 'bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-lg scale-105'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                     }`}
-                  aria-label={`Go to ${pres.state}`}
+                  aria-label={`${locale === 'hi' ? 'जाएं' : 'Go to'} ${pres.state}`}
                 >
                   {pres.state}
                 </button>
@@ -281,15 +317,15 @@ export default function LeadershipPage() {
             <div className="mb-6 inline-block">
               <span className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest">
                 <Users className="h-4 w-4" />
-                Expand Our Reach
+                {t('leadership.expandOurReach', 'Expand Our Reach')}
               </span>
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              State Committees
+              {t('leadership.stateCommittees', 'State Committees')}
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-blue-600 mx-auto mb-6 rounded-full"></div>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover opportunities to serve your state and strengthen our movement
+              {t('leadership.discoverOpportunities', 'Discover opportunities to serve your state and strengthen our movement')}
             </p>
           </div>
 
@@ -316,11 +352,11 @@ export default function LeadershipPage() {
               <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-2xl border border-gray-200 max-w-3xl mx-auto">
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-3 py-1 rounded-full mb-4 font-bold text-xs uppercase tracking-widest">
+                    <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-3 py-1 rounded-full mb-6 font-bold text-xs uppercase tracking-widest">
                       <MapPin className="h-4 w-4" />
                       {selectedState}
                     </div>
-                    <h3 className="text-4xl font-bold text-gray-900">{selectedState} Committee</h3>
+                    <h3 className="text-4xl font-bold text-gray-900">{selectedState} {locale === 'hi' ? 'समिति' : 'Committee'}</h3>
                   </div>
                   <button
                     onClick={() => setSelectedState(null)}
@@ -332,16 +368,22 @@ export default function LeadershipPage() {
 
                 <div className="space-y-5 mt-8">
                   <p className="text-gray-700 leading-relaxed text-lg">
-                    The <span className="font-bold text-blue-600">{selectedState}</span> committee is dedicated to building our party&apos;s presence and leadership across the state. We are actively recruiting talented individuals who share our vision for a progressive and inclusive India.
+                    {locale === 'hi'
+                      ? `${selectedState} समिति पूरे राज्य में हमारी पार्टी की उपस्थिति और नेतृत्व स्थापित करने के लिए समर्पित है। हम उन प्रतिभाशाली व्यक्तियों को सक्रिय रूप से भर्ती कर रहे हैं जो एक प्रगतिशील और समावेशी भारत की हमारी दृष्टि साझा करते हैं।`
+                      : `The ${selectedState} committee is dedicated to building our party's presence and leadership across the state. We are actively recruiting talented individuals who share our vision for a progressive and inclusive India.`
+                    }
                   </p>
 
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-l-4 border-blue-600 p-6">
                     <div className="flex items-start gap-3">
                       <span className="text-2xl">🏛️</span>
                       <div>
-                        <p className="text-gray-900 font-bold text-lg mb-1">Committee Structure</p>
+                        <p className="text-gray-900 font-bold text-lg mb-1">{locale === 'hi' ? 'समिति संरचना' : 'Committee Structure'}</p>
                         <p className="text-gray-700 text-sm">
-                          Committee details and members for {selectedState} will be available soon as we expand our leadership team and establish stronger foundations.
+                          {locale === 'hi'
+                            ? `${selectedState} के लिए समिति विवरण और सदस्य जल्द ही उपलब्ध होंगे क्योंकि हम अपनी नेतृत्व टीम का विस्तार करते हैं और मजबूत आधार स्थापित करते हैं।`
+                            : `Committee details and members for ${selectedState} will be available soon as we expand our leadership team and establish stronger foundations.`
+                          }
                         </p>
                       </div>
                     </div>
@@ -351,9 +393,12 @@ export default function LeadershipPage() {
                     <div className="flex items-start gap-3">
                       <span className="text-2xl">🤝</span>
                       <div>
-                        <p className="text-gray-900 font-bold text-lg mb-1">Get Involved</p>
+                        <p className="text-gray-900 font-bold text-lg mb-1">{locale === 'hi' ? 'शामिल हों' : 'Get Involved'}</p>
                         <p className="text-gray-700 text-sm">
-                          Interested in joining the {selectedState} committee? We welcome passionate individuals committed to making a difference. Contact us to learn more!
+                          {locale === 'hi'
+                            ? `${selectedState} समिति में शामिल होने में रुचि है? हम परिवर्तन लाने के लिए प्रतिबद्ध जुनूनी व्यक्तियों का स्वागत करते हैं। अधिक जानने के लिए हमसे संपर्क करें!`
+                            : `Interested in joining the ${selectedState} committee? We welcome passionate individuals committed to making a difference. Contact us to learn more!`
+                          }
                         </p>
                       </div>
                     </div>

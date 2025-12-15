@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import EventCard from '@/components/EventCard';
-
+import { useTranslations } from '@/lib/TranslationContext';
 
 interface Event {
   id: string;
@@ -16,6 +16,7 @@ interface Event {
 }
 
 export default function EventsPage() {
+  const { t, locale } = useTranslations();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,10 +45,13 @@ export default function EventsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-              Upcoming Events
+              {locale === 'hi' ? 'आने वाले कार्यक्रम' : 'Upcoming Events'}
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              Join us at our events and be part of the change you want to see
+              {locale === 'hi'
+                ? 'हमारे कार्यक्रमों में हमारे साथ जुड़ें और वह परिवर्तन का हिस्सा बनें जो आप देखना चाहते हैं'
+                : 'Join us at our events and be part of the change you want to see'
+              }
             </p>
           </div>
         </div>
@@ -58,7 +62,7 @@ export default function EventsPage() {
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-red-600 border-r-transparent"></div>
-              <p className="mt-4 text-gray-600">Loading events...</p>
+              <p className="mt-4 text-gray-600">{locale === 'hi' ? 'कार्यक्रम लोड हो रहे हैं...' : 'Loading events...'}</p>
             </div>
           ) : events.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -69,7 +73,10 @@ export default function EventsPage() {
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-600 text-lg">
-                No upcoming events at the moment. Check back soon for exciting announcements!
+                {locale === 'hi'
+                  ? 'इस समय कोई आने वाला कार्यक्रम नहीं है। रोमांचक घोषणाओं के लिए जल्द ही वापस जांचें!'
+                  : 'No upcoming events at the moment. Check back soon for exciting announcements!'
+                }
               </p>
             </div>
           )}

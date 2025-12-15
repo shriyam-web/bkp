@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
-
+import { useTranslations } from '@/lib/TranslationContext';
 
 interface News {
   id: string;
@@ -15,6 +15,7 @@ interface News {
 }
 
 export default function NewsPage() {
+  const { t, locale } = useTranslations();
   const [news, setNews] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,10 +44,13 @@ export default function NewsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-              Latest News
+              {locale === 'hi' ? 'नवीनतम समाचार' : 'Latest News'}
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              Stay informed about our activities, initiatives, and announcements
+              {locale === 'hi'
+                ? 'हमारी गतिविधियों, पहलों और घोषणाओं के बारे में अवगत रहें'
+                : 'Stay informed about our activities, initiatives, and announcements'
+              }
             </p>
           </div>
         </div>
@@ -57,7 +61,7 @@ export default function NewsPage() {
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-red-600 border-r-transparent"></div>
-              <p className="mt-4 text-gray-600">Loading news...</p>
+              <p className="mt-4 text-gray-600">{locale === 'hi' ? 'समाचार लोड हो रहा है...' : 'Loading news...'}</p>
             </div>
           ) : news.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -68,7 +72,10 @@ export default function NewsPage() {
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-600 text-lg">
-                No news articles available at the moment. Check back soon!
+                {locale === 'hi'
+                  ? 'इस समय कोई समाचार लेख उपलब्ध नहीं है। जल्द ही वापस जांचें!'
+                  : 'No news articles available at the moment. Check back soon!'
+                }
               </p>
             </div>
           )}

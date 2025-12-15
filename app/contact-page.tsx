@@ -8,11 +8,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
+import { useTranslations } from '@/lib/TranslationContext';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 
 export default function ContactPage() {
+  const { t, locale } = useTranslations();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -35,8 +36,8 @@ export default function ContactPage() {
 
       if (!response.ok) throw new Error('Failed to submit');
 
-      toast.success('Message sent successfully!', {
-        description: 'We will get back to you soon.',
+      toast.success(locale === 'hi' ? 'संदेश भेजा गया!' : 'Message sent successfully!', {
+        description: locale === 'hi' ? 'हम जल्द ही आपसे संपर्क करेंगे।' : 'We will get back to you soon.',
       });
 
       setFormData({
@@ -47,8 +48,8 @@ export default function ContactPage() {
         message: '',
       });
     } catch (error) {
-      toast.error('Failed to send message', {
-        description: 'Please try again later.',
+      toast.error(locale === 'hi' ? 'संदेश भेजने में विफल' : 'Failed to send message', {
+        description: locale === 'hi' ? 'कृपया बाद में फिर से प्रयास करें।' : 'Please try again later.',
       });
     } finally {
       setLoading(false);
@@ -64,10 +65,13 @@ export default function ContactPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-              Contact Us
+              {locale === 'hi' ? 'संपर्क करें' : 'Contact Us'}
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              We&apos;re here to listen to your concerns and answer your questions
+              {locale === 'hi'
+                ? 'हम आपकी चिंताओं को सुनने और आपके प्रश्नों का उत्तर देने के लिए यहां हैं'
+                : 'We\'re here to listen to your concerns and answer your questions'
+              }
             </p>
           </div>
         </div>
@@ -78,11 +82,13 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Get in Touch
+                {locale === 'hi' ? 'संपर्क में रहें' : 'Get in Touch'}
               </h2>
               <p className="text-gray-600 mb-8">
-                Have questions, suggestions, or want to get involved? We&apos;d love to hear from you.
-                Fill out the form and our team will respond as soon as possible.
+                {locale === 'hi'
+                  ? 'प्रश्न हैं, सुझाव हैं, या शामिल होना चाहते हैं? हम आपकी सुनना पसंद करेंगे। फॉर्म भरें और हमारी टीम जल्दी से जल्दी जवाब देगी।'
+                  : 'Have questions, suggestions, or want to get involved? We\'d love to hear from you. Fill out the form and our team will respond as soon as possible.'
+                }
               </p>
 
               <div className="space-y-6">
@@ -93,7 +99,7 @@ export default function ContactPage() {
                         <MapPin className="h-6 w-6 text-red-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">Address</h3>
+                        <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'पता' : 'Address'}</h3>
                         <p className="text-gray-600">
                           141, Dhansua PO Central Jail Fatehgarh Farrukhabad, 209602, Uttar Pradesh, India
                         </p>
@@ -109,7 +115,7 @@ export default function ContactPage() {
                         <Phone className="h-6 w-6 text-red-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">Phone</h3>
+                        <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'फोन' : 'Phone'}</h3>
                         <p className="text-gray-600">
                           +91 7376264269
                         </p>
@@ -125,9 +131,9 @@ export default function ContactPage() {
                         <Mail className="h-6 w-6 text-red-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">Email</h3>
+                        <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'ईमेल' : 'Email'}</h3>
                         <p className="text-gray-600">
-                          bahujankrantiparty@gmail.com
+                          bahujankrantipartyma@gmail.com
                         </p>
                       </div>
                     </div>
@@ -142,7 +148,7 @@ export default function ContactPage() {
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Full Name *
+                        {locale === 'hi' ? 'पूरा नाम *' : 'Full Name *'}
                       </label>
                       <Input
                         id="name"
@@ -150,13 +156,13 @@ export default function ContactPage() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Your name"
+                        placeholder={locale === 'hi' ? 'आपका नाम' : 'Your name'}
                       />
                     </div>
 
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        Email Address *
+                        {locale === 'hi' ? 'ईमेल पता *' : 'Email Address *'}
                       </label>
                       <Input
                         id="email"
@@ -170,7 +176,7 @@ export default function ContactPage() {
 
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        Phone Number
+                        {locale === 'hi' ? 'फोन नंबर' : 'Phone Number'}
                       </label>
                       <Input
                         id="phone"
@@ -183,7 +189,7 @@ export default function ContactPage() {
 
                     <div>
                       <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                        Subject *
+                        {locale === 'hi' ? 'विषय *' : 'Subject *'}
                       </label>
                       <Input
                         id="subject"
@@ -191,13 +197,13 @@ export default function ContactPage() {
                         required
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        placeholder="What is this regarding?"
+                        placeholder={locale === 'hi' ? 'यह किसके बारे में है?' : 'What is this regarding?'}
                       />
                     </div>
 
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium mb-2">
-                        Message *
+                        {locale === 'hi' ? 'संदेश *' : 'Message *'}
                       </label>
                       <Textarea
                         id="message"
@@ -205,7 +211,7 @@ export default function ContactPage() {
                         rows={5}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Your message..."
+                        placeholder={locale === 'hi' ? 'आपका संदेश...' : 'Your message...'}
                       />
                     </div>
 
@@ -214,7 +220,7 @@ export default function ContactPage() {
                       className="w-full bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700"
                       disabled={loading}
                     >
-                      {loading ? 'Sending...' : 'Send Message'}
+                      {loading ? (locale === 'hi' ? 'भेज रहे हैं...' : 'Sending...') : (locale === 'hi' ? 'संदेश भेजें' : 'Send Message')}
                       <Send className="ml-2 h-4 w-4" />
                     </Button>
                   </form>

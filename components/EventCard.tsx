@@ -1,5 +1,6 @@
 import { Calendar, MapPin } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { useState } from 'react';
 
 interface EventCardProps {
   title: string;
@@ -10,6 +11,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({ title, description, location, event_date, image_url }: EventCardProps) {
+  const [imageError, setImageError] = useState(false);
   const formattedDate = new Date(event_date).toLocaleDateString('en-IN', {
     year: 'numeric',
     month: 'long',
@@ -18,12 +20,15 @@ export default function EventCard({ title, description, location, event_date, im
     minute: '2-digit',
   });
 
+  const displayImage = !imageError && image_url ? image_url : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden bg-gray-200">
         <img
-          src={image_url}
+          src={displayImage}
           alt={title}
+          onError={() => setImageError(true)}
           className="w-full h-full object-cover"
         />
       </div>

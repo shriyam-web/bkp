@@ -13,8 +13,15 @@ export default function LanguageSwitcher() {
   const currentLocale = (pathname.split('/')[1] || i18n.defaultLocale) as Locale;
 
   const switchLanguage = (newLocale: Locale) => {
-    const pathWithoutLocale = pathname.replace(`/${currentLocale}`, '');
-    const newPath = `/${newLocale}${pathWithoutLocale || '/'}`;
+    const segments = pathname.split('/').filter(Boolean);
+    
+    if (segments[0] === 'en' || segments[0] === 'hi') {
+      segments[0] = newLocale;
+    } else {
+      segments.unshift(newLocale);
+    }
+
+    const newPath = '/' + segments.join('/');
     router.push(newPath);
     setIsOpen(false);
   };

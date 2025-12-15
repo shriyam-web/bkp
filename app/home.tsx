@@ -10,6 +10,7 @@ import EventCard from '@/components/EventCard';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PoliticalCarousel from '@/components/PoliticalCarousel';
+import { useTranslations } from '@/lib/TranslationContext';
 
 interface News {
   id: string;
@@ -29,6 +30,7 @@ interface Event {
 }
 
 export default function HomePage() {
+  const { t, locale } = useTranslations();
   const [news, setNews] = useState<News[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,43 +58,43 @@ export default function HomePage() {
   const values = [
     {
       icon: Heart,
-      title: 'Unity in Diversity',
-      description: 'Celebrating our rich cultural heritage while building a united nation',
+      title: t('home.democracy', 'Democracy'),
+      description: t('home.democracyDesc', 'Strengthening democratic institutions and citizen participation'),
     },
     {
       icon: Users,
-      title: 'People First',
-      description: 'Every policy crafted with the welfare of citizens at its core',
+      title: t('home.equality', 'Equality'),
+      description: t('home.equalityDesc', 'Ensuring equal opportunities for all citizens regardless of background'),
     },
     {
       icon: Lightbulb,
-      title: 'Innovation',
-      description: 'Embracing technology and new ideas for sustainable growth',
+      title: t('home.transparency', 'Transparency'),
+      description: t('home.transparencyDesc', 'Operating with complete transparency and accountability'),
     },
     {
       icon: TrendingUp,
-      title: 'Progress',
-      description: 'Building infrastructure and opportunities for all Indians',
+      title: t('home.inclusion', 'Inclusion'),
+      description: t('home.inclusionDesc', 'Building an inclusive society that celebrates diversity'),
     },
   ];
 
   const initiatives = [
     {
       icon: HandHeart,
-      title: 'Healthcare for All',
-      description: 'Universal healthcare coverage ensuring no citizen is left behind',
+      title: t('home.healthcare', 'Healthcare for All'),
+      description: t('home.healthcareDesc', 'Universal healthcare coverage ensuring no citizen is left behind'),
       color: 'from-red-500 to-red-600',
     },
     {
       icon: BookOpen,
-      title: 'Education Revolution',
-      description: 'Quality education accessible to every child across the nation',
+      title: t('home.education', 'Education Revolution'),
+      description: t('home.educationDesc', 'Quality education accessible to every child across the nation'),
       color: 'from-blue-500 to-blue-600',
     },
     {
       icon: Users,
-      title: 'Employment Generation',
-      description: 'Creating millions of jobs through skill development and entrepreneurship',
+      title: t('home.employment', 'Employment Generation'),
+      description: t('home.employmentDesc', 'Creating millions of jobs through skill development and entrepreneurship'),
       color: 'from-green-500 to-green-600',
     },
   ];
@@ -110,26 +112,26 @@ export default function HomePage() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl mb-6">
-              Building a{' '}
+              {locale === 'hi' ? 'एक बेहतर भारत का निर्माण' : 'Building a Stronger India'} <br/>
               <span className="bg-gradient-to-r from-red-500 to-blue-600 bg-clip-text text-transparent">
-                Stronger India
-              </span>{' '}
-              Together
+                {locale === 'hi' ? 'एक साथ' : 'Together'}
+              </span>
             </h1>
             <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-              Join us in our mission to create a progressive, inclusive, and prosperous nation
-              where every citizen has the opportunity to thrive.
+              {locale === 'hi' 
+                ? 'एक प्रगतिशील, समावेशी और समृद्ध राष्ट्र बनाने के लिए हमारे मिशन में शामिल हों जहां हर नागरिक को समृद्ध होने का अवसर हो।'
+                : 'Join us in our mission to create a progressive, inclusive, and prosperous nation where every citizen has the opportunity to thrive.'}
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/join">
+              <Link href={`/${locale}/join`}>
                 <Button size="lg" className="bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700 text-lg">
-                  Join Our Movement
+                  {t('home.ctaJoin', 'Join Our Movement')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/manifesto">
+              <Link href={`/${locale}/manifesto`}>
                 <Button size="lg" variant="outline" className="text-red-600 border-red-600 hover:bg-red-600 hover:text-white text-lg">
-                  Read Our Vision
+                  {t('home.ctaLearnMore', 'Read Our Vision')}
                 </Button>
               </Link>
             </div>
@@ -141,10 +143,10 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
-              Our Core Values
+              {t('home.values', 'Our Core Values')}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Principles that guide every decision we make for the nation
+              {locale === 'hi' ? 'सिद्धांत जो हम राष्ट्र के लिए हर निर्णय में लागू करते हैं' : 'Principles that guide every decision we make for the nation'}
             </p>
           </div>
 
@@ -168,10 +170,10 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
-              Key Initiatives
+              {locale === 'hi' ? 'मुख्य पहल' : 'Key Initiatives'}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Transformative programs designed to uplift every Indian
+              {locale === 'hi' ? 'प्रत्येक भारतीय को उन्नत करने के लिए डिजाइन किए गए परिवर्तनकारी कार्यक्रम' : 'Transformative programs designed to uplift every Indian'}
             </p>
           </div>
 
@@ -199,15 +201,15 @@ export default function HomePage() {
             <div className="flex justify-between items-end mb-12">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
-                  Latest News
+                  {t('news.title', 'Latest News')}
                 </h2>
                 <p className="text-lg text-gray-600">
-                  Stay updated with our recent activities and announcements
+                  {locale === 'hi' ? 'हमारी हाल की गतिविधियों और घोषणाओं के साथ अपडेट रहें' : 'Stay updated with our recent activities and announcements'}
                 </p>
               </div>
-              <Link href="/news">
+              <Link href={`/${locale}/news`}>
                 <Button variant="outline" className="hidden sm:flex">
-                  View All News
+                  {locale === 'hi' ? 'सभी समाचार देखें' : 'View All News'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -228,15 +230,15 @@ export default function HomePage() {
             <div className="flex justify-between items-end mb-12">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
-                  Upcoming Events
+                  {t('events.title', 'Upcoming Events')}
                 </h2>
                 <p className="text-lg text-gray-600">
-                  Join us at our events and be part of the change
+                  {locale === 'hi' ? 'हमारे कार्यक्रमों में शामिल हों और परिवर्तन का हिस्सा बनें' : 'Join us at our events and be part of the change'}
                 </p>
               </div>
-              <Link href="/events">
+              <Link href={`/${locale}/events`}>
                 <Button variant="outline" className="hidden sm:flex">
-                  View All Events
+                  {locale === 'hi' ? 'सभी कार्यक्रम देखें' : 'View All Events'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -254,21 +256,23 @@ export default function HomePage() {
       <section className="py-16 bg-gradient-to-r from-red-600 to-blue-600 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
-            Ready to Make a Difference?
+            {locale === 'hi' ? 'फर्क लाने के लिए तैयार हैं?' : 'Ready to Make a Difference?'}
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Join thousands of citizens working towards a better India. Your voice matters.
+            {locale === 'hi' 
+              ? 'हजारों नागरिकों के साथ जुड़ें जो एक बेहतर भारत के लिए काम कर रहे हैं। आपकी आवाज महत्वपूर्ण है।'
+              : 'Join thousands of citizens working towards a better India. Your voice matters.'}
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/join">
+            <Link href={`/${locale}/join`}>
               <Button size="lg" variant="secondary" className="text-lg">
-                Become a Member
+                {t('join.title', 'Become a Member')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href={`/${locale}/contact`}>
               <Button size="lg" variant="outline" className="text-black border-white hover:bg-white/10 text-lg">
-                Get in Touch
+                {t('contact.title', 'Get in Touch')}
               </Button>
             </Link>
           </div>
