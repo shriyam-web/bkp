@@ -80,7 +80,7 @@ const NATIONAL_COMMITTEE: CommitteeMember[] = [
   { id: 2, name: { en: 'Girija Shankar Saroj', hi: 'गिरिजा शंकर सरोज' }, position: 'General Secretary (MahaSachiv)', image: null, bio: null },
   { id: 3, name: { en: 'Virendra Kumar', hi: 'विरेंद्र कुमार' }, position: 'National Treasurer', image: null, bio: null },
   { id: 4, name: { en: 'Indrapaal', hi: 'इंद्रपाल' }, position: 'Joint General Secretary (MahaSachiv)', image: null, bio: null },
-  { id: 5, name: { en: 'Mr. Keshava Chandra Pandey', hi: 'श्री केशव चन्द्र पाण्डेय' }, position: 'Spokesperson', image: '/papa.jpg', bio: { en: 'Visionary leader and spokesperson for the national movement', hi: 'राष्ट्रीय आंदोलन के दूरदर्शी नेता और प्रवक्ता' } }
+  { id: 5, name: { en: 'Mr. Keshava Chandra Pandey', hi: 'श्री केशव चन्द्र पाण्डेय' }, position: 'National Spokesperson', image: '/papa.jpg', bio: { en: 'Visionary leader and spokesperson for the national movement', hi: 'राष्ट्रीय आंदोलन के दूरदर्शी नेता और प्रवक्ता' } }
 ];
 
 export default function LeadershipPage() {
