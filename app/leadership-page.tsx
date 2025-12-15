@@ -102,7 +102,7 @@ export default function LeadershipPage() {
       if (position === 'General Secretary (MahaSachiv)') return t('leadership.generalSecretary', 'General Secretary');
       if (position === 'National Treasurer') return t('leadership.treasurer', 'Treasurer');
       if (position === 'Joint General Secretary (MahaSachiv)') return t('leadership.jointSecretary', 'Joint Secretary');
-      if (position === 'Spokesperson') return t('leadership.spokesperson', 'Spokesperson');
+      if (position === 'National Spokesperson') return t('leadership.nationalSpokesperson', 'National Spokesperson');
       if (position === 'Media Head') return t('leadership.mediaHead', 'Media Head');
     }
     return position;
@@ -265,19 +265,13 @@ export default function LeadershipPage() {
                       {STATE_PRESIDENTS[carouselIndex].state}
                     </div>
                     <h3 className="text-4xl font-bold text-gray-900 mb-2">
-                      {typeof STATE_PRESIDENTS[carouselIndex].president === 'object'
-                        ? STATE_PRESIDENTS[carouselIndex].president[locale]
-                        : STATE_PRESIDENTS[carouselIndex].president}
+                      {STATE_PRESIDENTS[carouselIndex].president[locale]}
                     </h3>
                     <p className="text-red-600 font-bold mb-6 text-lg">
-                      {typeof STATE_PRESIDENTS[carouselIndex].position === 'object'
-                        ? STATE_PRESIDENTS[carouselIndex].position[locale]
-                        : STATE_PRESIDENTS[carouselIndex].position}
+                      {STATE_PRESIDENTS[carouselIndex].position[locale]}
                     </p>
                     <p className="text-gray-600 leading-relaxed text-lg mb-8">
-                      {typeof STATE_PRESIDENTS[carouselIndex].bio === 'object'
-                        ? STATE_PRESIDENTS[carouselIndex].bio[locale]
-                        : STATE_PRESIDENTS[carouselIndex].bio}
+                      {STATE_PRESIDENTS[carouselIndex].bio[locale]}
                     </p>
                   </div>
 
