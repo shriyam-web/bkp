@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 
 interface MemberFormProps {
   initialData?: any;
-  type: 'NATIONAL' | 'STATE';
+  type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT';
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -26,6 +26,7 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
     bio: { en: '', hi: '' },
     image: '',
     state: '',
+    district: '',
     type: type,
     order: 0,
     mobileNumber: '',
@@ -38,6 +39,7 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
       setFormData({
         ...initialData,
         state: initialData.state || '',
+        district: initialData.district || '',
         mobileNumber: initialData.mobileNumber || '',
       });
     }
@@ -147,20 +149,36 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
             </div>
           </div>
 
-          {type === 'STATE' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
-              <select
-                value={formData.state}
-                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                required
-              >
-                <option value="">Select State</option>
-                {INDIAN_STATES.map((state) => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
+          {(type === 'STATE' || type === 'DISTRICT') && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                <select
+                  value={formData.state}
+                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  required
+                >
+                  <option value="">Select State</option>
+                  {INDIAN_STATES.map((state) => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+              </div>
+
+              {type === 'DISTRICT' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
+                  <input
+                    type="text"
+                    value={formData.district}
+                    onChange={(e) => setFormData({ ...formData, district: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Enter District Name"
+                    required
+                  />
+                </div>
+              )}
             </div>
           )}
 

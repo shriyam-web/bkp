@@ -5,7 +5,7 @@ import { Plus, Pencil, Trash2, Search } from 'lucide-react';
 import MemberForm from './MemberForm';
 
 interface MemberListProps {
-  type: 'NATIONAL' | 'STATE';
+  type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT';
   title: string;
 }
 
@@ -52,7 +52,8 @@ export default function MemberList({ type, title }: MemberListProps) {
     member.name.en.toLowerCase().includes(search.toLowerCase()) ||
     member.name.hi.includes(search) ||
     member.position.en.toLowerCase().includes(search.toLowerCase()) ||
-    (member.state && member.state.toLowerCase().includes(search.toLowerCase()))
+    (member.state && member.state.toLowerCase().includes(search.toLowerCase())) ||
+    (member.district && member.district.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -91,7 +92,8 @@ export default function MemberList({ type, title }: MemberListProps) {
               <tr>
                 <th className="px-6 py-4">Name</th>
                 <th className="px-6 py-4">Position</th>
-                {type === 'STATE' && <th className="px-6 py-4">State</th>}
+                {(type === 'STATE' || type === 'DISTRICT') && <th className="px-6 py-4">State</th>}
+                {type === 'DISTRICT' && <th className="px-6 py-4">District</th>}
                 <th className="px-6 py-4">Order</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -99,13 +101,13 @@ export default function MemberList({ type, title }: MemberListProps) {
             <tbody className="divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={type === 'STATE' ? 5 : 4} className="px-6 py-8 text-center">
+                  <td colSpan={type === 'DISTRICT' ? 6 : (type === 'STATE' ? 5 : 4)} className="px-6 py-8 text-center">
                     Loading...
                   </td>
                 </tr>
               ) : filteredMembers.length === 0 ? (
                 <tr>
-                  <td colSpan={type === 'STATE' ? 5 : 4} className="px-6 py-8 text-center">
+                  <td colSpan={type === 'DISTRICT' ? 6 : (type === 'STATE' ? 5 : 4)} className="px-6 py-8 text-center">
                     No members found.
                   </td>
                 </tr>
@@ -120,10 +122,17 @@ export default function MemberList({ type, title }: MemberListProps) {
                       <div>{member.position.en}</div>
                       <div className="text-xs text-gray-500">{member.position.hi}</div>
                     </td>
-                    {type === 'STATE' && (
+                    {(type === 'STATE' || type === 'DISTRICT') && (
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           {member.state}
+                        </span>
+                      </td>
+                    )}
+                    {type === 'DISTRICT' && (
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                          {member.district}
                         </span>
                       </td>
                     )}

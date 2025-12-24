@@ -1,5 +1,6 @@
 'use client';
 
+import '../globals.css';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -24,7 +25,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/national-committee', label: 'National Committee', icon: Users },
+    { href: '/admin/rashtriya-parishad', label: 'Rashtriya Parishad', icon: Users },
+    { href: '/admin/rashtriya-kaaryasamiti', label: 'Rashtriya Kaaryasamiti', icon: Users },
     { href: '/admin/state-committee', label: 'State Committee', icon: Users },
+    { href: '/admin/district-committee', label: 'District Committee', icon: Users },
   ];
 
   return (

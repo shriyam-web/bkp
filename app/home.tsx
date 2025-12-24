@@ -103,7 +103,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       <Header />
 
-      <section className="relative h-[600px] flex items-center overflow-hidden">
+      <section className="relative h-[500px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0 h-full w-full">
           <PoliticalCarousel />
         </div>

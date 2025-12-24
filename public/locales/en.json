@@ -80,7 +80,9 @@
     "jointSecretary": "Joint Secretary",
     "spokesperson": "Spokesperson",
     "nationalSpokesperson": "National Spokesperson",
-    "mediaHead": "Media Head"
+    "mediaHead": "Media Head",
+    "rashtriyaParishad": "National Council ",
+    "rashtriyaKaaryasamiti": "National Executive Committee "
   },
   "manifesto": {
     "title": "Our Manifesto",

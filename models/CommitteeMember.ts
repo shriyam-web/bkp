@@ -14,11 +14,12 @@ const CommitteeMemberSchema = new mongoose.Schema({
     en: { type: String },
     hi: { type: String },
   },
-  state: { type: String }, // Only for state committee members
+  state: { type: String }, // For state and district committee members
+  district: { type: String }, // For district committee members
   mobileNumber: { type: String },
   type: {
     type: String,
-    enum: ['NATIONAL', 'STATE'],
+    enum: ['NATIONAL', 'STATE', 'RASHTRIYA_PARISHAD', 'RASHTRIYA_KAARYASAMITI', 'DISTRICT'],
     required: true,
   },
   order: { type: Number, default: 0 },

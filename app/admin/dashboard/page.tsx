@@ -22,6 +22,32 @@ export default function AdminDashboard() {
           </div>
         </Link>
 
+        <Link href="/admin/rashtriya-parishad" className="block group">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-purple-100 p-3 rounded-lg">
+                <Users className="h-6 w-6 text-purple-600" />
+              </div>
+              <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Rashtriya Parishad</h3>
+            <p className="text-gray-600">Manage Rashtriya Parishad members (Total: 545).</p>
+          </div>
+        </Link>
+
+        <Link href="/admin/rashtriya-kaaryasamiti" className="block group">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-orange-100 p-3 rounded-lg">
+                <Users className="h-6 w-6 text-orange-600" />
+              </div>
+              <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-orange-600 transition-colors" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Rashtriya Kaaryasamiti</h3>
+            <p className="text-gray-600">Manage Rashtriya Kaaryasamiti members (Total: 74).</p>
+          </div>
+        </Link>
+
         <Link href="/admin/state-committee" className="block group">
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">

@@ -7,8 +7,14 @@ export async function GET(request: Request) {
     await dbConnect();
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
+    const state = searchParams.get('state');
+    const district = searchParams.get('district');
     
-    const query = type ? { type } : {};
+    const query: any = {};
+    if (type) query.type = type;
+    if (state) query.state = state;
+    if (district) query.district = district;
+    
     const members = await CommitteeMember.find(query).sort({ order: 1, createdAt: -1 });
     
     return NextResponse.json(members);
