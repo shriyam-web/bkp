@@ -1,0 +1,9 @@
+{
+  "name": { "en": "Test Member", "hi": "टेस्ट सदस्य" },
+  "position": { "en": "Test Position", "hi": "टेस्ट स्थिति" },
+  "bio": { "en": "Test bio", "hi": "टेस्ट जीवनी" },
+  "image": "https://example.com/image.jpg",
+  "mobileNumber": "+91 9876543210",
+  "type": "NATIONAL",
+  "order": 1
+}

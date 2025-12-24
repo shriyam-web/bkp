@@ -86,9 +86,5 @@ export async function generateMetadata({
 export default function LocaleLayout({ children, params }: Props) {
   const locale = params.locale;
 
-  return (
-    <html lang={locale} dir={locale === 'hi' ? 'ltr' : 'ltr'}>
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
+  return <>{children}</>;
 }

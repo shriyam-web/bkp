@@ -1,112 +1,528 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Users, Briefcase, MapPin, ChevronLeft, ChevronRight, Star, Award } from 'lucide-react';
+import { Users, Briefcase, MapPin, ChevronLeft, ChevronRight, Star, Award, Download, Eye, Share2, MessageCircle } from 'lucide-react';
 import { useTranslations } from '@/lib/TranslationContext';
 
-const INDIAN_STATES = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
-  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
-  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-  'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
-];
-
 interface CommitteeMember {
-  id: number;
+  _id: string;
   name: { en: string; hi: string };
-  position: string;
+  position: { en: string; hi: string };
   image: string | null;
   bio: { en: string; hi: string } | null;
+  mobileNumber?: string;
+  state?: string;
+  type: 'NATIONAL' | 'STATE';
 }
-
-interface StatePresident {
-  id: number;
-  state: string;
-  president: { en: string; hi: string };
-  position: { en: string; hi: string };
-  image: string;
-  bio: { en: string; hi: string };
-}
-
-const STATE_PRESIDENTS: StatePresident[] = [
-  {
-    id: 1,
-    state: 'Uttar Pradesh',
-    president: { en: 'Mr. Keshava Chandra Pandey', hi: 'श्री केशव चन्द्र पाण्डेय' },
-    position: { en: 'State President - Uttar Pradesh', hi: 'राज्य अध्यक्ष - उत्तर प्रदेश' },
-    image: '/papa.jpg',
-    bio: { en: 'Visionary leader driving the party movement in Uttar Pradesh', hi: 'उत्तर प्रदेश में पार्टी आंदोलन को आगे बढ़ाने वाले दूरदर्शी नेता' }
-  },
-  {
-    id: 2,
-    state: 'Maharashtra',
-    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
-    position: { en: 'State President - Maharashtra', hi: 'राज्य अध्यक्ष - महाराष्ट्र' },
-    image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: { en: 'Building strong grassroots organization across Maharashtra', hi: 'महाराष्ट्र में मजबूत जमीनी संगठन बनाना' }
-  },
-  {
-    id: 3,
-    state: 'Bihar',
-    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
-    position: { en: 'State President - Bihar', hi: 'राज्य अध्यक्ष - बिहार' },
-    image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: { en: 'Leading the movement for social change in Bihar', hi: 'बिहार में सामाजिक परिवर्तन के लिए आंदोलन का नेतृत्व' }
-  },
-  {
-    id: 4,
-    state: 'West Bengal',
-    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
-    position: { en: 'State President - West Bengal', hi: 'राज्य अध्यक्ष - पश्चिम बंगाल' },
-    image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: { en: 'Championing inclusive development in West Bengal', hi: 'पश्चिम बंगाल में समावेशी विकास का समर्थन' }
-  },
-  {
-    id: 5,
-    state: 'Tamil Nadu',
-    president: { en: 'Coming Soon', hi: 'जल्द ही आएंगे' },
-    position: { en: 'State President - Tamil Nadu', hi: 'राज्य अध्यक्ष - तमिलनाडु' },
-    image: 'https://ui-avatars.com/api/?name=Coming+Soon&background=3B82F6&color=fff',
-    bio: { en: 'Driving progressive politics in Tamil Nadu', hi: 'तमिलनाडु में प्रगतिशील राजनीति को आगे बढ़ाना' }
-  }
-];
-
-const NATIONAL_COMMITTEE: CommitteeMember[] = [
-  { id: 1, name: { en: 'Nandlal', hi: 'नंदलाल' }, position: 'Vice President (Upadhyaksh)', image: null, bio: null },
-  { id: 2, name: { en: 'Girija Shankar Saroj', hi: 'गिरिजा शंकर सरोज' }, position: 'General Secretary (MahaSachiv)', image: null, bio: null },
-  { id: 3, name: { en: 'Virendra Kumar', hi: 'विरेंद्र कुमार' }, position: 'National Treasurer', image: null, bio: null },
-  { id: 4, name: { en: 'Indrapaal', hi: 'इंद्रपाल' }, position: 'Joint General Secretary (MahaSachiv)', image: null, bio: null },
-  { id: 5, name: { en: 'Mr. Keshava Chandra Pandey', hi: 'श्री केशव चन्द्र पाण्डेय' }, position: 'National Spokesperson', image: '/papa.jpg', bio: { en: 'Visionary leader and spokesperson for the national movement', hi: 'राष्ट्रीय आंदोलन के दूरदर्शी नेता और प्रवक्ता' } }
-];
 
 export default function LeadershipPage() {
   const { t, locale } = useTranslations();
-  const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [nationalCommittee, setNationalCommittee] = useState<CommitteeMember[]>([]);
+  const [statePresidents, setStatePresidents] = useState<CommitteeMember[]>([]);
+  const [nationalIndex, setNationalIndex] = useState(0);
+  const [stateIndex, setStateIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [selectedMember, setSelectedMember] = useState<CommitteeMember | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [shareMenuOpen, setShareMenuOpen] = useState<string | null>(null);
+  const [urlMemberId, setUrlMemberId] = useState<string | null>(null);
 
-  const nextCarousel = () => {
-    setCarouselIndex((prev) => (prev + 1) % STATE_PRESIDENTS.length);
-  };
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const checkUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const memberId = params.get('memberId');
+      console.log('Checking URL memberId:', memberId);
+      console.log('Full URL:', window.location.href);
+      console.log('Search string:', window.location.search);
+      
+      if (memberId) {
+        setUrlMemberId(memberId);
+      }
+    };
 
-  const prevCarousel = () => {
-    setCarouselIndex((prev) => (prev - 1 + STATE_PRESIDENTS.length) % STATE_PRESIDENTS.length);
-  };
+    checkUrl();
 
-  const getPositionText = (position: string) => {
-    if (locale === 'hi') {
-      if (position === 'Vice President (Upadhyaksh)') return t('leadership.vicePresident', 'Vice President');
-      if (position === 'General Secretary (MahaSachiv)') return t('leadership.generalSecretary', 'General Secretary');
-      if (position === 'National Treasurer') return t('leadership.treasurer', 'Treasurer');
-      if (position === 'Joint General Secretary (MahaSachiv)') return t('leadership.jointSecretary', 'Joint Secretary');
-      if (position === 'National Spokesperson') return t('leadership.nationalSpokesperson', 'National Spokesperson');
-      if (position === 'Media Head') return t('leadership.mediaHead', 'Media Head');
+    // Also listen for URL changes
+    const handlePopState = () => {
+      console.log('URL changed via popState');
+      checkUrl();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [nationalRes, stateRes] = await Promise.all([
+          fetch('/api/committee-members?type=NATIONAL'),
+          fetch('/api/committee-members?type=STATE')
+        ]);
+
+        if (!nationalRes.ok) throw new Error(`National fetch failed: ${nationalRes.status}`);
+        if (!stateRes.ok) throw new Error(`State fetch failed: ${stateRes.status}`);
+
+        const nationalData = await nationalRes.json();
+        const stateData = await stateRes.json();
+
+        console.log('National Committee Data:', nationalData);
+        console.log('State Committee Data:', stateData);
+
+        setNationalCommittee(Array.isArray(nationalData) ? nationalData : []);
+        setStatePresidents(Array.isArray(stateData) ? stateData : []);
+      } catch (error) {
+        console.error('Failed to fetch leadership data', error);
+        setNationalCommittee([]);
+        setStatePresidents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (isHovering || loading || nationalCommittee.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setNationalIndex((prev) => (prev + 1) % (nationalCommittee.length + 1));
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isHovering, loading, nationalCommittee.length]);
+
+  useEffect(() => {
+    if (loading || statePresidents.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setStateIndex((prev) => (prev + 1) % statePresidents.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [loading, statePresidents.length]);
+
+  useEffect(() => {
+    if (!urlMemberId) return;
+
+    console.log('=== Modal Opening Logic ===');
+    console.log('urlMemberId:', urlMemberId);
+    console.log('loading:', loading);
+    console.log('selectedMember:', selectedMember);
+
+    // Handle president case immediately
+    if (urlMemberId === 'president') {
+      console.log('→ Opening president modal');
+      const presidentMember: CommitteeMember = {
+        _id: 'president',
+        name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
+        position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
+        image: '/president.jpg',
+        bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
+        type: 'NATIONAL' as const
+      };
+      setSelectedMember(presidentMember);
+      return;
     }
-    return position;
+
+    // For regular members, wait for data to load
+    if (loading) {
+      console.log('→ Still loading data...');
+      return;
+    }
+
+    const allMembers = [...nationalCommittee, ...statePresidents];
+    console.log('→ Data loaded. Total members:', allMembers.length);
+    console.log('→ Looking for memberId:', urlMemberId);
+    
+    const foundMember = allMembers.find((m) => {
+      console.log(`  Checking member: ${m._id} === ${urlMemberId} ?`, m._id === urlMemberId);
+      return m._id === urlMemberId;
+    });
+
+    if (foundMember) {
+      console.log('→ Found member, opening modal:', foundMember.name);
+      setSelectedMember(foundMember);
+    } else {
+      console.log('→ Member not found in available data');
+    }
+  }, [urlMemberId, loading, nationalCommittee, statePresidents]);
+
+  const nextNationalCarousel = () => {
+    if (nationalCommittee.length === 0) return;
+    setNationalIndex((prev) => (prev + 1) % (nationalCommittee.length + 1));
   };
+
+  const prevNationalCarousel = () => {
+    if (nationalCommittee.length === 0) return;
+    setNationalIndex((prev) => (prev - 1 + nationalCommittee.length + 1) % (nationalCommittee.length + 1));
+  };
+
+  const nextStateCarousel = () => {
+    if (statePresidents.length === 0) return;
+    setStateIndex((prev) => (prev + 1) % statePresidents.length);
+  };
+
+  const prevStateCarousel = () => {
+    if (statePresidents.length === 0) return;
+    setStateIndex((prev) => (prev - 1 + statePresidents.length) % statePresidents.length);
+  };
+
+  const getPositionText = (position: { en: string; hi: string } | string) => {
+    if (typeof position === 'string') return position;
+    return position[locale];
+  };
+
+  const getNameText = (name: { en: string; hi: string } | string): string => {
+    if (typeof name === 'string') return name;
+    return name[locale];
+  };
+
+  const getBioText = (bio: { en: string; hi: string } | string | null) => {
+    if (!bio) return '';
+    if (typeof bio === 'string') return bio;
+    return bio[locale];
+  };
+
+  const handleCall = (phoneNumber: string | undefined) => {
+    if (phoneNumber) {
+      window.location.href = `tel:${phoneNumber}`;
+    }
+  };
+
+  const generateIdentityCardBlob = async (member: CommitteeMember): Promise<Blob | null> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        resolve(null);
+        return;
+      }
+
+      const width = 1000;
+      const height = 600;
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+
+      const gradient = ctx.createLinearGradient(0, 0, width, 0);
+      gradient.addColorStop(0, '#dc2626');
+      gradient.addColorStop(1, '#2563eb');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, 60);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 28px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText('MEMBER IDENTITY CARD', 40, 45);
+
+      ctx.fillStyle = '#e5e7eb';
+      ctx.fillRect(40, 80, 300, 350);
+      ctx.strokeStyle = '#d1d5db';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(40, 80, 300, 350);
+
+      const drawPlaceholder = () => {
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('No Image', 190, 250);
+      };
+
+      const drawCardContent = () => {
+        const nameEn = typeof member.name === 'string' ? member.name : member.name.en;
+        const nameHi = typeof member.name === 'string' ? member.name : member.name.hi;
+        
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText(nameEn, 380, 110);
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 18px Arial';
+        ctx.fillText(nameHi, 380, 135);
+
+        ctx.fillStyle = '#2563eb';
+        ctx.font = 'bold 12px Arial';
+        ctx.fillText('ORGANIZATION', 380, 160);
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = '12px Arial';
+        ctx.fillText('Bahujan Kranti Party (Marxwaad-Ambedkarwaad)', 380, 180);
+
+        ctx.fillStyle = '#2563eb';
+        ctx.font = 'bold 12px Arial';
+        ctx.fillText('POSITION', 380, 210);
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = '11px Arial';
+        const positionEn = typeof member.position === 'string' ? member.position : member.position.en;
+        const positionHi = typeof member.position === 'string' ? member.position : member.position.hi;
+        ctx.fillText(positionEn, 380, 225);
+        ctx.fillText(positionHi, 380, 240);
+
+        ctx.fillStyle = '#2563eb';
+        ctx.font = 'bold 11px Arial';
+        ctx.fillText('ABOUT', 380, 260);
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = '10px Arial';
+        const bioEn = typeof member.bio === 'string' ? member.bio : (member.bio?.en || '');
+        const bioHi = typeof member.bio === 'string' ? member.bio : (member.bio?.hi || '');
+        
+        const maxWidth = 300;
+        const lineHeight = 12;
+        let bioY = 275;
+
+        const wrapText = (text: string, x: number, y: number) => {
+          if (!text) return y;
+          const words = text.split(' ');
+          let line = '';
+          for (let i = 0; i < words.length; i++) {
+            const testLine = line + words[i] + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth) {
+              if (line) {
+                ctx.fillText(line, x, y);
+                y += lineHeight;
+              }
+              line = words[i] + ' ';
+            } else {
+              line = testLine;
+            }
+          }
+          if (line) {
+            ctx.fillText(line, x, y);
+            y += lineHeight;
+          }
+          return y;
+        };
+
+        bioY = wrapText(bioEn, 380, bioY);
+        bioY += 5;
+        bioY = wrapText(bioHi, 380, bioY);
+
+        let bottomY = Math.max(bioY + 15, 320);
+
+        if (member.mobileNumber) {
+          ctx.fillStyle = '#2563eb';
+          ctx.font = 'bold 11px Arial';
+          ctx.fillText('PHONE', 380, bottomY);
+
+          ctx.fillStyle = '#1f2937';
+          ctx.font = '11px Arial';
+          ctx.fillText(member.mobileNumber, 380, bottomY + 15);
+          bottomY += 30;
+        }
+
+        if (member.state) {
+          ctx.fillStyle = '#2563eb';
+          ctx.font = 'bold 11px Arial';
+          ctx.fillText('STATE', 380, bottomY);
+
+          ctx.fillStyle = '#1f2937';
+          ctx.font = '11px Arial';
+          ctx.fillText(member.state, 380, bottomY + 15);
+        }
+
+        ctx.fillStyle = '#d1d5db';
+        ctx.fillRect(0, 470, width, 2);
+
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText(`Generated on: ${new Date().toLocaleDateString()}`, width - 40, 540);
+
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, 'image/png');
+      };
+
+      if (member.image) {
+        const img = document.createElement('img');
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          ctx.drawImage(img, 40, 80, 300, 350);
+          drawCardContent();
+        };
+        img.onerror = () => {
+          drawPlaceholder();
+          drawCardContent();
+        };
+        img.src = member.image;
+      } else {
+        drawPlaceholder();
+        drawCardContent();
+      }
+    });
+  };
+
+  const generateIdentityCard = async (member: CommitteeMember) => {
+    const blob = await generateIdentityCardBlob(member);
+    if (!blob) return;
+    
+    const nameEn = typeof member.name === 'string' ? member.name : member.name.en;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${nameEn.replace(/\s+/g, '-')}-identity-card.png`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const shareToWhatsApp = async (member: CommitteeMember) => {
+    const name = getNameText(member.name);
+    const position = getPositionText(member.position);
+    const bio = getBioText(member.bio);
+    const state = member.state ? `State: ${member.state}` : '';
+    const profileUrl = `${window.location.origin}/${locale}/leadership?memberId=${member._id}`;
+    
+    const shareText = `Check out the profile of ${name}\n${position}\n${state}\n\n${bio}\n\nVisit: ${profileUrl}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const shareWithCard = async (member: CommitteeMember) => {
+    try {
+      const blob = await generateIdentityCardBlob(member);
+      if (!blob) {
+        const name = getNameText(member.name);
+        const position = getPositionText(member.position);
+        const bio = getBioText(member.bio);
+        const profileText = `${name}\n${position}\n\n${bio}`;
+        
+        if (navigator.share) {
+          navigator.share({ 
+            title: `${name} - ${position}`, 
+            text: profileText
+          });
+        } else {
+          const shareText = `Check out the profile of ${name} - ${position}: ${profileText}`;
+          const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.origin)}`;
+          window.open(shareUrl, '_blank');
+        }
+        return;
+      }
+
+      const file = new File([blob], `${getNameText(member.name).replace(/\s+/g, '-')}-card.png`, { type: 'image/png' });
+      
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: `${getNameText(member.name)} - Identity Card`,
+          text: `Check out the profile of ${getNameText(member.name)} - ${getPositionText(member.position)}`,
+          files: [file]
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = file.name;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error('Share failed:', error);
+    }
+  };
+
+  const MemberDetailModal = ({ member, onClose }: { member: CommitteeMember; onClose: () => void }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-gradient-to-r from-red-600 to-blue-600 p-6 text-white flex items-center justify-between">
+          <h2 className="text-2xl font-bold">{getNameText(member.name)}</h2>
+          <button
+            onClick={onClose}
+            className="text-white hover:text-gray-200 text-2xl font-bold"
+          >
+            ×
+          </button>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="md:col-span-1">
+              <div className="h-64 w-full bg-gradient-to-br from-red-100 to-blue-100 rounded-xl overflow-hidden relative flex items-center justify-center">
+                {member.image ? (
+                  <Image
+                    src={member.image}
+                    alt={getNameText(member.name)}
+                    fill
+                    quality={90}
+                    className="object-contain"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <div className="text-6xl font-bold bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                      {getNameText(member.name)
+                        .split(' ')
+                        .map((word) => word[0])
+                        .join('')
+                        .toUpperCase()
+                        .slice(0, 2)}
+                    </div>
+                    <p className="text-gray-500 text-sm">{t('leadership.imageComingSoon', 'Image coming soon')}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="md:col-span-2">
+              <div className="mb-4">
+                <h3 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent mb-2">
+                  {getNameText(member.name)}
+                </h3>
+                <div className="inline-block">
+                  <p className="bg-gradient-to-r from-red-500 to-blue-500 text-white font-bold text-base px-4 py-2 rounded-full">
+                    {getPositionText(member.position)}
+                  </p>
+                </div>
+              </div>
+              {member.state && (
+                <p className="text-gray-600 flex items-center gap-2 mb-4 text-lg">
+                  <MapPin className="h-5 w-5" />
+                  <span className="font-semibold">{member.state}</span>
+                </p>
+              )}
+              {member.mobileNumber && (
+                <p className="text-gray-600 flex items-center gap-2 mb-4 text-lg">
+                  <span className="font-semibold">📞 {member.mobileNumber}</span>
+                </p>
+              )}
+              <div>
+                <h3 className="font-bold text-gray-900 mb-3 text-lg">{t('leadership.about', 'About')}</h3>
+                <p className="text-gray-700 leading-relaxed text-base">
+                  {getBioText(member.bio) || t('leadership.noBioAvailable', 'No bio available')}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-3 flex-wrap pt-4 border-t border-gray-200">
+            {member.mobileNumber && (
+              <button
+                onClick={() => handleCall(member.mobileNumber)}
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              >
+                <span>📞</span>
+                Call
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-2 px-4 rounded-lg transition-colors"
+            >
+              {t('leadership.close', 'Close')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-white">
@@ -137,95 +553,193 @@ export default function LeadershipPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-white">
+      <section className="py-16 lg:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-            <div className="lg:col-span-1">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-3xl blur-2xl opacity-75 group-hover:opacity-100 transition duration-1000"></div>
-                <div className="relative bg-white rounded-3xl overflow-hidden shadow-2xl">
-                  <div className="aspect-square overflow-hidden bg-gray-200">
-                    <img
-                      src="/president.jpg"
-                      alt={t('leadership.nationalPresident', 'National President')}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-8 text-center">
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                      <Award className="h-5 w-5 text-red-600" />
-                      <span className="text-red-600 font-bold text-sm uppercase tracking-widest">{t('leadership.nationalPresident', 'National President')}</span>
-                      <Award className="h-5 w-5 text-red-600" />
-                    </div>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                      {locale === 'hi' ? 'श्री रंजीत सिंह' : 'Mr. Ranjeet Singh'}
-                    </h3>
-                    <p className="text-gray-700 text-sm mt-1">
-                      {locale === 'hi' ? '(जल्द ही विवरण अपडेट किए जाएंगे)' : '(Details coming soon)'}
-                    </p>
-                    <p className="text-gray-500 font-medium">
-                      {t('leadership.leadingTheMovement', 'Leading the Movement')}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="mb-10">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">{t('leadership.nationalCommittee', 'National Committee')}</h2>
+            <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-blue-600 rounded-full"></div>
+          </div>
 
-            <div className="lg:col-span-2">
-              <div className="mb-10">
-                <h2 className="text-4xl font-bold text-gray-900 mb-4">{t('leadership.nationalCommittee', 'National Committee')}</h2>
-                <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-blue-600 rounded-full"></div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {NATIONAL_COMMITTEE.map((member, idx) => (
-                  <div
-                    key={member.id}
-                    className={`group relative overflow-hidden rounded-2xl ${member.image ? 'md:col-span-2' : ''} hover:shadow-xl transition-all duration-300 border ${member.image ? 'bg-white' : 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200 hover:border-blue-300'}`}
-                  >
-                    {member.image ? (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-full">
-                        <div className="md:col-span-1 h-64 md:h-auto overflow-hidden bg-gray-300">
-                          <img
-                            src={member.image}
-                            alt={typeof member.name === 'object' ? member.name[locale] : member.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        </div>
-                        <div className="md:col-span-2 p-8 flex flex-col justify-center">
-                          <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-2">{getPositionText(member.position)}</p>
-                          <h4 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
-                            {typeof member.name === 'object' ? member.name[locale] : member.name}
-                          </h4>
-                          <p className="text-gray-600">
-                            {typeof member.bio === 'object' && member.bio !== null ? member.bio[locale] : member.bio}
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-red-600/10 to-blue-600/10 rounded-bl-full"></div>
-                        <div className="relative p-6">
-                          <div className="flex items-start gap-4 mb-3">
-                            <div className="flex-shrink-0">
-                              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-red-600 to-blue-600 text-white font-bold text-lg">
-                                {idx + 1}
-                              </div>
+          {loading ? (
+            <div className="text-center py-12">Loading...</div>
+          ) : nationalCommittee.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              No national committee members found. Adding members will display them here.
+            </div>
+          ) : (
+            <div className="relative w-full" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+              <div className="w-full bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
+                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+                    <div className="lg:col-span-3 h-56 sm:h-80 lg:h-auto overflow-hidden bg-gradient-to-br from-red-100 to-blue-100 relative flex items-center justify-center">
+                      {nationalIndex === 0 ? (
+                        <Image
+                          src="/president.jpg"
+                          alt={t('leadership.nationalPresident', 'National President')}
+                          fill
+                          quality={90}
+                          priority
+                          className="object-contain"
+                        />
+                      ) : nationalCommittee[nationalIndex - 1].image ? (
+                        <Image
+                          src={nationalCommittee[nationalIndex - 1].image as string}
+                          alt={getNameText(nationalCommittee[nationalIndex - 1].name)}
+                          fill
+                          quality={90}
+                          className="object-contain"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-red-100 to-blue-100 flex items-center justify-center">
+                          <div className="text-center">
+                            <div className="text-5xl sm:text-7xl font-bold bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                              {nationalIndex === 0 ? 'NP' : getNameText(nationalCommittee[nationalIndex - 1].name)
+                                .split(' ')
+                                .map((word) => word[0])
+                                .join('')
+                                .toUpperCase()
+                                .slice(0, 2)}
                             </div>
-                            <div className="flex-1">
-                              <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">{getPositionText(member.position)}</p>
-                              <p className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
-                                {typeof member.name === 'object' ? member.name[locale] : member.name}
-                              </p>
-                            </div>
+                            <p className="text-gray-500 font-medium text-xs sm:text-sm">{t('leadership.imageComingSoon', 'Image coming soon')}</p>
                           </div>
                         </div>
-                      </>
-                    )}
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div className="lg:col-span-2 flex flex-col justify-between p-4 sm:p-6 lg:p-8 min-h-56 sm:min-h-80 lg:min-h-0 bg-gradient-to-b from-white to-gray-50">
+                      <div>
+                        <div className="mb-3 sm:mb-4">
+                          <h3 className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent mb-2">
+                            {nationalIndex === 0 ? (locale === 'hi' ? 'श्री रंजीत सिंह' : 'Mr. Ranjeet Singh') : getNameText(nationalCommittee[nationalIndex - 1].name)}
+                          </h3>
+                          <div className="inline-block">
+                            <p className="bg-gradient-to-r from-red-500 to-blue-500 text-white font-bold text-xs sm:text-sm lg:text-base px-3 py-1.5 rounded-full">
+                              {nationalIndex === 0 ? t('leadership.nationalPresident', 'National President') : getPositionText(nationalCommittee[nationalIndex - 1].position)}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed text-xs sm:text-sm mb-3 overflow-y-auto max-h-12 sm:max-h-16 lg:max-h-20">
+                          {nationalIndex === 0 ? t('leadership.leadingTheMovement', 'Leading the Movement') : getBioText(nationalCommittee[nationalIndex - 1].bio)}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2 pt-4 border-t border-gray-200 flex-shrink-0 flex-wrap relative">
+                        <div className="relative flex-1 min-w-fit">
+                          <button
+                            onClick={() => setShareMenuOpen(shareMenuOpen === 'national' ? null : 'national')}
+                            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                          >
+                            <Share2 className="h-4 w-4" />
+                            <span className="hidden sm:inline">{t('leadership.share', 'Share')}</span>
+                          </button>
+                          {shareMenuOpen === 'national' && (
+                            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 z-10">
+                              <button
+                                onClick={() => {
+                                  const member = nationalIndex === 0 ? {
+                                    _id: 'president',
+                                    name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
+                                    position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
+                                    bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
+                                    image: '/president.jpg',
+                                    type: 'NATIONAL' as const
+                                  } : nationalCommittee[nationalIndex - 1];
+                                  shareToWhatsApp(member as CommitteeMember);
+                                  setShareMenuOpen(null);
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
+                              >
+                                <MessageCircle className="h-4 w-4 text-green-600" />
+                                WhatsApp
+                              </button>
+                              <button
+                                onClick={() => {
+                                  const member = nationalIndex === 0 ? {
+                                    _id: 'president',
+                                    name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
+                                    position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
+                                    bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
+                                    image: '/president.jpg',
+                                    type: 'NATIONAL' as const
+                                  } : nationalCommittee[nationalIndex - 1];
+                                  shareWithCard(member as CommitteeMember);
+                                  setShareMenuOpen(null);
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <Share2 className="h-4 w-4 text-purple-600" />
+                                Share Card
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => {
+                            const member = nationalIndex === 0 ? {
+                              _id: 'president',
+                              name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
+                              position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
+                              bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
+                              image: '/president.jpg',
+                              mobileNumber: '',
+                              type: 'NATIONAL' as const
+                            } : nationalCommittee[nationalIndex - 1];
+                            
+                            generateIdentityCard(member as CommitteeMember);
+                          }}
+                          className="flex-1 min-w-fit bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span className="hidden sm:inline">{t('leadership.download', 'Download')}</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (nationalIndex === 0) {
+                              setSelectedMember({
+                                _id: 'president',
+                                name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
+                                position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
+                                image: '/president.jpg',
+                                bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
+                                type: 'NATIONAL' as const
+                              } as CommitteeMember);
+                            } else {
+                              setSelectedMember(nationalCommittee[nationalIndex - 1] as CommitteeMember);
+                            }
+                          }}
+                          className="flex-1 min-w-fit bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                        >
+                          <Eye className="h-4 w-4" />
+                          <span className="hidden sm:inline">{t('leadership.viewDetails', 'View Details')}</span>
+                        </button>
+                        {(nationalIndex === 0 ? undefined : nationalCommittee[nationalIndex - 1].mobileNumber) && (
+                          <button
+                            onClick={() => handleCall(nationalCommittee[nationalIndex - 1].mobileNumber)}
+                            className="flex-1 min-w-fit bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                          >
+                            <span>📞</span>
+                            <span className="hidden sm:inline">{t('leadership.call', 'Call')}</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                ))}
+              </div>
+              <div className="flex justify-center items-center gap-3 mt-4">
+                <button
+                  onClick={prevNationalCarousel}
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={nextNationalCarousel}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -247,173 +761,154 @@ export default function LeadershipPage() {
             </p>
           </div>
 
-          <div className="relative max-w-6xl mx-auto">
-            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-                <div className="lg:col-span-2 h-full min-h-96 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 relative">
-                  <img
-                    src={STATE_PRESIDENTS[carouselIndex].image}
-                    alt={(typeof STATE_PRESIDENTS[carouselIndex].president === 'object' ? STATE_PRESIDENTS[carouselIndex].president[locale] : STATE_PRESIDENTS[carouselIndex].president) as string}
-                    className="w-full h-full object-cover transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                </div>
-                <div className="lg:col-span-3 flex flex-col justify-between p-8 sm:p-12">
-                  <div>
-                    <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full mb-6 font-bold text-xs uppercase tracking-widest">
-                      <MapPin className="h-4 w-4" />
-                      {STATE_PRESIDENTS[carouselIndex].state}
+          {loading ? (
+            <div className="text-center py-12">Loading...</div>
+          ) : statePresidents.length > 0 ? (
+            <div className="relative w-full">
+              <div className="w-full bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
+                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+                    <div className="lg:col-span-3 h-56 sm:h-80 lg:h-auto overflow-hidden bg-gradient-to-br from-blue-100 to-green-100 relative flex items-center justify-center">
+                      {statePresidents[stateIndex].image ? (
+                        <Image
+                          src={statePresidents[stateIndex].image as string}
+                          alt={getNameText(statePresidents[stateIndex].name)}
+                          fill
+                          quality={90}
+                          className="object-contain"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-green-100 flex items-center justify-center">
+                          <div className="text-center">
+                            <div className="text-5xl sm:text-7xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent mb-2">
+                              {getNameText(statePresidents[stateIndex].name)
+                                .split(' ')
+                                .map((word) => word[0])
+                                .join('')
+                                .toUpperCase()
+                                .slice(0, 2)}
+                            </div>
+                            <p className="text-gray-500 font-medium text-xs sm:text-sm">{t('leadership.imageComingSoon', 'Image coming soon')}</p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
-                    <h3 className="text-4xl font-bold text-gray-900 mb-2">
-                      {STATE_PRESIDENTS[carouselIndex].president[locale]}
-                    </h3>
-                    <p className="text-red-600 font-bold mb-6 text-lg">
-                      {STATE_PRESIDENTS[carouselIndex].position[locale]}
-                    </p>
-                    <p className="text-gray-600 leading-relaxed text-lg mb-8">
-                      {STATE_PRESIDENTS[carouselIndex].bio[locale]}
-                    </p>
-                  </div>
+                    <div className="lg:col-span-2 flex flex-col justify-between p-4 sm:p-6 lg:p-8 min-h-56 sm:min-h-80 lg:min-h-0 bg-gradient-to-b from-white to-gray-50">
+                      <div>
+                        <div className="mb-3 sm:mb-4">
+                          <div className="inline-block mb-2">
+                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-3 py-1.5 rounded-full font-bold text-xs uppercase tracking-widest border border-blue-200">
+                              <MapPin className="h-3.5 w-3.5" />
+                              {statePresidents[stateIndex].state}
+                            </div>
+                          </div>
+                          <h3 className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent mb-2">
+                            {getNameText(statePresidents[stateIndex].name)}
+                          </h3>
+                          <div className="inline-block">
+                            <p className="bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold text-xs sm:text-sm lg:text-base px-3 py-1.5 rounded-full">
+                              {getPositionText(statePresidents[stateIndex].position)}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed text-xs sm:text-sm mb-3 overflow-y-auto max-h-12 sm:max-h-16 lg:max-h-20">
+                          {getBioText(statePresidents[stateIndex].bio)}
+                        </p>
+                      </div>
 
-                  <div className="flex gap-3 pt-6 border-t border-gray-200">
-                    <button
-                      onClick={prevCarousel}
-                      className="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                      <span className="hidden sm:inline">{t('leadership.previous', 'Previous')}</span>
-                    </button>
-                    <button
-                      onClick={nextCarousel}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-                    >
-                      <span className="hidden sm:inline">{t('leadership.next', 'Next')}</span>
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
+                      <div className="flex gap-2 pt-4 border-t border-gray-200 flex-shrink-0 flex-wrap relative">
+                        <div className="relative flex-1 min-w-fit">
+                          <button
+                            onClick={() => setShareMenuOpen(shareMenuOpen === 'state' ? null : 'state')}
+                            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                          >
+                            <Share2 className="h-4 w-4" />
+                            <span className="hidden sm:inline">{t('leadership.share', 'Share')}</span>
+                          </button>
+                          {shareMenuOpen === 'state' && (
+                            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 z-10">
+                              <button
+                                onClick={() => {
+                                  shareToWhatsApp(statePresidents[stateIndex]);
+                                  setShareMenuOpen(null);
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
+                              >
+                                <MessageCircle className="h-4 w-4 text-green-600" />
+                                WhatsApp
+                              </button>
+                              <button
+                                onClick={() => {
+                                  shareWithCard(statePresidents[stateIndex]);
+                                  setShareMenuOpen(null);
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <Share2 className="h-4 w-4 text-purple-600" />
+                                Share Card
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => {
+                            generateIdentityCard(statePresidents[stateIndex] as CommitteeMember);
+                          }}
+                          className="flex-1 min-w-fit bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span className="hidden sm:inline">{t('leadership.download', 'Download')}</span>
+                        </button>
+                        <button
+                          onClick={() => setSelectedMember(statePresidents[stateIndex] as CommitteeMember)}
+                          className="flex-1 min-w-fit bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                        >
+                          <Eye className="h-4 w-4" />
+                          <span className="hidden sm:inline">{t('leadership.viewDetails', 'View Details')}</span>
+                        </button>
+                        {statePresidents[stateIndex].mobileNumber && (
+                          <button
+                            onClick={() => handleCall(statePresidents[stateIndex].mobileNumber)}
+                            className="flex-1 min-w-fit bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                          >
+                            <span>📞</span>
+                            <span className="hidden sm:inline">{t('leadership.call', 'Call')}</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
               </div>
-            </div>
-
-            <div className="flex justify-center gap-3 mt-12 flex-wrap">
-              {STATE_PRESIDENTS.map((pres, index) => (
+              <div className="flex justify-center items-center gap-3 mt-4">
                 <button
-                  key={index}
-                  onClick={() => setCarouselIndex(index)}
-                  className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 text-sm ${index === carouselIndex
-                    ? 'bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-lg scale-105'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  aria-label={`${locale === 'hi' ? 'जाएं' : 'Go to'} ${pres.state}`}
+                  onClick={prevStateCarousel}
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
                 >
-                  {pres.state}
+                  <ChevronLeft className="h-5 w-5" />
                 </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="mb-6 inline-block">
-              <span className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest">
-                <Users className="h-4 w-4" />
-                {t('leadership.expandOurReach', 'Expand Our Reach')}
-              </span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              {t('leadership.stateCommittees', 'State Committees')}
-            </h2>
-            <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-blue-600 mx-auto mb-6 rounded-full"></div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {t('leadership.discoverOpportunities', 'Discover opportunities to serve your state and strengthen our movement')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-12">
-            {INDIAN_STATES.map((state) => (
-              <button
-                key={state}
-                onClick={() => setSelectedState(selectedState === state ? null : state)}
-                className={`group relative p-4 rounded-2xl font-bold transition-all duration-300 text-sm text-center overflow-hidden ${selectedState === state
-                  ? 'bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-xl scale-105'
-                  : 'bg-white text-gray-900 shadow-md hover:shadow-lg hover:scale-102 border border-gray-200'
-                  }`}
-              >
-                <div className="flex items-center justify-center gap-1.5">
-                  <MapPin className="h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">{state}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {selectedState && (
-            <div className="mt-12 animate-fade-in">
-              <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-2xl border border-gray-200 max-w-3xl mx-auto">
-                <div className="flex items-start justify-between mb-6">
-                  <div>
-                    <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-3 py-1 rounded-full mb-6 font-bold text-xs uppercase tracking-widest">
-                      <MapPin className="h-4 w-4" />
-                      {selectedState}
-                    </div>
-                    <h3 className="text-4xl font-bold text-gray-900">{selectedState} {locale === 'hi' ? 'समिति' : 'Committee'}</h3>
-                  </div>
-                  <button
-                    onClick={() => setSelectedState(null)}
-                    className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-colors text-2xl h-10 w-10 flex items-center justify-center"
-                  >
-                    ×
-                  </button>
-                </div>
-
-                <div className="space-y-5 mt-8">
-                  <p className="text-gray-700 leading-relaxed text-lg">
-                    {locale === 'hi'
-                      ? `${selectedState} समिति पूरे राज्य में हमारी पार्टी की उपस्थिति और नेतृत्व स्थापित करने के लिए समर्पित है। हम उन प्रतिभाशाली व्यक्तियों को सक्रिय रूप से भर्ती कर रहे हैं जो एक प्रगतिशील और समावेशी भारत की हमारी दृष्टि साझा करते हैं।`
-                      : `The ${selectedState} committee is dedicated to building our party's presence and leadership across the state. We are actively recruiting talented individuals who share our vision for a progressive and inclusive India.`
-                    }
-                  </p>
-
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-l-4 border-blue-600 p-6">
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl">🏛️</span>
-                      <div>
-                        <p className="text-gray-900 font-bold text-lg mb-1">{locale === 'hi' ? 'समिति संरचना' : 'Committee Structure'}</p>
-                        <p className="text-gray-700 text-sm">
-                          {locale === 'hi'
-                            ? `${selectedState} के लिए समिति विवरण और सदस्य जल्द ही उपलब्ध होंगे क्योंकि हम अपनी नेतृत्व टीम का विस्तार करते हैं और मजबूत आधार स्थापित करते हैं।`
-                            : `Committee details and members for ${selectedState} will be available soon as we expand our leadership team and establish stronger foundations.`
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl border border-red-300 p-6">
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl">🤝</span>
-                      <div>
-                        <p className="text-gray-900 font-bold text-lg mb-1">{locale === 'hi' ? 'शामिल हों' : 'Get Involved'}</p>
-                        <p className="text-gray-700 text-sm">
-                          {locale === 'hi'
-                            ? `${selectedState} समिति में शामिल होने में रुचि है? हम परिवर्तन लाने के लिए प्रतिबद्ध जुनूनी व्यक्तियों का स्वागत करते हैं। अधिक जानने के लिए हमसे संपर्क करें!`
-                            : `Interested in joining the ${selectedState} committee? We welcome passionate individuals committed to making a difference. Contact us to learn more!`
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <button
+                  onClick={nextStateCarousel}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
               </div>
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              No state presidents found.
             </div>
           )}
         </div>
       </section>
 
       <Footer />
+      {selectedMember && (
+        <MemberDetailModal
+          member={selectedMember}
+          onClose={() => setSelectedMember(null)}
+        />
+      )}
     </div>
   );
 }
