@@ -6,6 +6,7 @@
     "manifesto": "Manifesto",
     "news": "News",
     "events": "Events",
+    "inspiration": "Inspiration",
     "contact": "Contact",
     "join": "Join Us"
   },
@@ -151,8 +152,15 @@
     "voterIdCardNo": "Voter ID Card Number",
     "date": "Date",
     "membershipType": "Membership Type",
+    "selectMembershipTitle": "Choose Your Membership Type",
+    "selectMembershipSubtitle": "Select the type of membership that best suits your commitment to the movement",
     "activeMembership": "Active Membership",
+    "activeMembershipDesc": "For those who want to actively participate in party activities, organization, and grassroots movements.",
     "normalMembership": "Normal Membership",
+    "normalMembershipDesc": "For supporters who want to stay connected, receive updates, and contribute to the party's vision.",
+    "activeMembershipLabel": "Active",
+    "normalMembershipLabel": "Normal",
+    "selectButton": "Select this Membership",
     "submit": "Submit Application",
     "submitting": "Submitting...",
     "successMessage": "Application submitted successfully! We will review your application and get back to you soon.",
@@ -162,6 +170,15 @@
     "benefit2": "Attend exclusive events and training sessions",
     "benefit3": "Connect with like-minded individuals",
     "benefit4": "Contribute to creating positive change"
+  },
+  "inspiration": {
+    "title": "Our Inspiration",
+    "subtitle": "Guiding Lights of Our Movement",
+    "description": "Our ideology is rooted in the revolutionary thoughts and actions of great visionaries who dedicated their lives to social justice and equality.",
+    "karlMarx": "Karl Marx",
+    "karlMarxDesc": "A revolutionary philosopher whose ideas on class struggle and economic equality continue to inspire the fight against exploitation and for a more just society.",
+    "brAmbedkar": "Dr. B.R. Ambedkar",
+    "brAmbedkarDesc": "The chief architect of the Indian Constitution and a champion of social justice, who fought tirelessly for the rights of the oppressed and envisioned an India built on liberty, equality, and fraternity."
   },
   "footer": {
     "about": "About Us",

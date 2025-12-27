@@ -41,7 +41,7 @@ export async function generateMetadata({
       type: 'website',
       locale: isHindi ? 'hi_IN' : 'en_IN',
       url: `https://bharatparty.in/${locale}`,
-      siteName: isHindi ? 'बहुजन क्रांति पार्टी' : 'Bahujan Kranti Party',
+      siteName: isHindi ? 'बहुजन क्रांति पार्टी' : 'Bahujan Kranti Party ',
       title: isHindi
         ? 'बहुजन क्रांति पार्टी | एक बेहतर भारत का निर्माण'
         : 'Bahujan Kranti Party | Building a Better India',

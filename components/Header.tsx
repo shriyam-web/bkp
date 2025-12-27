@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { Menu, X, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ export default function Header() {
     { name: 'About', name_hi: 'परिचय', href: `/${locale}/about` },
     { name: 'Leadership', name_hi: 'नेतृत्व', href: `/${locale}/leadership` },
     { name: 'Manifesto', name_hi: 'घोषणापत्र', href: `/${locale}/manifesto` },
+    { name: 'Inspiration', name_hi: 'हमारे प्रेरणा-स्रोत', href: `/${locale}/inspiration` },
     { name: 'News', name_hi: 'समाचार', href: `/${locale}/news` },
     { name: 'Events', name_hi: 'कार्यक्रम', href: `/${locale}/events` },
     { name: 'Contact', name_hi: 'संपर्क', href: `/${locale}/contact` },
@@ -28,11 +30,9 @@ export default function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
         <div className="flex lg:flex-1">
           <Link href={`/${locale}/`} className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-red-600 to-blue-600">
-              <Flag className="h-6 w-6 text-white" />
-            </div>
+
             <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
-              {locale === 'hi' ? 'बहुजन क्रांति पार्टी' : 'Bahujan Kranti Party'}
+              {locale === 'hi' ? 'बहुजन क्रांति पार्टी (मा.अ.)' : 'Bahujan Kranti Party (M.A.)'}
             </span>
           </Link>
         </div>
