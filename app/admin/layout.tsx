@@ -24,9 +24,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/national-committee', label: 'National Committee', icon: Users },
-    { href: '/admin/rashtriya-parishad', label: 'Rashtriya Parishad', icon: Users },
-    { href: '/admin/rashtriya-kaaryasamiti', label: 'Rashtriya Kaaryasamiti', icon: Users },
+    { href: '/admin/national-committee', label: 'Top National Members ', icon: Users },
+    { href: '/admin/rashtriya-parishad', label: 'National Council', icon: Users },
+    {
+      href: '/admin/rashtriya-kaaryasamiti', label: 'National Executive Committee', icon: Users
+    },
     { href: '/admin/state-committee', label: 'State Committee', icon: Users },
     { href: '/admin/district-committee', label: 'District Committee', icon: Users },
     { href: '/admin/messaging', label: 'Messaging', icon: Send },
@@ -45,15 +47,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex h-screen overflow-hidden">
         {/* Sidebar */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           <div className="h-full flex flex-col">
             <div className="p-6 border-b">
               <h1 className="text-2xl font-bold text-gray-800">Admin Panel</h1>
             </div>
-            
+
             <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -62,11 +63,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-blue-50 text-blue-600'
-                        : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-600 hover:bg-gray-50'
+                      }`}
                     onClick={() => setSidebarOpen(false)}
                   >
                     <Icon className="h-5 w-5" />

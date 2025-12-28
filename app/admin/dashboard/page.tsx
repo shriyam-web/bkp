@@ -7,7 +7,7 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link href="/admin/national-committee" className="block group">
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
@@ -17,7 +17,7 @@ export default function AdminDashboard() {
               </div>
               <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">National Committee</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Top National Members</h3>
             <p className="text-gray-600">Manage national committee members and their details.</p>
           </div>
         </Link>
@@ -30,8 +30,8 @@ export default function AdminDashboard() {
               </div>
               <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Rashtriya Parishad</h3>
-            <p className="text-gray-600">Manage Rashtriya Parishad members (Total: 545).</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">National Council</h3>
+            <p className="text-gray-600">Manage National Council (राष्ट्रीय परिषद्) members (Total: 545).</p>
           </div>
         </Link>
 
@@ -43,8 +43,10 @@ export default function AdminDashboard() {
               </div>
               <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-orange-600 transition-colors" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Rashtriya Kaaryasamiti</h3>
-            <p className="text-gray-600">Manage Rashtriya Kaaryasamiti members (Total: 74).</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+
+              National Executive Committee</h3>
+            <p className="text-gray-600">Manage National Executive Committee (राष्ट्रीय कार्यसमिति) members (Total: 74).</p>
           </div>
         </Link>
 
