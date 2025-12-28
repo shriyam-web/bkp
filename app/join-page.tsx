@@ -21,6 +21,8 @@ export default function JoinPage() {
     age: '',
     fathersOrHusbandsName: '',
     address: '',
+    state: '',
+    district: '',
     pincode: '',
     mobileNo: '',
     voterIdCardNo: '',
@@ -55,6 +57,8 @@ export default function JoinPage() {
         age: '',
         fathersOrHusbandsName: '',
         address: '',
+        state: '',
+        district: '',
         pincode: '',
         mobileNo: '',
         voterIdCardNo: '',
@@ -270,6 +274,36 @@ export default function JoinPage() {
                           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                           placeholder={locale === 'hi' ? 'आपका आवासीय पता' : 'Your residential address'}
                         />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label htmlFor="state" className="block text-sm font-medium mb-2">
+                            {locale === 'hi' ? 'राज्य *' : 'State *'}
+                          </label>
+                          <Input
+                            id="state"
+                            type="text"
+                            required
+                            value={formData.state}
+                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                            placeholder={locale === 'hi' ? 'राज्य' : 'State'}
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor="district" className="block text-sm font-medium mb-2">
+                            {locale === 'hi' ? 'जिला / शहर *' : 'District / City *'}
+                          </label>
+                          <Input
+                            id="district"
+                            type="text"
+                            required
+                            value={formData.district}
+                            onChange={(e) => setFormData({ ...formData, district: e.target.value })}
+                            placeholder={locale === 'hi' ? 'जिला या शहर' : 'District or City'}
+                          />
+                        </div>
                       </div>
 
                       <div>

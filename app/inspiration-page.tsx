@@ -96,10 +96,10 @@ export default function InspirationPage() {
       <section className="py-20 bg-gray-900 text-white text-center">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-8">
-            {t.locale === 'hi' ? 'हमारे मार्गदर्शक प्रकाश' : 'Our Guiding Lights'}
+            {locale === 'hi' ? 'हमारे मार्गदर्शक प्रकाश' : 'Our Guiding Lights'}
           </h2>
           <p className="text-xl text-gray-300 leading-relaxed">
-            {t.locale === 'hi'
+            {locale === 'hi'
               ? 'कार्ल मार्क्स और डॉ. बी.आर. अंबेडकर के विचार हमें एक ऐसे समाज के निर्माण के लिए प्रेरित करते हैं जहाँ कोई शोषण न हो और हर व्यक्ति को गरिमा के साथ जीने का अधिकार हो।'
               : 'The thoughts of Karl Marx and Dr. B.R. Ambedkar inspire us to build a society where there is no exploitation and every individual has the right to live with dignity.'}
           </p>

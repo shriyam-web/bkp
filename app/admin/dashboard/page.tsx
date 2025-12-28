@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Users, ArrowRight } from 'lucide-react';
+import { Users, ArrowRight, Send } from 'lucide-react';
 
 export default function AdminDashboard() {
   return (
@@ -58,6 +58,19 @@ export default function AdminDashboard() {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">State Committee</h3>
             <p className="text-gray-600">Manage state presidents and committee members.</p>
+          </div>
+        </Link>
+
+        <Link href="/admin/messaging" className="block group">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-red-100 p-3 rounded-lg">
+                <Send className="h-6 w-6 text-red-600" />
+              </div>
+              <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-red-600 transition-colors" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Messaging</h3>
+            <p className="text-gray-600">Send targeted messages to members and committees.</p>
           </div>
         </Link>
       </div>
