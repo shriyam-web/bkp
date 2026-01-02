@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Users, CheckCircle2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Users, CheckCircle2, Copy } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +16,9 @@ export default function JoinPage() {
   const { t, locale } = useTranslations();
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [memberId, setMemberId] = useState('');
+  const confirmationRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -29,6 +32,13 @@ export default function JoinPage() {
     date: '',
     membershipType: '',
   });
+
+  useEffect(() => {
+    if (showConfirmation && confirmationRef.current) {
+      confirmationRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      confirmationRef.current.focus();
+    }
+  }, [showConfirmation]);
 
   const handleSelectMembership = (type: string) => {
     setFormData({ ...formData, membershipType: type });
@@ -48,9 +58,10 @@ export default function JoinPage() {
 
       if (!response.ok) throw new Error('Failed to submit');
 
-      toast.success(locale === 'hi' ? 'आवेदन सफलतापूर्वक जमा किया गया!' : 'Application submitted successfully!', {
-        description: locale === 'hi' ? 'हम आपके आवेदन की समीक्षा करेंगे और जल्द ही आपसे संपर्क करेंगे।' : 'We will review your application and get back to you soon.',
-      });
+      const data = await response.json();
+      setMemberId(data.memberId);
+      setShowConfirmation(true);
+      setShowForm(false);
 
       setFormData({
         name: '',
@@ -72,6 +83,16 @@ export default function JoinPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const copyMemberId = () => {
+    navigator.clipboard.writeText(memberId);
+    toast.success(locale === 'hi' ? 'सदस्य ID कॉपी किया गया!' : 'Member ID copied!');
+  };
+
+  const resetToSelection = () => {
+    setShowConfirmation(false);
+    setMemberId('');
   };
 
   const benefits = locale === 'hi' ? [
@@ -113,7 +134,71 @@ export default function JoinPage() {
 
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {!showForm ? (
+          {showConfirmation ? (
+            <div className="max-w-2xl mx-auto" ref={confirmationRef} tabIndex={-1}>
+              <Card className="border-2 border-green-500 bg-gradient-to-br from-green-50 to-blue-50">
+                <CardContent className="pt-12 pb-12 text-center">
+                  <div className="flex justify-center mb-6">
+                    <div className="h-20 w-20 bg-green-100 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="h-12 w-12 text-green-600" />
+                    </div>
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    {locale === 'hi'
+                      ? 'बहुजन क्रांति पार्टी में स्वागत है!'
+                      : 'Welcome to Bahujan Kranti Party!'}
+                  </h2>
+                  <p className="text-lg text-gray-700 mb-8">
+                    {locale === 'hi'
+                      ? 'आपने सफलतापूर्वक बहुजन क्रांति पार्टी की सदस्यता के लिए पंजीकृत किया गया है।'
+                      : 'You have successfully registered for Bahujan Kranti Party membership.'}
+                  </p>
+
+                  <Card className="bg-white border-2 border-gray-200 mb-8">
+                    <CardContent className="pt-6 pb-6">
+                      <p className="text-gray-600 mb-3">
+                        {locale === 'hi' ? 'आपका सदस्य ID:' : 'Your Member ID:'}
+                      </p>
+                      <div className="flex items-center justify-center gap-3">
+                        <p className="text-2xl font-bold text-blue-600 tracking-widest">
+                          {memberId}
+                        </p>
+                        <button
+                          onClick={copyMemberId}
+                          className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+                          title={locale === 'hi' ? 'कॉपी करें' : 'Copy'}
+                        >
+                          <Copy className="h-5 w-5 text-gray-600" />
+                        </button>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <p className="text-sm text-gray-600 mb-8">
+                    {locale === 'hi'
+                      ? 'कृपया अपने सदस्य ID को सुरक्षित रखें। यह भविष्य के संदर्भ के लिए आवश्यक होगा।'
+                      : 'Please keep your member ID safe. You will need it for future reference.'}
+                  </p>
+
+                  <div className="space-y-3">
+                    <Button
+                      onClick={resetToSelection}
+                      className="w-full bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700"
+                    >
+                      {locale === 'hi' ? 'किसी और को आमंत्रित करें' : 'Invite Someone Else'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => window.print()}
+                    >
+                      {locale === 'hi' ? 'यह पृष्ठ प्रिंट करें' : 'Print This Page'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ) : !showForm ? (
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -337,15 +422,14 @@ export default function JoinPage() {
 
                       <div>
                         <label htmlFor="voterIdCardNo" className="block text-sm font-medium mb-2">
-                          {locale === 'hi' ? 'मतदाता पहचान पत्र संख्या *' : 'Voter ID Card No. *'}
+                          {locale === 'hi' ? 'मतदाता पहचान पत्र संख्या' : 'Voter ID Card No.'}
                         </label>
                         <Input
                           id="voterIdCardNo"
                           type="text"
-                          required
                           value={formData.voterIdCardNo}
                           onChange={(e) => setFormData({ ...formData, voterIdCardNo: e.target.value })}
-                          placeholder={locale === 'hi' ? 'आपका मतदाता पहचान पत्र नंबर' : 'Your voter ID card number'}
+                          placeholder={locale === 'hi' ? 'आपका मतदाता पहचान पत्र नंबर (वैकल्पिक)' : 'Your voter ID card number (optional)'}
                         />
                       </div>
 

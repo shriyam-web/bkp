@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const membershipSchema = new mongoose.Schema(
   {
+    memberId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,
@@ -36,7 +41,7 @@ const membershipSchema = new mongoose.Schema(
     },
     voterIdCardNo: {
       type: String,
-      required: true,
+      required: false,
     },
     date: {
       type: Date,
