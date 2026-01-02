@@ -21,7 +21,7 @@ export default function AboutPage() {
               {locale === 'hi' ? 'बहुजन क्रांति पार्टी के बारे में' : 'About Bahujan Kranti Party'}
             </h1>
             <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              {locale === 'hi' 
+              {locale === 'hi'
                 ? 'समर्पित सेवा और जनकेंद्रित नीतियों के माध्यम से एक प्रगतिशील, समावेशी भारत का निर्माण'
                 : 'Building a progressive, inclusive India through dedicated service and people-centric policies'}
             </p>
@@ -39,8 +39,8 @@ export default function AboutPage() {
               <div className="space-y-4 text-gray-600">
                 <p>
                   {locale === 'hi'
-                    ? '2015 में स्थापित, बहुजन क्रांति पार्टी एक राजनीतिक आंदोलन बनाने की दृष्टि से उभरी जो वास्तव में हर भारतीय नागरिक की आकांक्षाओं का प्रतिनिधित्व करती है। हमारी यात्रा समर्पित व्यक्तियों के एक छोटे समूह के साथ शुरू हुई जो हमारे राष्ट्र में सकारात्मक परिवर्तन लाने के लिए प्रतिबद्ध थे।'
-                    : 'Founded in 2015, Bahujan Kranti Party emerged from a vision to create a political movement that truly represents the aspirations of every Indian citizen. Our journey began with a small group of dedicated individuals committed to bringing about positive change in our nation.'}
+                    ? '2012 में स्थापित, बहुजन क्रांति पार्टी एक राजनीतिक आंदोलन बनाने की दृष्टि से उभरी जो वास्तव में हर भारतीय नागरिक की आकांक्षाओं का प्रतिनिधित्व करती है। हमारी यात्रा समर्पित व्यक्तियों के एक छोटे समूह के साथ शुरू हुई जो हमारे राष्ट्र में सकारात्मक परिवर्तन लाने के लिए प्रतिबद्ध थे।'
+                    : 'Founded in 2012, Bahujan Kranti Party emerged from a vision to create a political movement that truly represents the aspirations of every Indian citizen. Our journey began with a small group of dedicated individuals committed to bringing about positive change in our nation.'}
                 </p>
                 <p>
                   {locale === 'hi'
@@ -135,7 +135,7 @@ export default function AboutPage() {
             <div className="flex gap-6">
               <div className="flex-shrink-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 font-bold">
-                  2015
+                  2012
                 </div>
               </div>
               <div className="flex-1">
@@ -150,7 +150,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="flex gap-6">
+            {/* <div className="flex gap-6">
               <div className="flex-shrink-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 font-bold">
                   2017
@@ -166,9 +166,9 @@ export default function AboutPage() {
                     : 'Won seats in 5 state assemblies, establishing our presence as a credible alternative.'}
                 </p>
               </div>
-            </div>
+            </div> */}
 
-            <div className="flex gap-6">
+            {/* <div className="flex gap-6">
               <div className="flex-shrink-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 font-bold">
                   2019
@@ -184,7 +184,7 @@ export default function AboutPage() {
                     : 'Expanded to all states and union territories with over 5 million registered members.'}
                 </p>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex gap-6">
               <div className="flex-shrink-0">

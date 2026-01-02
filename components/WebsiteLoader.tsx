@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function WebsiteLoader() {
   const [show, setShow] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
     // Start fade out after 2.5 seconds
     const fadeTimer = setTimeout(() => {
       setFadeOut(true);
@@ -15,11 +18,13 @@ export default function WebsiteLoader() {
     // Remove from DOM after fade animation completes (0.5s)
     const removeTimer = setTimeout(() => {
       setShow(false);
+      document.body.style.overflow = 'unset';
     }, 3000);
 
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(removeTimer);
+      document.body.style.overflow = 'unset';
     };
   }, []);
 
@@ -27,23 +32,26 @@ export default function WebsiteLoader() {
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white transition-opacity duration-500 ${
+      className={`fixed top-0 left-0 z-[9999] bg-white transition-opacity duration-500 flex flex-col items-center justify-center ${
         fadeOut ? 'opacity-0' : 'opacity-100'
       }`}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        padding: 0,
+      }}
     >
-      <div className="relative w-72 h-44 shadow-2xl overflow-hidden rounded-sm animate-bounce shadow-blue-900/20">
-        {/* Flag Design: 80% Red, 20% Dark Blue */}
-        <div className="h-[80%] w-full bg-[#FF0000] flex items-center justify-center">
-          <span className="text-white font-black text-4xl tracking-tighter drop-shadow-lg">BKP</span>
-        </div>
-        <div className="h-[20%] w-full bg-[#00008B]"></div>
+      <div className="relative w-full h-3/4">
+        <Image
+          src="/flag.png"
+          alt="Loading"
+          fill
+          priority
+          className="object-contain"
+        />
       </div>
-      <div className="mt-8 flex flex-col items-center gap-2">
-        <div className="w-48 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div className="h-full bg-[#FF0000] animate-[loading_2.5s_ease-in-out_infinite]"></div>
-        </div>
-        <p className="text-[#00008B] font-medium animate-pulse">Loading Bahujan Kranti Party...</p>
-      </div>
+      <p className="text-lg font-medium text-gray-700 mt-4 animate-pulse">Loading Bahujan Kranti Party Website...</p>
     </div>
   );
 }
