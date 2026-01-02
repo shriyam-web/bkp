@@ -14,6 +14,13 @@ const CommitteeMemberSchema = new mongoose.Schema({
     en: { type: String },
     hi: { type: String },
   },
+  address: {
+    street: { type: String },
+    city: { type: String },
+    state: { type: String },
+    postalCode: { type: String },
+    country: { type: String, default: 'India' },
+  },
   state: { type: String }, // For state and district committee members
   district: { type: String }, // For district committee members
   mobileNumber: { type: String },

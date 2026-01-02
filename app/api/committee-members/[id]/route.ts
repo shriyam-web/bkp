@@ -13,6 +13,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       position: body.position,
       image: body.image,
       bio: body.bio,
+      address: body.address,
       state: body.state,
       mobileNumber: body.mobileNumber,
       type: body.type,

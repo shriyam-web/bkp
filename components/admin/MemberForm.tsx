@@ -10,6 +10,14 @@ interface MemberFormProps {
   onSuccess: () => void;
 }
 
+interface Address {
+  street?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
+
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
   'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
@@ -30,6 +38,13 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
     type: type,
     order: 0,
     mobileNumber: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: 'India',
+    },
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -41,6 +56,13 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
         state: initialData.state || '',
         district: initialData.district || '',
         mobileNumber: initialData.mobileNumber || '',
+        address: initialData.address || {
+          street: '',
+          city: '',
+          state: '',
+          postalCode: '',
+          country: 'India',
+        },
       });
     }
   }, [initialData]);
@@ -203,6 +225,69 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="+91 9876543210"
               />
+            </div>
+          </div>
+
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Address Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                <input
+                  type="text"
+                  value={formData.address.street}
+                  onChange={(e) => setFormData({ ...formData, address: { ...formData.address, street: e.target.value } })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="House number, street name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                <input
+                  type="text"
+                  value={formData.address.city}
+                  onChange={(e) => setFormData({ ...formData, address: { ...formData.address, city: e.target.value } })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="City name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                <select
+                  value={formData.address.state}
+                  onChange={(e) => setFormData({ ...formData, address: { ...formData.address, state: e.target.value } })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                  <option value="">Select State</option>
+                  {INDIAN_STATES.map((state) => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                <input
+                  type="text"
+                  value={formData.address.postalCode}
+                  onChange={(e) => setFormData({ ...formData, address: { ...formData.address, postalCode: e.target.value } })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="PIN code"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                <input
+                  type="text"
+                  value={formData.address.country}
+                  onChange={(e) => setFormData({ ...formData, address: { ...formData.address, country: e.target.value } })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="Country name"
+                />
+              </div>
             </div>
           </div>
 
