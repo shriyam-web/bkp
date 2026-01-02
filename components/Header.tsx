@@ -30,10 +30,13 @@ export default function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
         <div className="flex lg:flex-1">
           <Link href={`/${locale}/`} className="flex items-center space-x-2">
-
-            <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">
-              {locale === 'hi' ? 'बहुजन क्रांति पार्टी (मा.अ.)' : 'Bahujan Kranti Party (M.A.)'}
-            </span>
+            <Image
+              src={locale === 'hi' ? '/hindi.png' : '/eng.png'}
+              alt="Bahujan Kranti Party Logo"
+              width={250}
+              height={85}
+              className="h-auto"
+            />
           </Link>
         </div>
 
