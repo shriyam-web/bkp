@@ -38,6 +38,7 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
     type: type,
     order: 0,
     mobileNumber: '',
+    email: '',
     address: {
       street: '',
       city: '',
@@ -56,6 +57,7 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
         state: initialData.state || '',
         district: initialData.district || '',
         mobileNumber: initialData.mobileNumber || '',
+        email: initialData.email || '',
         address: initialData.address || {
           street: '',
           city: '',
@@ -225,6 +227,20 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="+91 9876543210"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="member@example.com"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                This email will be needed for sending email to that member.
+              </p>
             </div>
           </div>
 

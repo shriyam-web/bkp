@@ -63,9 +63,9 @@ export default function AdminDashboard() {
       category: 'District Level'
     },
     {
-      href: '/admin/messaging',
-      title: 'Messaging',
-      description: 'Send targeted messages to members and committees.',
+      href: '/admin/emailing',
+      title: 'Email Center',
+      description: 'Send targeted emails to members and committees.',
       icon: Send,
       color: 'red',
       category: 'Communications'

@@ -24,6 +24,7 @@ const CommitteeMemberSchema = new mongoose.Schema({
   state: { type: String }, // For state and district committee members
   district: { type: String }, // For district committee members
   mobileNumber: { type: String },
+  email: { type: String },
   type: {
     type: String,
     enum: ['NATIONAL', 'STATE', 'RASHTRIYA_PARISHAD', 'RASHTRIYA_KAARYASAMITI', 'DISTRICT'],

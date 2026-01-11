@@ -6,6 +6,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Users, Briefcase, MapPin, ChevronLeft, ChevronRight, Star, Award, Download, Eye, Share2, MessageCircle, ChevronDown, ChevronUp, Phone } from 'lucide-react';
 import { useTranslations } from '@/lib/TranslationContext';
+import { formatDate } from '@/lib/utils';
+import jsPDF from 'jspdf';
 
 interface CommitteeMember {
   _id: string;
@@ -14,8 +16,16 @@ interface CommitteeMember {
   image: string | null;
   bio: { en: string; hi: string } | null;
   mobileNumber?: string;
+  email?: string;
   state?: string;
   district?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+  };
   type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT';
 }
 
@@ -285,8 +295,46 @@ export default function LeadershipPage() {
         return;
       }
 
-      const width = 1000;
-      const height = 600;
+      const baseWidth = 500;
+      const scale = 3;
+      const width = baseWidth * scale;
+      const padding = 15;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, 1);
+
+      const nameEn = typeof member.name === 'string' ? member.name : member.name.en;
+      const nameHi = typeof member.name === 'string' ? member.name : member.name.hi;
+      const positionEn = typeof member.position === 'string' ? member.position : member.position.en;
+      const positionHi = typeof member.position === 'string' ? member.position : member.position.hi;
+
+      const pledgeText = `हम घोषणा करते हैं बहुजन क्रांति पार्टी (मार्क्सवाद अंबेडकरवाद) समाज में सामाजिक आर्थिक विषमता को समाप्त करके समाज के हर व्यक्ति को समानता के स्तर पर पहुंचना। कोई भी व्यक्ति बिना श्रम के नहीं खाएगा, हर किसी को श्रम करना होगा। मशीन आदि से उत्पादन होगा उसे समाज के सभी व्यक्तियों की हिस्सेदारी होगी। अंधविश्वास, आडंबर के नाम पर कोई शोषण नहीं कर सकेगा। धार्मिक उन्माद फैलाकर कोई जनता में कोई भी विघटन नहीं पैदा करेगा। व्यक्तिगत गरिमा के साथ सामाजिक आर्थिक राजनैतिक एवं सांस्कृतिक स्तर पर व्यवहारिक रूप से सभी बराबर होंगे, कोई छोटा व बड़ा नहीं होगा। ईमानदारी नैतिकता और पारदर्शता हमारी पार्टी के अलंकार होंगे। नए और बेहतर किस्म के इस समाज को समाजवादी समाज कहते हैं इस प्रकार के समाज की स्थापना करना ही डॉ. कार्लमार्क्स व डॉ. भीमराव अंबेडकर जी का सपना था। इसकी स्थापना किए बगैर मानव समाज एक सुखी, समृद्ध समाज नहीं बन सकता है जीवन की भारी से भारी कीमत देकर भी ऐसे समाज की स्थापना महंगी नहीं है। आओ हम सब प्राण पर से इस काम में जुट जाएं।`;
+
+      const getPledgeLines = () => {
+        const maxWidth = width - 120;
+        const lineHeight = 30;
+        const lines = [];
+        const words = pledgeText.split(' ');
+        let line = '';
+
+        ctx.font = '18px Arial';
+        for (let i = 0; i < words.length; i++) {
+          const testLine = line + words[i] + ' ';
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth) {
+            if (line) lines.push(line);
+            line = words[i] + ' ';
+          } else {
+            line = testLine;
+          }
+        }
+        if (line) lines.push(line);
+        return { lines, height: lines.length * lineHeight };
+      };
+
+      const pledgeInfo = getPledgeLines();
+
+      const height = 2100;
       canvas.width = width;
       canvas.height = height;
 
@@ -297,150 +345,177 @@ export default function LeadershipPage() {
       gradient.addColorStop(0, '#dc2626');
       gradient.addColorStop(1, '#2563eb');
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, 60);
+      ctx.fillRect(0, 0, width, 150);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 28px Arial';
+      ctx.font = 'bold 42px Arial';
       ctx.textAlign = 'left';
-      ctx.fillText('MEMBER IDENTITY CARD', 40, 45);
+      ctx.fillText('बहुजन क्रांति पार्टी (Bahujan Kranti Party) - Digital ID', 60, 90);
+
+      let currentY = 180;
 
       ctx.fillStyle = '#e5e7eb';
-      ctx.fillRect(40, 80, 300, 350);
-      ctx.strokeStyle = '#d1d5db';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(40, 80, 300, 350);
+      ctx.fillRect(45, currentY, 450, 600);
+      ctx.strokeStyle = '#999';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(45, currentY, 450, 600);
 
-      const drawPlaceholder = () => {
-        ctx.fillStyle = '#9ca3af';
-        ctx.font = '16px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('No Image', 190, 250);
-      };
+      const continueDrawing = () => {
+        currentY = 225;
+        let col1 = 540;
+        let col2 = 900;
 
-      const drawCardContent = () => {
-        const nameEn = typeof member.name === 'string' ? member.name : member.name.en;
-        const nameHi = typeof member.name === 'string' ? member.name : member.name.hi;
-
-        ctx.fillStyle = '#1f2937';
-        ctx.font = 'bold 20px Arial';
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 36px Arial';
         ctx.textAlign = 'left';
-        ctx.fillText(nameEn, 380, 110);
-
-        ctx.fillStyle = '#1f2937';
-        ctx.font = 'bold 18px Arial';
-        ctx.fillText(nameHi, 380, 135);
+        ctx.fillText(nameEn, col1, currentY);
 
         ctx.fillStyle = '#2563eb';
-        ctx.font = 'bold 12px Arial';
-        ctx.fillText('ORGANIZATION', 380, 160);
+        ctx.font = 'bold 30px Arial';
+        ctx.fillText(nameHi, col1, currentY + 42);
 
+        currentY += 102;
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 21px Arial';
+        ctx.fillText('POSITION:', col1, currentY);
         ctx.fillStyle = '#1f2937';
-        ctx.font = '12px Arial';
-        ctx.fillText('Bahujan Kranti Party (Marxwaad-Ambedkarwaad)', 380, 180);
+        ctx.font = '21px Arial';
+        ctx.fillText(positionEn + ' (' + positionHi + ')', col1, currentY + 24);
 
-        ctx.fillStyle = '#2563eb';
-        ctx.font = 'bold 12px Arial';
-        ctx.fillText('POSITION', 380, 210);
+        currentY += 66;
 
-        ctx.fillStyle = '#1f2937';
-        ctx.font = '11px Arial';
-        const positionEn = typeof member.position === 'string' ? member.position : member.position.en;
-        const positionHi = typeof member.position === 'string' ? member.position : member.position.hi;
-        ctx.fillText(positionEn, 380, 225);
-        ctx.fillText(positionHi, 380, 240);
-
-        ctx.fillStyle = '#2563eb';
-        ctx.font = 'bold 11px Arial';
-        ctx.fillText('ABOUT', 380, 260);
-
-        ctx.fillStyle = '#1f2937';
-        ctx.font = '10px Arial';
-        const bioEn = typeof member.bio === 'string' ? member.bio : (member.bio?.en || '');
-        const bioHi = typeof member.bio === 'string' ? member.bio : (member.bio?.hi || '');
-
-        const maxWidth = 300;
-        const lineHeight = 12;
-        let bioY = 275;
-
-        const wrapText = (text: string, x: number, y: number) => {
-          if (!text) return y;
-          const words = text.split(' ');
-          let line = '';
-          for (let i = 0; i < words.length; i++) {
-            const testLine = line + words[i] + ' ';
-            const metrics = ctx.measureText(testLine);
-            if (metrics.width > maxWidth) {
-              if (line) {
-                ctx.fillText(line, x, y);
-                y += lineHeight;
-              }
-              line = words[i] + ' ';
-            } else {
-              line = testLine;
-            }
-          }
-          if (line) {
-            ctx.fillText(line, x, y);
-            y += lineHeight;
-          }
-          return y;
-        };
-
-        bioY = wrapText(bioEn, 380, bioY);
-        bioY += 5;
-        bioY = wrapText(bioHi, 380, bioY);
-
-        let bottomY = Math.max(bioY + 15, 320);
+        if (member._id) {
+          ctx.fillStyle = '#dc2626';
+          ctx.font = 'bold 21px Arial';
+          ctx.fillText('ID:', col1, currentY);
+          ctx.fillStyle = '#1f2937';
+          ctx.font = '18px Arial';
+          ctx.fillText(member._id.substring(0, 30), col1, currentY + 21);
+          currentY += 57;
+        }
 
         if (member.mobileNumber) {
-          ctx.fillStyle = '#2563eb';
-          ctx.font = 'bold 11px Arial';
-          ctx.fillText('PHONE', 380, bottomY);
-
+          ctx.fillStyle = '#dc2626';
+          ctx.font = 'bold 21px Arial';
+          ctx.fillText('Phone:', col1, currentY);
           ctx.fillStyle = '#1f2937';
-          ctx.font = '11px Arial';
-          ctx.fillText(member.mobileNumber, 380, bottomY + 15);
-          bottomY += 30;
+          ctx.font = '21px Arial';
+          ctx.fillText(member.mobileNumber, col1, currentY + 21);
+          currentY += 57;
+        }
+
+        if (member.email) {
+          ctx.fillStyle = '#dc2626';
+          ctx.font = 'bold 21px Arial';
+          ctx.fillText('Email:', col1, currentY);
+          ctx.fillStyle = '#1f2937';
+          ctx.font = '18px Arial';
+          ctx.fillText(member.email.substring(0, 35), col1, currentY + 21);
+          currentY += 57;
         }
 
         if (member.state) {
-          ctx.fillStyle = '#2563eb';
-          ctx.font = 'bold 11px Arial';
-          ctx.fillText('STATE', 380, bottomY);
-
+          ctx.fillStyle = '#dc2626';
+          ctx.font = 'bold 21px Arial';
+          ctx.fillText('State:', col1, currentY);
           ctx.fillStyle = '#1f2937';
-          ctx.font = '11px Arial';
-          ctx.fillText(member.state, 380, bottomY + 15);
+          ctx.font = '21px Arial';
+          ctx.fillText(member.state, col1, currentY + 21);
         }
 
+        if (member.address && (member.address.street || member.address.city || member.address.postalCode)) {
+          let addrY = 180;
+          ctx.fillStyle = '#dc2626';
+          ctx.font = 'bold 21px Arial';
+          ctx.fillText('ADDRESS:', col2, addrY);
+          ctx.fillStyle = '#1f2937';
+          ctx.font = '18px Arial';
+          addrY += 27;
+
+          if (member.address.street) {
+            ctx.fillText(member.address.street.substring(0, 40), col2, addrY);
+            addrY += 24;
+          }
+          if (member.address.city) {
+            ctx.fillText(member.address.city, col2, addrY);
+            addrY += 24;
+          }
+          if (member.address.postalCode) {
+            ctx.fillText('Code: ' + member.address.postalCode, col2, addrY);
+          }
+        }
+
+        currentY = 810;
+
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'bold 21px Arial';
+        ctx.fillText('PLEDGE:', 60, currentY);
+
         ctx.fillStyle = '#d1d5db';
-        ctx.fillRect(0, 470, width, 2);
+        ctx.fillRect(0, currentY + 15, width, 3);
+
+        currentY += 45;
+
+        ctx.fillStyle = '#374151';
+        ctx.font = '18px Arial';
+        const lineHeight = 30;
+        const maxPledgeY = height - 150;
+
+        let pledgeLinesDrawn = 0;
+        for (const line of pledgeInfo.lines) {
+          if (currentY > maxPledgeY) {
+            break;
+          }
+          ctx.fillText(line, 60, currentY);
+          currentY += lineHeight;
+          pledgeLinesDrawn++;
+        }
 
         ctx.fillStyle = '#6b7280';
-        ctx.font = '12px Arial';
+        ctx.font = '18px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText(`Generated on: ${new Date().toLocaleDateString()}`, width - 40, 540);
+        ctx.fillText(`Generated: ${formatDate(new Date())}`, width - 60, height - 80);
 
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, 'image/png');
+        const canvasImage = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'px',
+          format: [width, height]
+        });
+        
+        pdf.addImage(canvasImage, 'PNG', 0, 0, width, height);
+        const pdfBlob = pdf.output('blob');
+        if (pdfBlob instanceof Promise) {
+          pdfBlob.then((blob) => {
+            resolve(blob);
+          });
+        } else {
+          resolve(pdfBlob);
+        }
       };
 
       if (member.image) {
         const img = document.createElement('img');
         img.crossOrigin = 'anonymous';
         img.onload = () => {
-          ctx.drawImage(img, 40, 80, 300, 350);
-          drawCardContent();
+          ctx.drawImage(img, 45, currentY, 450, 600);
+          continueDrawing();
         };
         img.onerror = () => {
-          drawPlaceholder();
-          drawCardContent();
+          ctx.fillStyle = '#9ca3af';
+          ctx.font = '30px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText('Photo', 270, currentY + 300);
+          continueDrawing();
         };
         img.src = member.image;
       } else {
-        drawPlaceholder();
-        drawCardContent();
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '30px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Photo', 270, currentY + 300);
+        continueDrawing();
       }
     });
   };
@@ -453,7 +528,7 @@ export default function LeadershipPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${nameEn.replace(/\s+/g, '-')}-identity-card.png`;
+    link.download = `${nameEn.replace(/\s+/g, '-')}-identity-card.pdf`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -492,7 +567,7 @@ export default function LeadershipPage() {
         return;
       }
 
-      const file = new File([blob], `${getNameText(member.name).replace(/\s+/g, '-')}-card.png`, { type: 'image/png' });
+      const file = new File([blob], `${getNameText(member.name).replace(/\s+/g, '-')}-card.pdf`, { type: 'application/pdf' });
 
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
@@ -528,7 +603,7 @@ export default function LeadershipPage() {
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="md:col-span-1">
-              <div className="h-64 w-full bg-gradient-to-br from-red-100 to-blue-100 rounded-xl overflow-hidden relative flex items-center justify-center">
+              <div className="h-80 w-full bg-gradient-to-br from-red-100 to-blue-100 rounded-xl overflow-hidden relative flex items-center justify-center">
                 {member.image ? (
                   <Image
                     src={member.image}
@@ -608,7 +683,7 @@ export default function LeadershipPage() {
     <div
       className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-300 group flex flex-col h-full"
     >
-      <div className="h-64 bg-gradient-to-br from-red-100 to-blue-100 relative overflow-hidden flex-shrink-0">
+      <div className="h-80 bg-gradient-to-br from-red-100 to-blue-100 relative overflow-hidden flex-shrink-0">
         {member.image ? (
           <Image
             src={member.image}
@@ -727,9 +802,16 @@ export default function LeadershipPage() {
               {t('leadership.subtitle', 'for a Better India')}
             </span>
           </h1>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto mb-0 leading-relaxed">
+          <p className="text-lg text-white/80 max-w-2xl mx-auto mb-6 leading-relaxed">
             {t('leadership.description', 'Dedicated individuals united in their mission to create positive change and empower every citizen')}
           </p>
+          <div className="max-w-3xl mx-auto">
+            <blockquote className="text-lg sm:text-xl font-semibold italic text-white border-l-4 border-yellow-400 pl-6 py-4 bg-white/5 backdrop-blur-md rounded-r-lg">
+              {locale === 'hi' 
+                ? 'सत्ता के लिए संघर्ष में सर्वहारा के पास संगठन के अलावा कोई दूसरा हथियार नहीं है - व्लादिमीर लेनिन'
+                : '"In the struggle for power, the proletariat has no weapon other than organization" - V. Lenin'}
+            </blockquote>
+          </div>
         </div>
       </section>
 
@@ -767,7 +849,7 @@ export default function LeadershipPage() {
                 <div className="relative w-full" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
                   <div className="w-full bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-                      <div className="lg:col-span-3 h-56 sm:h-80 lg:h-auto overflow-hidden bg-gradient-to-br from-red-100 to-blue-100 relative flex items-center justify-center">
+                      <div className="lg:col-span-3 h-64 sm:h-96 lg:h-auto overflow-hidden bg-gradient-to-br from-red-100 to-blue-100 relative flex items-center justify-center">
                         {nationalIndex === 0 ? (
                           <Image
                             src="/president.jpg"

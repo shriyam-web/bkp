@@ -7,6 +7,10 @@ const membershipSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    serialNo: {
+      type: String,
+      required: false,
+    },
     name: {
       type: String,
       required: true,
@@ -29,7 +33,7 @@ const membershipSchema = new mongoose.Schema(
     },
     district: {
       type: String,
-      required: true,
+      required: false,
     },
     pincode: {
       type: String,
@@ -39,7 +43,23 @@ const membershipSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: false,
+    },
     voterIdCardNo: {
+      type: String,
+      required: false,
+    },
+    aadharNumber: {
+      type: String,
+      required: false,
+    },
+    pollingStation: {
+      type: String,
+      required: false,
+    },
+    constituency: {
       type: String,
       required: false,
     },

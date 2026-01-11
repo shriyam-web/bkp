@@ -21,7 +21,7 @@ export default function Header() {
     { name: 'Manifesto', name_hi: 'घोषणापत्र', href: `/${locale}/manifesto` },
     { name: 'Inspiration', name_hi: 'हमारे प्रेरणा-स्रोत', href: `/${locale}/inspiration` },
     { name: 'News', name_hi: 'समाचार', href: `/${locale}/news` },
-    { name: 'Events', name_hi: 'कार्यक्रम', href: `/${locale}/events` },
+    { name: 'Gallery', name_hi: 'गैलरी', href: `/${locale}/gallery` },
     { name: 'Contact', name_hi: 'संपर्क', href: `/${locale}/contact` },
   ];
 
@@ -55,7 +55,7 @@ export default function Header() {
           </button>
         </div>
 
-        <div className="hidden lg:flex lg:gap-x-8">
+        <div className="hidden lg:flex lg:gap-x-4">
           {navigation.map((item) => (
             <Link
               key={item.name}

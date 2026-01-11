@@ -4,7 +4,7 @@ import '../globals.css';
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Users, LogOut, Menu, X, Send } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, Menu, X, Send, FileText, Image as ImageIcon } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -31,7 +31,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     },
     { href: '/admin/state-committee', label: 'State Committee', icon: Users },
     { href: '/admin/district-committee', label: 'District Committee', icon: Users },
-    { href: '/admin/messaging', label: 'Messaging', icon: Send },
+    { href: '/admin/emailing', label: 'Email Center', icon: Send },
+    { href: '/admin/press-release', label: 'Press Release', icon: FileText },
+    { href: '/admin/gallery', label: 'Gallery', icon: ImageIcon },
   ];
 
   return (

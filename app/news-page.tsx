@@ -7,7 +7,7 @@ import NewsCard from '@/components/NewsCard';
 import { useTranslations } from '@/lib/TranslationContext';
 
 interface News {
-  id: string;
+  _id: string;
   title: string;
   excerpt: string;
   image_url: string;
@@ -66,7 +66,7 @@ export default function NewsPage() {
           ) : news.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {news.map((item) => (
-                <NewsCard key={item.id} {...item} />
+                <NewsCard key={item._id} id={item._id} {...item} />
               ))}
             </div>
           ) : (

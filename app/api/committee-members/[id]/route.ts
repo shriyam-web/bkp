@@ -16,6 +16,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       address: body.address,
       state: body.state,
       mobileNumber: body.mobileNumber,
+      email: body.email,
       type: body.type,
       order: body.order,
     };

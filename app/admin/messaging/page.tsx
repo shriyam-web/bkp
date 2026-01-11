@@ -3,6 +3,16 @@
 import { useState, useEffect } from 'react';
 import { Send, Users, History, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { formatDate } from '@/lib/utils';
+
+const INDIAN_STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
+  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+  'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+];
 
 interface MessageHistory {
   _id: string;
@@ -19,30 +29,14 @@ export default function MessagingPage() {
   const [content, setContent] = useState('');
   const [targetType, setTargetType] = useState('NATIONAL');
   const [targetValue, setTargetValue] = useState('');
-  const [states, setStates] = useState<string[]>([]);
-  const [districts, setDistricts] = useState<string[]>([]);
   const [history, setHistory] = useState<MessageHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchingHistory, setFetchingHistory] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchLocations();
     fetchHistory();
   }, []);
-
-  const fetchLocations = async () => {
-    try {
-      const res = await fetch('/api/locations');
-      const data = await res.json();
-      if (data.success) {
-        setStates(data.states);
-        setDistricts(data.districts);
-      }
-    } catch (error) {
-      console.error('Failed to fetch locations:', error);
-    }
-  };
 
   const fetchHistory = async () => {
     setFetchingHistory(true);
@@ -144,11 +138,15 @@ export default function MessagingPage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                     >
                       <option value="">Select Location</option>
-                      {(targetType === 'STATE' ? states : districts).map((loc) => (
-                        <option key={loc} value={loc}>
-                          {loc}
-                        </option>
-                      ))}
+                      {targetType === 'STATE' ? (
+                        INDIAN_STATES.map((state) => (
+                          <option key={state} value={state}>
+                            {state}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="">Enter district name in members list</option>
+                      )}
                     </select>
                   </div>
                 )}
@@ -240,7 +238,7 @@ export default function MessagingPage() {
                     <div className="flex justify-between items-start mb-1">
                       <h4 className="font-bold text-gray-900 truncate pr-2">{msg.subject}</h4>
                       <span className="text-xs text-gray-500 whitespace-nowrap">
-                        {new Date(msg.sentAt).toLocaleDateString()}
+                        {formatDate(msg.sentAt)}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 line-clamp-2 mb-2">{msg.content}</p>
