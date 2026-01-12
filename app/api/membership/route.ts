@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const membership = await Membership.create(membershipData);
 
     return NextResponse.json(
-      { success: true, data: membership, memberId: membership.memberId },
+      { success: true, data: membership },
       { status: 201 }
     );
   } catch (error) {
