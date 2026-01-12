@@ -18,6 +18,7 @@ export default function Header() {
     { name: 'Home', name_hi: 'होम', href: `/${locale}/` },
     { name: 'About', name_hi: 'परिचय', href: `/${locale}/about` },
     { name: 'Leadership', name_hi: 'नेतृत्व', href: `/${locale}/leadership` },
+    { name: 'Organization', name_hi: 'संगठनात्मक ढांचा', href: `/${locale}/organization` },
     { name: 'Manifesto', name_hi: 'घोषणापत्र', href: `/${locale}/manifesto` },
     { name: 'Inspiration', name_hi: 'हमारे प्रेरणा-स्रोत', href: `/${locale}/inspiration` },
     { name: 'News', name_hi: 'समाचार', href: `/${locale}/news` },

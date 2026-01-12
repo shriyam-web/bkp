@@ -7,11 +7,11 @@ export async function GET() {
   try {
     await dbConnect();
     
-    const committeeStates = await CommitteeMember.distinct('state', { state: { $ne: null, $ne: '' } });
-    const membershipStates = await Membership.distinct('state', { state: { $ne: null, $ne: '' } });
+    const committeeStates = await CommitteeMember.distinct('state', { state: { $nin: [null, ''] } });
+    const membershipStates = await Membership.distinct('state', { state: { $nin: [null, ''] } });
     
-    const committeeDistricts = await CommitteeMember.distinct('district', { district: { $ne: null, $ne: '' } });
-    const membershipDistricts = await Membership.distinct('district', { district: { $ne: null, $ne: '' } });
+    const committeeDistricts = await CommitteeMember.distinct('district', { district: { $nin: [null, ''] } });
+    const membershipDistricts = await Membership.distinct('district', { district: { $nin: [null, ''] } });
 
     const states = Array.from(new Set([...committeeStates, ...membershipStates]))
       .filter(s => s && typeof s === 'string' && s.trim() !== '')
