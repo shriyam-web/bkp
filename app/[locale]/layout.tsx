@@ -26,7 +26,7 @@ export async function generateMetadata({
   const isHindi = locale === 'hi';
 
   return {
-    metadataBase: new URL('https://bharatparty.in/'),
+    metadataBase: new URL('https://bahujankrantiparty.org/'),
     title: isHindi
       ? 'बहुजन क्रांति पार्टी (मार्क्सवाद-अंबेडकरवाद) | एक बेहतर भारत का निर्माण'
       : 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad) | Official Website',
@@ -40,7 +40,7 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       locale: isHindi ? 'hi_IN' : 'en_IN',
-      url: `https://bharatparty.in/${locale}`,
+      url: `https://bahujankrantiparty.org/${locale}`,
       siteName: isHindi ? 'बहुजन क्रांति पार्टी' : 'Bahujan Kranti Party',
       title: isHindi
         ? 'बहुजन क्रांति पार्टी (मार्क्सवाद-अंबेडकरवाद) | एक बेहतर भारत का निर्माण'
@@ -81,7 +81,7 @@ export async function generateMetadata({
       },
     },
     alternates: {
-      canonical: `https://bharatparty.in/${locale}`,
+      canonical: `https://bahujankrantiparty.org/${locale}`,
     },
   };
 }

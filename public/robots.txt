@@ -1,5 +1,5 @@
 # Robots.txt for Bahujan Kranti Party (Marxwaad-Ambedkarwaad) Official Website
-# Official Website: https://bharatparty.in
+# Official Website: https://bahujankrantiparty.org
 
 User-agent: *
 Allow: /
@@ -32,7 +32,7 @@ User-agent: AhrefsBot
 Disallow: /
 
 # Sitemap location
-Sitemap: https://bharatparty.in/sitemap.xml
+Sitemap: https://bahujankrantiparty.org/sitemap.xml
 
 # Official Website
-Host: https://bharatparty.in
+Host: https://bahujankrantiparty.org

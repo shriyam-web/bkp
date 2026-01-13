@@ -2,14 +2,14 @@ export function OrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    '@id': 'https://bharatparty.in',
+    '@id': 'https://bahujankrantiparty.org',
     name: 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad)',
     alternateName: ['BKP', 'Bahujan Kranti Party', 'Bahujan Kranti Party Marxwaad-Ambedkarwaad'],
     description: 'Official website of Bahujan Kranti Party (Marxwaad-Ambedkarwaad) - A political movement committed to Marxist and Ambedkarite principles, dedicated to social equality, workers\' rights, and empowering every citizen for a progressive, inclusive, and prosperous India.',
-    url: 'https://bharatparty.in',
-    email: 'info@bharatparty.in',
-    logo: 'https://bharatparty.in/flag.png',
-    image: 'https://bharatparty.in/flag.png',
+    url: 'https://bahujankrantiparty.org',
+    email: 'info@bahujankrantiparty.org',
+    logo: 'https://bahujankrantiparty.org/flag.png',
+    image: 'https://bahujankrantiparty.org/flag.png',
     sameAs: [
       'https://facebook.com/BahujanKrantiParty',
       'https://twitter.com/BahujanKrantiParty',
@@ -19,7 +19,7 @@ export function OrganizationSchema() {
       {
         '@type': 'ContactPoint',
         contactType: 'Customer Service',
-        email: 'info@bharatparty.in',
+        email: 'info@bahujankrantiparty.org',
         telephone: '+91-11-1234-5678',
         areaServed: 'IN',
         availableLanguage: ['en', 'hi'],
@@ -66,7 +66,7 @@ export function BreadcrumbSchema({ items }: { items: Array<{ name: string; url: 
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `https://bharatparty.in${item.url}`,
+      item: `https://bahujankrantiparty.org${item.url}`,
     })),
   };
 
@@ -92,13 +92,13 @@ export function WebPageSchema({
     '@type': 'WebPage',
     name: title,
     description: description,
-    url: `https://bharatparty.in${url}`,
+    url: `https://bahujankrantiparty.org${url}`,
     publisher: {
       '@type': 'Organization',
       name: 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad)',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bharatparty.in/flag.png',
+        url: 'https://bahujankrantiparty.org/flag.png',
       },
     },
   };
@@ -141,7 +141,7 @@ export function EventSchema({
     organizer: {
       '@type': 'Organization',
       name: 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad)',
-      url: 'https://bharatparty.in',
+      url: 'https://bahujankrantiparty.org',
     },
     ...(image && {
       image: image,

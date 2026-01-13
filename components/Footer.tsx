@@ -24,7 +24,7 @@ export default function Footer() {
               Official website dedicated to social equality, workers' rights, and inclusive development. Building a stronger, progressive India for every citizen.
             </p>
             <p className="text-xs text-gray-500 mt-2">
-              Official Website: <a href="https://bharatparty.in" className="text-red-500 hover:text-red-400">bharatparty.in</a>
+              Official Website: <a href="https://bahujankrantiparty.org" className="text-red-500 hover:text-red-400">bahujankrantiparty.org</a>
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-red-600 transition-colors">

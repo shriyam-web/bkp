@@ -132,7 +132,7 @@
 - ✅ `SEO_CHECKLIST.md`
 
 ### Metadata Base URL
-- `https://bharatparty.in` (configured in layout)
+- `https://bahujankrantiparty.org` (configured in layout)
 
 ---
 
@@ -208,7 +208,7 @@ Once improvements are made, monitor:
 
 ## 📝 Notes
 
-- Replace `bharatparty.in` with actual domain
+- Replace `bahujankrantiparty.org` with actual domain
 - Update social media handles in metadata
 - Add business address and contact info in Schema
 - Regularly update sitemap with new content
