@@ -105,7 +105,7 @@ export default function JoinPage() {
       if (!response.ok) throw new Error('Failed to submit');
 
       const data = await response.json();
-      setMemberId(data.memberId);
+      setMemberId(data.data.memberId);
       setShowConfirmation(true);
       setShowForm(false);
       setShowPledgeModal(false);

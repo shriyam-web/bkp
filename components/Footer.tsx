@@ -11,12 +11,20 @@ export default function Footer() {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-red-600 to-blue-600">
                 <Flag className="h-6 w-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">
-                Bahujan Kranti Party
-              </span>
+              <div>
+                <span className="text-xl font-bold text-white block">
+                  Bahujan Kranti Party
+                </span>
+                <span className="text-xs text-gray-400">
+                  (Marxwaad-Ambedkarwaad)
+                </span>
+              </div>
             </div>
             <p className="text-sm">
-              Building a stronger, progressive India for every citizen.
+              Official website dedicated to social equality, workers' rights, and inclusive development. Building a stronger, progressive India for every citizen.
+            </p>
+            <p className="text-xs text-gray-500 mt-2">
+              Official Website: <a href="https://bharatparty.in" className="text-red-500 hover:text-red-400">bharatparty.in</a>
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-red-600 transition-colors">
@@ -74,7 +82,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm">
-            &copy; 2025 Bahujan Kranti Party. All rights reserved.
+            &copy; 2025 Bahujan Kranti Party (Marxwaad-Ambedkarwaad). All rights reserved. | Official Website: bharatparty.in
           </p>
           <div className="flex space-x-6 text-sm mt-4 sm:mt-0">
             <Link href="#" className="hover:text-red-600 transition-colors">Privacy Policy</Link>

@@ -2,25 +2,34 @@ export function OrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Bahujan Kranti Party',
-    description: 'A political movement dedicated to creating positive change and empowering every citizen for a progressive, inclusive, and prosperous India.',
+    '@id': 'https://bharatparty.in',
+    name: 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad)',
+    alternateName: ['BKP', 'Bahujan Kranti Party', 'Bahujan Kranti Party Marxwaad-Ambedkarwaad'],
+    description: 'Official website of Bahujan Kranti Party (Marxwaad-Ambedkarwaad) - A political movement committed to Marxist and Ambedkarite principles, dedicated to social equality, workers\' rights, and empowering every citizen for a progressive, inclusive, and prosperous India.',
     url: 'https://bharatparty.in',
-    logo: 'https://bharatparty.in/logo.png',
+    email: 'info@bharatparty.in',
+    logo: 'https://bharatparty.in/flag.png',
+    image: 'https://bharatparty.in/flag.png',
     sameAs: [
       'https://facebook.com/BahujanKrantiParty',
       'https://twitter.com/BahujanKrantiParty',
       'https://instagram.com/BahujanKrantiParty',
     ],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Customer Service',
-      email: 'info@bharatparty.in',
-      telephone: '+91-11-1234-5678',
-      areaServed: 'IN',
-      availableLanguage: ['en', 'hi'],
-    },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'Customer Service',
+        email: 'info@bharatparty.in',
+        telephone: '+91-11-1234-5678',
+        areaServed: 'IN',
+        availableLanguage: ['en', 'hi'],
+      },
+    ],
     foundingDate: '2024',
-    areaServed: 'India',
+    areaServed: {
+      '@type': 'Country',
+      name: 'IN',
+    },
     address: {
       '@type': 'PostalAddress',
       streetAddress: '123 Parliament Street',
@@ -29,6 +38,16 @@ export function OrganizationSchema() {
       postalCode: '110001',
       addressCountry: 'IN',
     },
+    knowsAbout: [
+      'Social Equality',
+      'Workers\' Rights',
+      'Marxist Ideology',
+      'Ambedkarite Movement',
+      'Social Justice',
+      'Caste Eradication',
+      'Democratic Participation',
+      'Inclusive Development',
+    ],
   };
 
   return (
@@ -76,10 +95,10 @@ export function WebPageSchema({
     url: `https://bharatparty.in${url}`,
     publisher: {
       '@type': 'Organization',
-      name: 'Bahujan Kranti Party',
+      name: 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad)',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bharatparty.in/logo.png',
+        url: 'https://bharatparty.in/flag.png',
       },
     },
   };
@@ -121,7 +140,7 @@ export function EventSchema({
     },
     organizer: {
       '@type': 'Organization',
-      name: 'Bahujan Kranti Party',
+      name: 'Bahujan Kranti Party (Marxwaad-Ambedkarwaad)',
       url: 'https://bharatparty.in',
     },
     ...(image && {

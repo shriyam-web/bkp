@@ -33,7 +33,8 @@ export default function Header() {
           <Link href={`/${locale}/`} className="flex items-center space-x-2">
             <Image
               src={locale === 'hi' ? '/hindi.png' : '/eng.png'}
-              alt="Bahujan Kranti Party Logo"
+              alt="Bahujan Kranti Party (Marxwaad-Ambedkarwaad) Official Logo"
+              title="Bahujan Kranti Party (Marxwaad-Ambedkarwaad) - Official Website"
               width={250}
               height={85}
               className="h-auto"

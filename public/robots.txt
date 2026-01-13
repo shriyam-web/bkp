@@ -1,5 +1,5 @@
-# Robots.txt for Bahujan Kranti Party website
-# Allow all search engines to crawl the site
+# Robots.txt for Bahujan Kranti Party (Marxwaad-Ambedkarwaad) Official Website
+# Official Website: https://bharatparty.in
 
 User-agent: *
 Allow: /
@@ -9,15 +9,30 @@ Disallow: /private/
 Disallow: /.next/
 Disallow: /node_modules/
 
-# Allow specific search engines
+# Allow specific search engines for better indexing
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 0.5
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 0.5
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Disallow bad bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
 
 # Sitemap location
 Sitemap: https://bharatparty.in/sitemap.xml
 
-# Crawl delay
-Crawl-delay: 1
+# Official Website
+Host: https://bharatparty.in
