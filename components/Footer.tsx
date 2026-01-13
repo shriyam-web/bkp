@@ -82,7 +82,7 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm">
-            &copy; 2025 Bahujan Kranti Party (Marxwaad-Ambedkarwaad). All rights reserved. | Official Website: bharatparty.in
+            &copy; 2025 Bahujan Kranti Party (Marxwaad-Ambedkarwaad). All rights reserved. | Official Website: bahujankrantiparty.org
           </p>
           <div className="flex space-x-6 text-sm mt-4 sm:mt-0">
             <Link href="#" className="hover:text-red-600 transition-colors">Privacy Policy</Link>
