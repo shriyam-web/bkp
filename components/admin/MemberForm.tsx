@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { X, Upload, Trash2 } from 'lucide-react';
-import { CldUploadWidget } from 'next-cloudinary';
+import dynamic from 'next/dynamic';
+
+const CldUploadWidget = dynamic(() => import('next-cloudinary').then(mod => mod.CldUploadWidget), { ssr: false });
 
 interface MemberFormProps {
   initialData?: any;
