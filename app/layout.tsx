@@ -1,9 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import WebsiteLoader from '@/components/WebsiteLoader';
 
-const inter = Inter({ subsets: ['latin'] });
+const interClassName = "antialiased font-sans"; // Use system font to avoid build timeout
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://bahujankrantiparty.org/'),
@@ -56,7 +55,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={interClassName}>
         <WebsiteLoader />
         {children}
       </body>
