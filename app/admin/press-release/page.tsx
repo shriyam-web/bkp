@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { FileText, Trash2, Loader2, Plus, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/lib/utils';
-import { CldUploadWidget } from 'next-cloudinary';
+import dynamic from 'next/dynamic';
+
+const CldUploadWidget = dynamic(() => import('next-cloudinary').then(mod => mod.CldUploadWidget), { ssr: false });
 
 interface PressRelease {
   _id: string;
