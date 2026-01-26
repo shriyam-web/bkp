@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Image as ImageIcon, Trash2, Loader2, Plus, ArrowUp, ArrowDown, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { CldUploadWidget } from 'next-cloudinary';
+import dynamic from 'next/dynamic';
+
+const CldUploadWidget = dynamic(() => import('next-cloudinary').then(mod => mod.CldUploadWidget), { ssr: false });
 
 interface GalleryItem {
   _id: string;
