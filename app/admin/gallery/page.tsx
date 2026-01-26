@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Image as ImageIcon, Trash2, Loader2, Plus, ArrowUp, ArrowDown } from 'lucide-react';
+import { Image as ImageIcon, Trash2, Loader2, Plus, ArrowUp, ArrowDown, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { CldUploadWidget } from 'next-cloudinary';
 
 interface GalleryItem {
   _id: string;
@@ -48,6 +49,16 @@ export default function GalleryPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    if (!imageUrl) {
+      toast({
+        title: 'Error',
+        description: 'Please upload a photo first',
+        variant: 'destructive',
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch('/api/gallery', {
@@ -211,17 +222,45 @@ export default function GalleryPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Image URL
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Photo
                 </label>
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  required
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                />
+                {imageUrl ? (
+                  <div className="relative aspect-video mb-2 group">
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className="w-full h-full object-cover rounded-lg border border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setImageUrl('')}
+                      className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <CldUploadWidget
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                    onSuccess={(result: any) => {
+                      if (result.event === 'success') {
+                        setImageUrl(result.info.secure_url);
+                      }
+                    }}
+                  >
+                    {({ open }) => (
+                      <button
+                        type="button"
+                        onClick={() => open()}
+                        className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-gray-500 hover:text-blue-600"
+                      >
+                        <Upload className="h-8 w-8" />
+                        <span>Upload from device</span>
+                      </button>
+                    )}
+                  </CldUploadWidget>
+                )}
               </div>
 
               <div>
