@@ -68,6 +68,45 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="py-16 bg-blue-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {locale === 'hi' ? 'वैज्ञानिक समाजवाद और विचारधारा' : 'Scientific Socialism & Ideology'}
+            </h2>
+            <div className="w-20 h-1 bg-red-600 mx-auto"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="space-y-6">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {locale === 'hi'
+                  ? 'बहुजन क्रांति पार्टी (मा.अ.) का मानना है कि वर्तमान पूंजीवादी व्यवस्था ही समाज में व्याप्त अव्यवस्था, शोषण और आमजन के दुखों का मूल कारण है। यह व्यवस्था पूंजीपति वर्ग द्वारा श्रमिक वर्ग के शोषण पर टिकी है। हमारा संकल्प इस पूंजीवादी व्यवस्था को उखाड़ फेंककर "वैज्ञानिक समाजवाद" की स्थापना करना है, जहाँ मनुष्य द्वारा मनुष्य का शोषण असंभव होगा।'
+                  : 'Bahujan Kranti Party (M.A.) asserts that the current capitalist system is the root cause of social disorder, exploitation, and the suffering of the masses. This system thrives on the exploitation of the working class by the capitalist elite. Our resolve is to uproot this system and establish "Scientific Socialism," ensuring an end to the exploitation of one human by another.'}
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {locale === 'hi'
+                  ? 'हमारा लक्ष्य डॉ. कार्ल मार्क्स और डॉ. बी.आर. अंबेडकर के सम्मिलित विजन—"वर्ग-विहीन और जाति-विहीन समाज"—की स्थापना करना है। हम एक ऐसी व्यवस्था के पक्षधर हैं जहाँ संपत्ति का समान वितरण हो और राज्य समाजवाद के माध्यम से प्रत्येक नागरिक को भोजन, आवास और सम्मानजनक रोजगार की गारंटी मिले।'
+                  : 'Our goal is to realize the shared vision of Dr. Karl Marx and Dr. B.R. Ambedkar: a "classless and casteless society." We advocate for a system of equitable wealth distribution and state socialism, guaranteeing every citizen food, housing, and dignified employment.'}
+              </p>
+            </div>
+            <div className="space-y-6">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {locale === 'hi'
+                  ? 'पूंजीवाद शोषण का जनक है। इसके उन्मूलन के बिना मानवीय मूल्यों की स्थापना असंभव है। बहुजन क्रांति पार्टी का संघर्ष उसी आर्थिक विषमता को समाप्त करने के लिए है, जिसके बारे में बाबा साहब ने 15 मार्च 1947 को संविधान सभा को सौंपे गए अपने ज्ञापन में सविस्तार चर्चा की थी। हम राज्य समाजवाद के माध्यम से कृषि का राष्ट्रीयकरण और उद्योगों पर जन-स्वामित्व सुनिश्चित करेंगे।'
+                  : 'Capitalism is the progenitor of exploitation. Without its abolition, the establishment of true human values is impossible. BKP’s struggle is dedicated to ending the economic disparity that Babasaheb detailed in his memorandum to the Constituent Assembly on March 15, 1947. We aim to ensure the nationalization of agriculture and public ownership of industries through State Socialism.'}
+              </p>
+              <div className="bg-red-600 text-white p-6 rounded-lg shadow-lg mt-8">
+                <p className="text-xl font-bold italic">
+                  {locale === 'hi'
+                    ? 'समाजवाद ही मुक्ति का मार्ग है। आइए, एक ऐसे भारत का निर्माण करें जहाँ मेहनत की लूट न हो और हर हाथ को काम, हर सिर को छत मिले। जागो भारतीयों, जागो बहुजनों!'
+                    : "Socialism is the path to liberation. Let us build an India where labor is not looted, every hand has work, and every head has a roof. Awaken, Indians! Awaken, Bahujans!"}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -140,12 +179,12 @@ export default function AboutPage() {
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-2">
-                  {locale === 'hi' ? 'स्थापना' : 'Foundation'}
+                  {locale === 'hi' ? 'स्थापना और राजनीतिक घोषणा' : 'Foundation & Political Declaration'}
                 </h3>
                 <p className="text-gray-600">
                   {locale === 'hi'
-                    ? 'बहुजन क्रांति पार्टी की आधिकारिक स्थापना की गई।'
-                    : 'Bahujan Kranti Party was officially founded with a core group of 50 founding members.'}
+                    ? '1 सितंबर 2012 को उत्तर प्रदेश राज्य संपत्ति विभाग के बी-ब्लॉक कॉमन हॉल, दारुल शफा, लखनऊ में बहुजन क्रांति पार्टी (मा.अ.) की आधिकारिक घोषणा की गई।'
+                    : 'On September 1, 2012, Bahujan Kranti Party (M.A.) was officially announced at B-Block Common Hall, Darul Shafa, Lucknow, Uttar Pradesh.'}
                 </p>
               </div>
             </div>
