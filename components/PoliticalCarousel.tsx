@@ -46,9 +46,10 @@ export default function PoliticalCarousel() {
         {CAROUSEL_IMAGES.map((image, index) => (
           <div
             key={image.id}
-            className="absolute inset-0 transition-opacity duration-1000"
+            className={`absolute inset-0 transition-all duration-[2000ms] ease-out ${
+              index === currentSlide ? 'opacity-100 scale-110' : 'opacity-0 scale-100'
+            }`}
             style={{
-              opacity: index === currentSlide ? 1 : 0,
               pointerEvents: index === currentSlide ? 'auto' : 'none',
             }}
           >
