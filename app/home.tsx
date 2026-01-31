@@ -13,7 +13,7 @@ import PoliticalCarousel from '@/components/PoliticalCarousel';
 import { useTranslations } from '@/lib/TranslationContext';
 
 interface News {
-  id: string;
+  _id: string;
   title: string;
   excerpt: string;
   image_url: string;
@@ -21,7 +21,7 @@ interface News {
 }
 
 interface Event {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   location: string;
@@ -217,7 +217,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {news.map((item) => (
-                <NewsCard key={item.id} {...item} />
+                <NewsCard key={item._id} id={item._id} {...item} />
               ))}
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => (
-                <EventCard key={event.id} {...event} />
+                <EventCard key={event._id} {...event} />
               ))}
             </div>
           </div>

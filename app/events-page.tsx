@@ -7,7 +7,7 @@ import EventCard from '@/components/EventCard';
 import { useTranslations } from '@/lib/TranslationContext';
 
 interface Event {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   location: string;
@@ -67,7 +67,7 @@ export default function EventsPage() {
           ) : events.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => (
-                <EventCard key={event.id} {...event} />
+                <EventCard key={event._id} {...event} />
               ))}
             </div>
           ) : (
