@@ -147,14 +147,10 @@ export default function HomePage() {
               </Link>
 
               <div className="hidden lg:flex items-center gap-3 ml-6 text-white/60">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="h-8 w-8 rounded-full border-2 border-black bg-gray-800 flex items-center justify-center overflow-hidden">
-                      <Users className="h-4 w-4" />
-                    </div>
-                  ))}
+                <div className="flex h-8 w-8 rounded-full border-2 border-white/20 bg-white/5 items-center justify-center">
+                  <Heart className="h-4 w-4 text-red-500" />
                 </div>
-                <span className="text-xs font-bold tracking-widest">{locale === 'hi' ? '500K+ सदस्य' : '500K+ MEMBERS'}</span>
+                <span className="text-xs font-bold tracking-widest">{locale === 'hi' ? 'सक्रिय स्वयंसेवक' : 'ACTIVE VOLUNTEERS'}</span>
               </div>
             </div>
           </div>
@@ -171,16 +167,16 @@ export default function HomePage() {
       <section className="relative z-20 -mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
-            { label: locale === 'hi' ? 'सक्रिय सदस्य' : 'Active Members', value: '500K+', icon: Users, color: 'text-blue-600' },
-            { label: locale === 'hi' ? 'जिले कवर' : 'Districts Covered', value: '450+', icon: Globe, color: 'text-red-600' },
-            { label: locale === 'hi' ? 'आयोजित कार्यक्रम' : 'Events Held', value: '1,200+', icon: Award, color: 'text-blue-600' },
-            { label: locale === 'hi' ? 'स्वयंसेवक' : 'Volunteers', value: '25K+', icon: Heart, color: 'text-red-600' },
+            { label: locale === 'hi' ? 'सक्रिय सदस्य' : 'Active Members', value: locale === 'hi' ? 'बढ़ता हुआ' : 'Growing', icon: Users, color: 'text-blue-600' },
+            { label: locale === 'hi' ? 'क्षेत्र कवर' : 'Areas Covered', value: locale === 'hi' ? 'सक्रिय' : 'Active', icon: Globe, color: 'text-red-600' },
+            { label: locale === 'hi' ? 'आयोजित कार्यक्रम' : 'Events Held', value: locale === 'hi' ? 'नियमित' : 'Regular', icon: Award, color: 'text-blue-600' },
+            { label: locale === 'hi' ? 'स्वयंसेवक' : 'Volunteers', value: locale === 'hi' ? 'समर्पित' : 'Dedicated', icon: Heart, color: 'text-red-600' },
           ].map((stat, i) => (
             <div key={i} className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-gray-100 hover:scale-105 transition-transform">
               <div className={`p-3 rounded-xl bg-gray-50 ${stat.color} mb-3`}>
                 <stat.icon className="h-6 w-6" />
               </div>
-              <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
+              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
               <div className="text-sm font-medium text-gray-500">{stat.label}</div>
             </div>
           ))}
@@ -461,7 +457,7 @@ export default function HomePage() {
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-sm font-medium">{locale === 'hi' ? '50,000+ पहले से जुड़े हैं' : '50,000+ already joined'}</span>
+                  <span className="text-sm font-medium">{locale === 'hi' ? 'हमारे बढ़ते समुदाय में शामिल हों' : 'Join our growing community'}</span>
                 </div>
               </div>
             </div>
