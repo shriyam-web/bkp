@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag } from 'lucide-react';
+import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import NewsCard from '@/components/NewsCard';
@@ -130,40 +130,40 @@ export default function HomePage() {
 
   const manifestoItems = [
     {
-      icon: BookOpen,
-      title: locale === 'hi' ? 'शिक्षा नीति' : 'Education Policy',
-      description: locale === 'hi' ? 'राष्ट्रवादी और मूल्य-आधारित शिक्षा प्रणाली जो हर बच्चे के भविष्य को संवारती है।' : 'A nationalistic and value-based education system that shapes every child\'s future.',
-      color: 'from-orange-500 to-red-600',
-    },
-    {
-      icon: Shield,
-      title: locale === 'hi' ? 'सेना व अखंड भारत' : 'Army & Akhand Bharat',
-      description: locale === 'hi' ? 'शक्तिशाली सेना का निर्माण और अखंड भारत के गौरव को पुनः प्राप्त करने का संकल्प।' : 'Building a powerful military and a commitment to reclaiming the glory of Akhand Bharat.',
-      color: 'from-red-600 to-red-800',
-    },
-    {
-      icon: Scale,
-      title: locale === 'hi' ? 'न्याय व्यवस्था' : 'Judicial System',
-      description: locale === 'hi' ? 'प्रत्येक नागरिक के लिए सुलभ, तीव्र और पारदर्शी न्याय सुनिश्चित करने के लिए व्यापक सुधार।' : 'Comprehensive reforms to ensure accessible, swift, and transparent justice for every citizen.',
-      color: 'from-blue-600 to-blue-800',
-    },
-    {
-      icon: MapPin,
-      title: locale === 'hi' ? 'फर्रुखाबाद विकास योजना' : 'Farrukhabad Development',
-      description: locale === 'hi' ? 'फर्रुखाबाद के सर्वांगीण विकास के लिए एक समर्पित और आधुनिक मास्टर प्लान।' : 'A dedicated and modern master plan for the all-round development of Farrukhabad.',
-      color: 'from-green-600 to-green-800',
-    },
-    {
       icon: Heart,
-      title: locale === 'hi' ? 'परिवार व संस्कृति रक्षा' : 'Family & Cultural Protection',
-      description: locale === 'hi' ? 'पारंपरिक पारिवारिक मूल्यों और हमारी सांस्कृतिक जड़ों को आधुनिकता के प्रहार से बचाना।' : 'Protecting traditional family values and our cultural roots from the onslaught of modernity.',
-      color: 'from-purple-600 to-purple-800',
+      title: locale === 'hi' ? 'आयुर्वेदिक सुपर-स्पेशलिटी' : 'Ayurvedic Super-Specialty',
+      description: locale === 'hi' ? 'प्रत्येक जिले में गंभीर रोगों के इलाज हेतु सुपर स्पेशलिटी आयुर्वेदिक अस्पतालों का निर्माण।' : 'Construction of super-specialty Ayurvedic hospitals in every district for serious ailments.',
+      color: 'from-red-500 to-red-700',
     },
     {
-      icon: Flag,
-      title: locale === 'hi' ? 'संस्कृति बचाओ कार्यक्रम' : 'Sanskriti Bachao Karyakram',
-      description: locale === 'hi' ? 'भारत की समृद्ध विरासत और गौरवशाली परंपराओं को संरक्षित करने का हमारा प्रमुख अभियान।' : 'Our flagship movement to preserve Bharat\'s rich heritage and glorious traditions.',
-      color: 'from-yellow-500 to-orange-600',
+      icon: Briefcase,
+      title: locale === 'hi' ? 'कर्ज मुक्त भारत' : 'Debt-Free India',
+      description: locale === 'hi' ? 'किसानों और मध्यम वर्ग को ₹50 प्रति लीटर पर पेट्रोलियम की उपलब्धता और आयकर की समाप्ति।' : 'Ensuring petroleum at ₹50/liter for farmers and middle class, and abolition of Income Tax.',
+      color: 'from-green-500 to-green-700',
+    },
+    {
+      icon: Sprout,
+      title: locale === 'hi' ? 'राजकीय कृषि एवं गौ-रक्षा' : 'State Agriculture & Cow Protection',
+      description: locale === 'hi' ? 'गाय-बैल को राजकीय धर्म पशु घोषित करना और कृषि का पूर्ण आधुनिकरण।' : 'Declaring cows as State Religious Animals and complete modernization of agriculture.',
+      color: 'from-blue-500 to-blue-700',
+    },
+    {
+      icon: Globe,
+      title: locale === 'hi' ? 'विदेशी काला धन' : 'Foreign Black Money',
+      description: locale === 'hi' ? 'विदेशी बैंकों में जमा काले धन को राष्ट्रीय संपत्ति घोषित करना और उसे वापस लाना।' : 'Declaring black money in foreign banks as National Property and its repatriation.',
+      color: 'from-indigo-500 to-indigo-700',
+    },
+    {
+      icon: Users,
+      title: locale === 'hi' ? 'सामाजिक सुरक्षा' : 'Social Security',
+      description: locale === 'hi' ? 'प्रत्येक भारतीय को भोजन, आवास और 65 वर्ष से अधिक आयु के वृद्धों के लिए पेंशन।' : 'Guaranteed food, housing, and pension for senior citizens above 65 years.',
+      color: 'from-purple-500 to-purple-700',
+    },
+    {
+      icon: Building2,
+      title: locale === 'hi' ? 'भ्रष्टाचार मुक्त शासन' : 'Corruption-Free Governance',
+      description: locale === 'hi' ? 'संविधान में भ्रष्टाचार की स्पष्ट परिभाषा और बैंकों का पूर्ण राष्ट्रीयकरण।' : 'Clear definition of corruption in constitution and complete nationalization of banks.',
+      color: 'from-gray-500 to-gray-700',
     },
   ];
 

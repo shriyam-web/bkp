@@ -767,7 +767,7 @@ export default function LeadershipPage() {
           <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
         </div>
-
+       
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="inline-flex items-center rounded-full bg-white/5 px-5 py-2 text-[9px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-8 backdrop-blur-xl uppercase shadow-2xl">
