@@ -11,16 +11,29 @@ export default function AboutPage() {
   const { locale } = useTranslations();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fcfcfc]">
       <Header />
 
-      <section className="relative bg-gradient-to-r from-red-600 to-blue-600 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#0a0a0a] pt-56 pb-40">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/15 rounded-full blur-[140px] animate-pulse" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-              {locale === 'hi' ? 'बहुजन क्रांति पार्टी के बारे में' : 'About Bahujan Kranti Party'}
+            <div className="inline-flex items-center rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-10 backdrop-blur-xl uppercase shadow-2xl">
+              {locale === 'hi' ? 'हमारी पहचान' : 'OUR IDENTITY'}
+            </div>
+            <h1 className="text-6xl font-black tracking-tighter text-white sm:text-9xl mb-10 leading-[0.95] drop-shadow-2xl">
+              {locale === 'hi' ? 'बहुजन क्रांति पार्टी के बारे में' : 'ABOUT BAHUJAN KRANTI'} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 italic font-serif">
+                {locale === 'hi' ? 'हमारा इतिहास और विचारधारा' : 'PARTY & OUR CORE IDEOLOGY'}
+              </span>
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed border-l-2 border-red-600/30 pl-8">
               {locale === 'hi'
                 ? 'समर्पित सेवा और जनकेंद्रित नीतियों के माध्यम से एक प्रगतिशील, समावेशी भारत का निर्माण'
                 : 'Building a progressive, inclusive India through dedicated service and people-centric policies'}
@@ -44,8 +57,8 @@ export default function AboutPage() {
                 </p>
                 <p>
                   {locale === 'hi'
-                    ? 'पिछले वर्षों में, हम एक राष्ट्रीय आंदोलन में विकसित हुए हैं, जिसमें सभी राज्यों और केंद्र शासित प्रदेशों में लाखों सदस्य हैं। हमारे जमीनी दृष्टिकोण ने हमें आम नागरिकों द्वारा सामना किए जाने वाली वास्तविक चुनौतियों को समझने और उनकी जरूरतों को पूरा करने वाली नीतियां तैयार करने में सक्षम बनाया है।'
-                    : 'Over the years, we have grown into a national movement, with millions of members across all states and union territories. Our grassroots approach has enabled us to understand the real challenges faced by ordinary citizens and craft policies that address their needs.'}
+                    ? 'पिछले वर्षों में, हम एक सक्रिय राजनीतिक आंदोलन में विकसित हुए हैं, जिसमें पूरे भारत में समर्पित सदस्य और स्वयंसेवक शामिल हैं। हमारे जमीनी दृष्टिकोण ने हमें आम नागरिकों द्वारा सामना किए जाने वाली वास्तविक चुनौतियों को समझने और उनकी जरूरतों को पूरा करने वाली नीतियां तैयार करने में सक्षम बनाया है।'
+                    : 'Over the years, we have grown into an active political movement, with dedicated members and volunteers across India. Our grassroots approach has enabled us to understand the real challenges faced by ordinary citizens and craft policies that address their needs.'}
                 </p>
                 <p>
                   {locale === 'hi'
@@ -207,23 +220,23 @@ export default function AboutPage() {
               </div>
             </div> */}
 
-            {/* <div className="flex gap-6">
+            <div className="flex gap-6">
               <div className="flex-shrink-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 font-bold">
-                  2019
+                  2020
                 </div>
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-2">
-                  {locale === 'hi' ? 'राष्ट्रीय विस्तार' : 'National Expansion'}
+                  {locale === 'hi' ? 'संगठनात्मक विस्तार' : 'Organizational Expansion'}
                 </h3>
                 <p className="text-gray-600">
                   {locale === 'hi'
-                    ? 'पूरे देश में 50 लाख से अधिक पंजीकृत सदस्यों के साथ सभी राज्यों और संघ क्षेत्रों में विस्तृत।'
-                    : 'Expanded to all states and union territories with over 5 million registered members.'}
+                    ? 'विभिन्न राज्यों में संगठनात्मक ढाँचे का विस्तार और जमीनी स्तर पर कार्यकर्ताओं का जुड़ाव।'
+                    : 'Expansion of organizational structure across various states and engagement of grassroots workers.'}
                 </p>
               </div>
-            </div> */}
+            </div>
 
             <div className="flex gap-6">
               <div className="flex-shrink-0">

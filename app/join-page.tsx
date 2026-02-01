@@ -167,17 +167,29 @@ export default function JoinPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fcfcfc]">
       <Toaster />
       <Header />
 
-      <section className="relative bg-gradient-to-r from-red-600 to-blue-600 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#0a0a0a] pt-48 pb-32">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/10 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-              {locale === 'hi' ? 'हमारे आंदोलन में शामिल हों' : 'Join Our Movement'}
+            <div className="inline-flex items-center rounded-full bg-white/5 px-4 py-2 text-xs font-bold tracking-[0.2em] text-red-500 border border-white/10 mb-8 backdrop-blur-md uppercase">
+              {locale === 'hi' ? 'सदस्यता' : 'MEMBERSHIP'}
+            </div>
+            <h1 className="text-5xl font-black tracking-tighter text-white sm:text-8xl mb-8 leading-[1.1] drop-shadow-2xl">
+              {locale === 'hi' ? 'हमारे आंदोलन में शामिल हों' : 'Join Our Movement'} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 italic font-serif">
+                {locale === 'hi' ? 'परिवर्तन का हिस्सा बनें' : 'BE THE CHANGE'}
+              </span>
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed">
               {locale === 'hi'
                 ? 'एक सदस्य बनें और सभी के लिए एक बेहतर भारत बनाने में हमारी मदद करें'
                 : 'Become a member and help us build a better India for all'

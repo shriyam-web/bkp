@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Users, Briefcase, MapPin, ChevronLeft, ChevronRight, Star, Award, Download, Eye, Share2, MessageCircle, ChevronDown, ChevronUp, Phone } from 'lucide-react';
+import { PremiumLoader } from '@/components/LeadershipLoader';
+import { Users, Briefcase, MapPin, ChevronLeft, ChevronRight, Star, Award, Download, Eye, Share2, MessageCircle, ChevronDown, ChevronUp, Phone, Search, Filter } from 'lucide-react';
 import { useTranslations } from '@/lib/TranslationContext';
 import { formatDate } from '@/lib/utils';
 import jsPDF from 'jspdf';
@@ -63,10 +64,8 @@ export default function LeadershipPage() {
   const [orderedStates, setOrderedStates] = useState<string[]>(INDIAN_STATES);
   const [loading, setLoading] = useState(true);
   const [selectedMember, setSelectedMember] = useState<CommitteeMember | null>(null);
-  const [isHovering, setIsHovering] = useState(false);
   const [shareMenuOpen, setShareMenuOpen] = useState<string | null>(null);
   const [urlMemberId, setUrlMemberId] = useState<string | null>(null);
-  const [nationalIndex, setNationalIndex] = useState(0);
   const stateLeadershipRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -219,16 +218,6 @@ export default function LeadershipPage() {
   }, [selectedState, selectedLevel, selectedDistrict]);
 
   useEffect(() => {
-    if (isHovering || loading || nationalCommittee.length === 0) return;
-
-    const interval = setInterval(() => {
-      setNationalIndex((prev) => (prev + 1) % (nationalCommittee.length + 1));
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isHovering, loading, nationalCommittee.length]);
-
-  useEffect(() => {
     if (!urlMemberId) return;
 
     // Handle president case immediately
@@ -255,16 +244,6 @@ export default function LeadershipPage() {
       setSelectedMember(foundMember);
     }
   }, [urlMemberId, loading, nationalCommittee, statePresidents, rashtriyaParishad, rashtriyaKaaryasamiti]);
-
-  const nextNationalCarousel = () => {
-    if (nationalCommittee.length === 0) return;
-    setNationalIndex((prev) => (prev + 1) % (nationalCommittee.length + 1));
-  };
-
-  const prevNationalCarousel = () => {
-    if (nationalCommittee.length === 0) return;
-    setNationalIndex((prev) => (prev - 1 + nationalCommittee.length + 1) % (nationalCommittee.length + 1));
-  };
 
   const getPositionText = (position: { en: string; hi: string } | string) => {
     if (typeof position === 'string') return position;
@@ -591,90 +570,94 @@ export default function LeadershipPage() {
   };
 
   const MemberDetailModal = ({ member, onClose }: { member: CommitteeMember; onClose: () => void }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-red-600 to-blue-600 p-6 text-white flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{getNameText(member.name)}</h2>
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+      <div className="bg-white rounded-[2rem] shadow-2xl max-w-xl w-full overflow-hidden border border-gray-100 animate-in zoom-in-95 duration-300">
+        <div className="relative h-32 sm:h-40 bg-gradient-to-br from-red-600 via-red-500 to-blue-600">
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
           <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 text-2xl font-bold"
+            className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 backdrop-blur-md transition-all z-10"
           >
-            ×
+            <ChevronDown className="h-5 w-5" />
           </button>
-        </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="md:col-span-1">
-              <div className="h-80 w-full bg-gradient-to-br from-red-100 to-blue-100 rounded-xl overflow-hidden relative flex items-center justify-center">
-                {member.image ? (
-                  <Image
-                    src={member.image}
-                    alt={getNameText(member.name)}
-                    fill
-                    quality={90}
-                    className="object-contain"
-                  />
-                ) : (
-                  <div className="text-center">
-                    <div className="text-6xl font-bold bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                      {getNameText(member.name)
-                        .split(' ')
-                        .map((word) => word[0])
-                        .join('')
-                        .toUpperCase()
-                        .slice(0, 2)}
-                    </div>
-                    <p className="text-gray-500 text-sm">{t('leadership.imageComingSoon', 'Image coming soon')}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="md:col-span-2">
-              <div className="mb-4">
-                <h3 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent mb-2">
-                  {getNameText(member.name)}
-                </h3>
-                <div className="inline-block">
-                  <p className="bg-gradient-to-r from-red-500 to-blue-500 text-white font-bold text-base px-4 py-2 rounded-full">
-                    {getPositionText(member.position)}
-                  </p>
+          
+          <div className="absolute -bottom-12 left-8">
+            <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-gray-100 relative">
+              {member.image ? (
+                <Image
+                  src={member.image}
+                  alt={getNameText(member.name)}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                  <span className="text-3xl font-black text-gray-400">
+                    {getNameText(member.name).split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </span>
                 </div>
-              </div>
-              {member.state && (
-                <p className="text-gray-600 flex items-center gap-2 mb-4 text-lg">
-                  <MapPin className="h-5 w-5" />
-                  <span className="font-semibold">{member.state}</span>
-                </p>
               )}
-              {member.mobileNumber && (
-                <p className="text-gray-600 flex items-center gap-2 mb-4 text-lg">
-                  <span className="font-semibold">📞 {member.mobileNumber}</span>
-                </p>
-              )}
-              <div>
-                <h3 className="font-bold text-gray-900 mb-3 text-lg">{t('leadership.about', 'About')}</h3>
-                <p className="text-gray-700 leading-relaxed text-base">
-                  {getBioText(member.bio) || t('leadership.noBioAvailable', 'No bio available')}
-                </p>
-              </div>
             </div>
           </div>
-          <div className="flex gap-3 flex-wrap pt-4 border-t border-gray-200">
-            {member.mobileNumber && (
+        </div>
+
+        <div className="pt-16 px-8 pb-8">
+          <div className="mb-6">
+            <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-0.5">
+              {getNameText(member.name)}
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="text-blue-600 font-bold uppercase tracking-wider text-xs">
+                {getPositionText(member.position)}
+              </span>
+              {member.state && (
+                <>
+                  <span className="text-gray-300">•</span>
+                  <span className="text-gray-500 font-medium flex items-center gap-1 text-xs">
+                    <MapPin className="h-3 w-3" />
+                    {member.state}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div>
+              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">Biography</h3>
+              <p className="text-sm text-gray-600 leading-relaxed font-medium">
+                {getBioText(member.bio) || t('leadership.noBioAvailable', 'No bio available')}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-5 border-t border-gray-50">
+              {member.mobileNumber && (
+                <button
+                  onClick={() => handleCall(member.mobileNumber)}
+                  className="group flex items-center justify-center gap-2.5 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-green-100 hover:shadow-green-200 active:scale-95 text-sm"
+                >
+                  <Phone className="h-4 w-4 group-hover:animate-bounce" />
+                  CALL NOW
+                </button>
+              )}
               <button
-                onClick={() => handleCall(member.mobileNumber)}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                onClick={() => generateIdentityCard(member)}
+                className="flex items-center justify-center gap-2.5 bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-gray-200 active:scale-95 text-sm"
               >
-                <span>📞</span>
-                Call
+                <Download className="h-4 w-4" />
+                GET IDENTITY CARD
               </button>
-            )}
-            <button
-              onClick={onClose}
-              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-2 px-4 rounded-lg transition-colors"
-            >
-              {t('leadership.close', 'Close')}
-            </button>
+            </div>
+
+            <div className="flex justify-center pt-2">
+              <button
+                onClick={() => { shareToWhatsApp(member); }}
+                className="flex items-center gap-2 text-gray-400 hover:text-green-600 font-bold text-xs transition-colors"
+              >
+                <MessageCircle className="h-3.5 w-3.5" />
+                SHARE ON WHATSAPP
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -683,413 +666,338 @@ export default function LeadershipPage() {
 
   const MemberCard = ({ member }: { member: CommitteeMember }) => (
     <div
-      className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-300 group flex flex-col h-full"
+      className="group relative flex flex-col h-full bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 min-w-[280px] sm:min-w-0 snap-center"
     >
-      <div className="h-80 bg-gradient-to-br from-red-100 to-blue-100 relative overflow-hidden flex-shrink-0">
+      <div className="aspect-[4/5] relative overflow-hidden bg-gray-50">
         {member.image ? (
           <Image
             src={member.image}
             alt={getNameText(member.name)}
             fill
-            className="object-contain transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="text-4xl font-bold bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent">
-              {getNameText(member.name)
-                .split(' ')
-                .map((word) => word[0])
-                .join('')
-                .toUpperCase()
-                .slice(0, 2)}
-            </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-red-50 to-blue-50">
+            <span className="text-5xl font-black text-gray-200 uppercase">
+              {getNameText(member.name).split(' ').map(n => n[0]).join('').slice(0, 2)}
+            </span>
           </div>
         )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSelectedMember(member)}
+              className="flex-1 bg-white/20 backdrop-blur-md hover:bg-white/40 text-white rounded-xl py-2.5 text-xs font-bold transition-all"
+            >
+              VIEW DETAILS
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="p-4 text-center flex-grow flex flex-col">
-        <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-red-600 transition-colors line-clamp-1">
+      
+      <div className="p-6 flex flex-col flex-grow">
+        <h3 className="text-xl font-black text-gray-900 mb-1 group-hover:text-red-600 transition-colors">
           {getNameText(member.name)}
         </h3>
-        <p className="text-blue-600 font-semibold text-xs uppercase tracking-wider mb-4 line-clamp-1">
+        <p className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-4">
           {getPositionText(member.position)}
         </p>
         
-        <div className="mt-auto grid grid-cols-2 gap-2">
+        <div className="mt-auto space-y-2">
           {member.mobileNumber && (
             <button
               onClick={() => handleCall(member.mobileNumber)}
-              className="col-span-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs shadow-sm"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-sm hover:bg-green-50 hover:text-green-600 transition-all border border-gray-100"
             >
               <Phone className="h-4 w-4" />
-              {t('leadership.call', 'Call')}
+              CALL NOW
             </button>
           )}
           
-          <div className="relative">
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => generateIdentityCard(member)}
+              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-xs hover:bg-blue-50 hover:text-blue-600 transition-all border border-gray-100"
+            >
+              <Download className="h-3.5 w-3.5" />
+              CARD
+            </button>
             <button
               onClick={() => setShareMenuOpen(shareMenuOpen === member._id ? null : member._id)}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-sm"
+              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-xs hover:bg-purple-50 hover:text-purple-600 transition-all border border-gray-100"
             >
               <Share2 className="h-3.5 w-3.5" />
-              {t('leadership.share', 'Share')}
+              SHARE
             </button>
-            {shareMenuOpen === member._id && (
-              <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 z-10">
-                <button
-                  onClick={() => {
-                    shareToWhatsApp(member);
-                    setShareMenuOpen(null);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
-                >
-                  <MessageCircle className="h-4 w-4 text-green-600" />
-                  WhatsApp
-                </button>
-                <button
-                  onClick={() => {
-                    shareWithCard(member);
-                    setShareMenuOpen(null);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                >
-                  <Share2 className="h-4 w-4 text-purple-600" />
-                  Share Card
-                </button>
-              </div>
-            )}
           </div>
-
-          <button
-            onClick={() => generateIdentityCard(member)}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-sm"
-          >
-            <Download className="h-3.5 w-3.5" />
-            {t('leadership.download', 'Download')}
-          </button>
-
-          <button
-            onClick={() => setSelectedMember(member)}
-            className="col-span-2 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-sm"
-          >
-            <Eye className="h-3.5 w-3.5" />
-            {t('leadership.viewDetails', 'Details')}
-          </button>
         </div>
       </div>
+
+      {shareMenuOpen === member._id && (
+        <div className="absolute bottom-20 left-6 right-6 bg-white rounded-2xl shadow-2xl border border-gray-100 p-2 z-20 animate-in slide-in-from-bottom-2 duration-200">
+          <button
+            onClick={() => { shareToWhatsApp(member); setShareMenuOpen(null); }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-xl transition-colors"
+          >
+            <MessageCircle className="h-5 w-5 text-green-500" />
+            WHATSAPP
+          </button>
+          <button
+            onClick={() => { shareWithCard(member); setShareMenuOpen(null); }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-colors"
+          >
+            <Share2 className="h-5 w-5 text-purple-500" />
+            SHARE PROFILE
+          </button>
+        </div>
+      )}
     </div>
   );
 
   const availableDistricts = Array.from(new Set(allDistrictMembersForState.map(m => m.district).filter(Boolean))) as string[];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fcfcfc]">
       <Header />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-red-900 to-blue-900 py-16">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl"></div>
-          <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl"></div>
+      <section className="relative overflow-hidden bg-[#0a0a0a] pt-32 pb-16">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/15 rounded-full blur-[140px] animate-pulse" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-4 inline-block">
-            <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white/80 text-sm font-medium">
-              <Star className="h-4 w-4 text-yellow-400" />
-              {t('leadership.meetOurLeaders', 'Meet Our Leaders')}
-            </span>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex items-center rounded-full bg-white/5 px-5 py-2 text-[9px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-8 backdrop-blur-xl uppercase shadow-2xl">
+              <Star className="h-2.5 w-2.5 mr-2.5 fill-red-500 animate-spin-slow" />
+              {locale === 'hi' ? 'हमारा नेतृत्व' : 'OUR LEADERSHIP'}
+              <Star className="h-2.5 w-2.5 ml-2.5 fill-red-500 animate-spin-slow" />
+            </div>
+            <h1 className="text-3xl font-black tracking-tighter text-white sm:text-5xl mb-6 leading-[1.1] drop-shadow-2xl">
+              {t('leadership.title', 'Visionary Leadership')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-500 italic font-serif">
+                {t('leadership.subtitle', 'for a Better India')}
+              </span>
+            </h1>
+            <p className="text-base text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed mb-12 border-l-2 border-red-600/30 pl-6">
+              {t('leadership.description', 'Dedicated individuals united in their mission to create positive change and empower every citizen')}
+            </p>
+            
+            <div className="max-w-3xl mx-auto relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+              <div className="relative">
+                <div className="absolute -left-4 -top-8 text-7xl text-red-600/10 font-serif pointer-events-none">"</div>
+                <blockquote className="text-base sm:text-lg font-bold italic text-white/90 px-10 py-8 bg-white/[0.03] backdrop-blur-2xl rounded-2xl text-left border border-white/10 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full"></div>
+                  {locale === 'hi' 
+                    ? 'सत्ता के लिए संघर्ष में सर्वहारा के पास संगठन के अलावा कोई दूसरा हथियार नहीं है - व्लादिमीर लेनिन'
+                    : 'In the struggle for power, the proletariat has no weapon other than organization.'}
+                  <footer className="mt-4 text-[10px] not-italic text-gray-500 font-black tracking-[0.2em] uppercase flex items-center gap-2">
+                    <div className="w-6 h-[1px] bg-gray-800"></div>
+                    V. Lenin
+                  </footer>
+                </blockquote>
+              </div>
+            </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
-            {t('leadership.title', 'Visionary Leadership')}<br />
-            <span className="bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent">
-              {t('leadership.subtitle', 'for a Better India')}
-            </span>
-          </h1>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto mb-6 leading-relaxed">
-            {t('leadership.description', 'Dedicated individuals united in their mission to create positive change and empower every citizen')}
-          </p>
-          <div className="max-w-3xl mx-auto">
-            <blockquote className="text-lg sm:text-xl font-semibold italic text-white border-l-4 border-yellow-400 pl-6 py-4 bg-white/5 backdrop-blur-md rounded-r-lg">
-              {locale === 'hi' 
-                ? 'सत्ता के लिए संघर्ष में सर्वहारा के पास संगठन के अलावा कोई दूसरा हथियार नहीं है - व्लादिमीर लेनिन'
-                : '"In the struggle for power, the proletariat has no weapon other than organization" - V. Lenin'}
-            </blockquote>
-          </div>
+        </div>
+        
+        {/* Scroll hint */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 animate-bounce opacity-20">
+          <div className="w-[1px] h-8 bg-gradient-to-b from-white to-transparent"></div>
         </div>
       </section>
 
-      {/* National Leadership Accordion */}
-      <section className="py-12 bg-white border-b border-gray-100">
+      {loading ? (
+        <div className="py-32">
+          <PremiumLoader />
+        </div>
+      ) : (
+        <>
+          {/* National Leadership Accordion */}
+          <section className="py-12 relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => setIsNationalExpanded(!isNationalExpanded)}
-            className="w-full flex items-center justify-between group py-4"
-          >
-            <div className="text-left">
-              <h2 className="text-4xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
-                {t('leadership.nationalLeadership', 'National Leadership')}
-              </h2>
-              <div className="h-1.5 w-32 bg-gradient-to-r from-red-600 to-blue-600 rounded-full transition-all duration-300 group-hover:w-40"></div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-full shadow-md group-hover:shadow-lg transition-all duration-300 border border-gray-100">
-              {isNationalExpanded ? (
-                <ChevronUp className="h-8 w-8 text-red-600" />
-              ) : (
-                <ChevronDown className="h-8 w-8 text-blue-600" />
-              )}
-            </div>
-          </button>
+          <div className="mb-8 relative">
+            <button
+              onClick={() => setIsNationalExpanded(!isNationalExpanded)}
+              className="w-full flex items-center justify-between group bg-white p-6 rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 hover:border-red-500/20 transition-all duration-500"
+            >
+              <div className="text-left">
+                <div className="flex items-center gap-4 mb-1">
+                  <div className="h-8 w-1 bg-gradient-to-b from-red-600 to-blue-600 rounded-full"></div>
+                  <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                    {t('leadership.nationalLeadership', 'National Leadership')}
+                  </h2>
+                </div>
+                <p className="text-sm text-gray-500 font-medium ml-5">{t('leadership.nationalDescription', 'Our central governing body and visionary pioneers')}</p>
+              </div>
+              <div className={`p-3 rounded-xl transition-all duration-500 ${isNationalExpanded ? 'bg-red-600 text-white shadow-red-200' : 'bg-gray-50 text-gray-400'}`}>
+                {isNationalExpanded ? (
+                  <ChevronUp className="h-6 w-6" />
+                ) : (
+                  <ChevronDown className="h-6 w-6" />
+                )}
+              </div>
+            </button>
+          </div>
 
-          <div className={`transition-all duration-500 overflow-hidden ${isNationalExpanded ? 'max-h-[10000px] mt-12 opacity-100' : 'max-h-0 opacity-0'}`}>
-            <div className="mb-16">
+          <div className={`transition-all duration-700 ease-in-out overflow-hidden ${isNationalExpanded ? 'max-h-[10000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className="mb-12">
               {loading ? (
-                <div className="text-center py-12">Loading...</div>
+                <PremiumLoader />
               ) : nationalCommittee.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
                   No national committee members found.
                 </div>
               ) : (
-                <div className="relative w-full" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-                  <div className="w-full bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
-                      <div className="lg:col-span-3 h-64 sm:h-96 lg:h-auto overflow-hidden bg-gradient-to-br from-red-100 to-blue-100 relative flex items-center justify-center">
-                        {nationalIndex === 0 ? (
-                          <Image
-                            src="/president.jpg"
-                            alt={t('leadership.nationalPresident', 'National President')}
-                            fill
-                            quality={90}
-                            priority
-                            className="object-contain"
-                          />
-                        ) : (nationalCommittee[nationalIndex - 1]?.image ? (
-                          <Image
-                            src={nationalCommittee[nationalIndex - 1].image as string}
-                            alt={getNameText(nationalCommittee[nationalIndex - 1].name)}
-                            fill
-                            quality={90}
-                            className="object-contain"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-red-100 to-blue-100 flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-5xl sm:text-7xl font-bold bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                                {nationalIndex === 0 ? 'NP' : getNameText(nationalCommittee[nationalIndex - 1].name)
-                                  .split(' ')
-                                  .map((word) => word[0])
-                                  .join('')
-                                  .toUpperCase()
-                                  .slice(0, 2)}
-                              </div>
-                              <p className="text-gray-500 font-medium text-xs sm:text-sm">{t('leadership.imageComingSoon', 'Image coming soon')}</p>
-                            </div>
-                          </div>
-                        ))}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                <div className="space-y-12">
+                  {/* Featured President Card */}
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-[2rem] blur opacity-5 group-hover:opacity-10 transition duration-1000"></div>
+                    <div className="relative bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-xl flex flex-col lg:flex-row">
+                      <div className="lg:w-1/3 aspect-[4/5] lg:aspect-auto relative bg-gray-50">
+                        <Image
+                          src="/president.jpg"
+                          alt={t('leadership.nationalPresident', 'National President')}
+                          fill
+                          className="object-cover"
+                          priority
+                        />
                       </div>
-                      <div className="lg:col-span-2 flex flex-col justify-between p-4 sm:p-6 lg:p-8 min-h-56 sm:min-h-80 lg:min-h-0 bg-gradient-to-b from-white to-gray-50">
-                        <div>
-                          <div className="mb-3 sm:mb-4">
-                            <h3 className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent mb-2">
-                              {nationalIndex === 0 ? (locale === 'hi' ? 'श्री रंजीत सिंह' : 'Mr. Ranjeet Singh') : (nationalCommittee[nationalIndex - 1] ? getNameText(nationalCommittee[nationalIndex - 1].name) : '')}
-                            </h3>
-                            <div className="inline-block">
-                              <p className="bg-gradient-to-r from-red-500 to-blue-500 text-white font-bold text-xs sm:text-sm lg:text-base px-3 py-1.5 rounded-full">
-                                {nationalIndex === 0 ? t('leadership.nationalPresident', 'National President') : (nationalCommittee[nationalIndex - 1] ? getPositionText(nationalCommittee[nationalIndex - 1].position) : '')}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-gray-600 leading-relaxed text-xs sm:text-sm mb-3 overflow-y-auto max-h-12 sm:max-h-16 lg:max-h-20">
-                            {nationalIndex === 0 ? t('leadership.leadingTheMovement', 'Leading the Movement') : (nationalCommittee[nationalIndex - 1] ? getBioText(nationalCommittee[nationalIndex - 1].bio) : '')}
-                          </p>
+                      <div className="lg:w-2/3 p-6 sm:p-10 flex flex-col justify-center">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 text-red-600 text-[10px] font-black tracking-widest uppercase mb-4">
+                          <Star className="h-2.5 w-2.5 fill-red-600" />
+                          {t('leadership.nationalPresident', 'National President')}
                         </div>
-
-                        <div className="flex gap-2 pt-4 border-t border-gray-200 flex-shrink-0 flex-wrap relative">
-                          {(nationalIndex === 0 ? null : nationalCommittee[nationalIndex - 1]?.mobileNumber) && (
-                            <button
-                              onClick={() => {
-                                const mobile = nationalIndex === 0 ? null : nationalCommittee[nationalIndex - 1]?.mobileNumber;
-                                if (mobile) handleCall(mobile);
-                              }}
-                              className="flex-1 min-w-fit bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
-                            >
-                              <Phone className="h-4 w-4" />
-                              <span className="hidden sm:inline">{t('leadership.call', 'Call')}</span>
-                            </button>
-                          )}
-                          <div className="relative flex-1 min-w-fit">
-                            <button
-                              onClick={() => setShareMenuOpen(shareMenuOpen === 'national' ? null : 'national')}
-                              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
-                            >
-                              <Share2 className="h-4 w-4" />
-                              <span className="hidden sm:inline">{t('leadership.share', 'Share')}</span>
-                            </button>
-                            {shareMenuOpen === 'national' && (
-                              <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 z-10">
-                                <button
-                                  onClick={() => {
-                                    const member = nationalIndex === 0 ? {
-                                      _id: 'president',
-                                      name: { en: 'Mr. Ranjeet सिंह', hi: 'श्री रंजीत सिंह' },
-                                      position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
-                                      bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
-                                      image: '/president.jpg',
-                                      type: 'NATIONAL' as const
-                                    } : nationalCommittee[nationalIndex - 1];
-                                    shareToWhatsApp(member as CommitteeMember);
-                                    setShareMenuOpen(null);
-                                  }}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-100"
-                                >
-                                  <MessageCircle className="h-4 w-4 text-green-600" />
-                                  WhatsApp
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    const member = nationalIndex === 0 ? {
-                                      _id: 'president',
-                                      name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
-                                      position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
-                                      bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
-                                      image: '/president.jpg',
-                                      type: 'NATIONAL' as const
-                                    } : nationalCommittee[nationalIndex - 1];
-                                    shareWithCard(member as CommitteeMember);
-                                    setShareMenuOpen(null);
-                                  }}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                                >
-                                  <Share2 className="h-4 w-4 text-purple-600" />
-                                  Share Card
-                                </button>
-                              </div>
-                            )}
-                          </div>
+                        <h3 className="text-2xl sm:text-4xl font-black text-gray-900 mb-4 leading-tight">
+                          {locale === 'hi' ? 'श्री रंजीत सिंह' : 'Mr. Ranjeet Singh'}
+                        </h3>
+                        <p className="text-base text-gray-600 leading-relaxed mb-8 font-medium">
+                          {t('leadership.leadingTheMovement', 'Leading the Movement for Social Justice and Equality. Dedicated to the empowerment of every citizen through organization and awareness.')}
+                        </p>
+                        <div className="flex flex-wrap gap-4">
                           <button
-                            onClick={() => {
-                              const member = nationalIndex === 0 ? {
-                                _id: 'president',
-                                name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
-                                position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
-                                bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
-                                image: '/president.jpg',
-                                mobileNumber: '',
-                                type: 'NATIONAL' as const
-                              } : nationalCommittee[nationalIndex - 1];
-
-                              generateIdentityCard(member as CommitteeMember);
-                            }}
-                            className="flex-1 min-w-fit bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
-                          >
-                            <Download className="h-4 w-4" />
-                            <span className="hidden sm:inline">{t('leadership.download', 'Download')}</span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              const member = nationalIndex === 0 ? {
-                                _id: 'president',
-                                name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
-                                position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
-                                bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
-                                image: '/president.jpg',
-                                type: 'NATIONAL' as const
-                              } : nationalCommittee[nationalIndex - 1];
-                              setSelectedMember(member as CommitteeMember);
-                            }}
-                            className="flex-1 min-w-fit bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 text-xs shadow-md hover:shadow-lg"
+                            onClick={() => setSelectedMember({
+                              _id: 'president',
+                              name: { en: 'Mr. Ranjeet Singh', hi: 'श्री रंजीत सिंह' },
+                              position: { en: 'National President', hi: 'राष्ट्रीय अध्यक्ष' },
+                              image: '/president.jpg',
+                              bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
+                              type: 'NATIONAL'
+                            })}
+                            className="bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-gray-200 active:scale-95 text-sm"
                           >
                             <Eye className="h-4 w-4" />
-                            <span className="hidden sm:inline">{t('leadership.viewDetails', 'Details')}</span>
+                            VIEW FULL PROFILE
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-center items-center gap-3 mt-4">
-                    <button
-                      onClick={prevNationalCarousel}
-                      className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={nextNationalCarousel}
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
-                  </div>
+
+                  {/* Other National Members Grid */}
+                  {nationalCommittee.length > 0 && (
+                    <div className="pt-12 border-t border-gray-100">
+                      <div className="flex items-center gap-4 mb-10">
+                        <div className="h-8 w-1 bg-blue-600 rounded-full"></div>
+                        <h4 className="text-xl font-black text-gray-900 uppercase tracking-widest">
+                          {t('leadership.nationalCommittee', 'National Committee Members')}
+                        </h4>
+                      </div>
+                      <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {nationalCommittee.map((member) => (
+                          <MemberCard key={member._id} member={member} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
             {/* National Council Sub-section (Nested Accordion) */}
-            <div className="mb-8 border-t border-gray-100 pt-8">
+            <div className="mb-8">
               <button
                 onClick={() => setIsParishadExpanded(!isParishadExpanded)}
-                className="w-full flex items-center justify-between group"
+                className="w-full flex items-center justify-between group bg-white/50 backdrop-blur-sm p-5 rounded-xl border border-gray-100 hover:border-red-500/20 transition-all duration-300"
               >
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
+                <div className="text-left flex items-center gap-4">
+                  <div className="h-6 w-1 bg-red-500 rounded-full"></div>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
                     {t('leadership.rashtriyaParishad', 'National Council (Rashtriya Parishad)')}
                   </h3>
-                  <div className="h-1 w-20 bg-gradient-to-r from-red-600 to-blue-600 rounded-full transition-all duration-300 group-hover:w-28"></div>
                 </div>
-                <div className="bg-gray-50 p-2 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300 border border-gray-100">
+                <div className={`p-1.5 rounded-lg transition-all duration-300 ${isParishadExpanded ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-400'}`}>
                   {isParishadExpanded ? (
-                    <ChevronUp className="h-5 w-5 text-red-600" />
+                    <ChevronUp className="h-4 w-4" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-blue-600" />
+                    <ChevronDown className="h-4 w-4" />
                   )}
                 </div>
               </button>
 
-              <div className={`transition-all duration-500 overflow-hidden ${isParishadExpanded ? 'max-h-[5000px] mt-8 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`transition-all duration-500 overflow-hidden ${isParishadExpanded ? 'max-h-[5000px] mt-6 opacity-100' : 'max-h-0 opacity-0'}`}>
                 {!loading && rashtriyaParishad.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                  <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {rashtriyaParishad.map((member) => (
                       <MemberCard key={member._id} member={member} />
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-300">
-                    {loading ? t('common.loading', 'Loading...') : 'No members found in National Council.'}
+                  <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200 shadow-inner">
+                    {loading ? (
+                      <PremiumLoader />
+                    ) : (
+                      <div className="flex flex-col items-center gap-3">
+                        <Users className="h-10 w-10 text-gray-200" />
+                        <p className="text-sm font-medium">No members found in National Council.</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             </div>
 
             {/* National Executive Committee Sub-section (Nested Accordion) */}
-            <div className="mb-8 border-t border-gray-100 pt-8">
+            <div className="mb-8">
               <button
                 onClick={() => setIsKaaryasamitiExpanded(!isKaaryasamitiExpanded)}
-                className="w-full flex items-center justify-between group"
+                className="w-full flex items-center justify-between group bg-white/50 backdrop-blur-sm p-5 rounded-xl border border-gray-100 hover:border-red-500/20 transition-all duration-300"
               >
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
+                <div className="text-left flex items-center gap-4">
+                  <div className="h-6 w-1 bg-red-500 rounded-full"></div>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
                     {t('leadership.rashtriyaKaaryasamiti', 'National Executive Committee (Rashtriya Karyasamiti)')}
                   </h3>
-                  <div className="h-1 w-20 bg-gradient-to-r from-red-600 to-blue-600 rounded-full transition-all duration-300 group-hover:w-28"></div>
                 </div>
-                <div className="bg-gray-50 p-2 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300 border border-gray-100">
+                <div className={`p-1.5 rounded-lg transition-all duration-300 ${isKaaryasamitiExpanded ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-400'}`}>
                   {isKaaryasamitiExpanded ? (
-                    <ChevronUp className="h-5 w-5 text-red-600" />
+                    <ChevronUp className="h-4 w-4" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-blue-600" />
+                    <ChevronDown className="h-4 w-4" />
                   )}
                 </div>
               </button>
 
-              <div className={`transition-all duration-500 overflow-hidden ${isKaaryasamitiExpanded ? 'max-h-[5000px] mt-8 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`transition-all duration-500 overflow-hidden ${isKaaryasamitiExpanded ? 'max-h-[5000px] mt-6 opacity-100' : 'max-h-0 opacity-0'}`}>
                 {!loading && rashtriyaKaaryasamiti.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                  <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {rashtriyaKaaryasamiti.map((member) => (
                       <MemberCard key={member._id} member={member} />
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                    {loading ? t('common.loading', 'Loading...') : 'No members found in National Executive Committee.'}
+                  <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200 shadow-inner">
+                    {loading ? (
+                      <PremiumLoader />
+                    ) : (
+                      <div className="flex flex-col items-center gap-3">
+                        <Users className="h-10 w-10 text-gray-200" />
+                        <p className="text-sm font-medium">No members found in National Executive Committee.</p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1098,170 +1006,211 @@ export default function LeadershipPage() {
         </div>
       </section>
 
-      <section ref={stateLeadershipRef} className="py-12 bg-white border-b border-gray-100">
+      {/* State Leadership Section */}
+      <section ref={stateLeadershipRef} className="py-12 relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => setIsStateExpanded(!isStateExpanded)}
-            className="w-full flex items-center justify-between group py-4"
-          >
-            <div className="text-left">
-              <h2 className="text-4xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                {t('leadership.stateLeadership', 'State Leadership')}
-              </h2>
-              <div className="h-1.5 w-32 bg-gradient-to-r from-blue-600 to-green-600 rounded-full transition-all duration-300 group-hover:w-40"></div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-full shadow-md group-hover:shadow-lg transition-all duration-300 border border-gray-100">
-              {isStateExpanded ? (
-                <ChevronUp className="h-8 w-8 text-blue-600" />
-              ) : (
-                <ChevronDown className="h-8 w-8 text-green-600" />
-              )}
-            </div>
-          </button>
+          <div className="mb-8 relative">
+            <button
+              onClick={() => setIsStateExpanded(!isStateExpanded)}
+              className="w-full flex items-center justify-between group bg-white p-6 rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 hover:border-blue-500/20 transition-all duration-500"
+            >
+              <div className="text-left">
+                <div className="flex items-center gap-4 mb-1">
+                  <div className="h-8 w-1 bg-gradient-to-b from-blue-600 to-green-600 rounded-full"></div>
+                  <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                    {t('leadership.stateLeadership', 'State Leadership')}
+                  </h2>
+                </div>
+                <p className="text-sm text-gray-500 font-medium ml-5">{t('leadership.stateDescription', 'Empowering regional voices and local governance')}</p>
+              </div>
+              <div className={`p-3 rounded-xl transition-all duration-500 ${isStateExpanded ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-gray-50 text-gray-400'}`}>
+                {isStateExpanded ? (
+                  <ChevronUp className="h-6 w-6" />
+                ) : (
+                  <ChevronDown className="h-6 w-6" />
+                )}
+              </div>
+            </button>
+          </div>
 
-          <div className={`transition-all duration-500 overflow-hidden ${isStateExpanded ? 'max-h-[10000px] mt-12 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className={`transition-all duration-700 ease-in-out overflow-hidden ${isStateExpanded ? 'max-h-[10000px] opacity-100' : 'max-h-0 opacity-0'}`}>
             {!selectedState ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-2">
                 {orderedStates.map((state) => (
                   <button
                     key={state}
                     onClick={() => setSelectedState(state)}
-                    className="p-6 text-left bg-white border border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-lg transition-all group"
+                    className="group relative p-8 text-left bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/30 transition-all duration-300 overflow-hidden"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-gray-700 group-hover:text-blue-600">{state}</span>
-                      <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transform group-hover:translate-x-1 transition-all" />
+                    <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ChevronRight className="h-5 w-5 text-blue-500" />
                     </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">STATE</span>
+                      <span className="text-lg font-black text-gray-800 group-hover:text-blue-600 transition-colors leading-tight">{state}</span>
+                    </div>
+                    <div className="mt-4 h-1 w-0 bg-blue-500 rounded-full group-hover:w-12 transition-all duration-500"></div>
                   </button>
                 ))}
               </div>
             ) : (
-              <div className="space-y-8">
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => {
-                      if (selectedLevel) {
-                        setSelectedLevel(null);
-                        setSelectedDistrict(null);
-                      } else {
-                        setSelectedState(null);
-                      }
-                    }}
-                    className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                    {t('common.back', 'Back')}
-                  </button>
-                  <h3 className="text-2xl font-bold text-gray-900">
-                    {selectedState} {selectedLevel ? `- ${selectedLevel === 'STATE' ? 'State Committee' : 'District Committee'}` : ''}
-                    {selectedDistrict ? ` - ${selectedDistrict}` : ''}
-                  </h3>
+              <div className="space-y-12">
+                <div className="flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                  <div className="flex items-center gap-6">
+                    <button
+                      onClick={() => {
+                        if (selectedLevel) {
+                          setSelectedLevel(null);
+                          setSelectedDistrict(null);
+                        } else {
+                          setSelectedState(null);
+                        }
+                      }}
+                      className="flex items-center justify-center h-12 w-12 bg-gray-50 rounded-full text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </button>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <MapPin className="h-4 w-4 text-red-500" />
+                        <span className="text-xs font-black tracking-widest text-gray-400 uppercase">{selectedState}</span>
+                      </div>
+                      <h3 className="text-2xl font-black text-gray-900">
+                        {selectedLevel ? (selectedLevel === 'STATE' ? 'State Committee' : 'District Committee') : 'Select Level'}
+                        {selectedDistrict ? ` - ${selectedDistrict}` : ''}
+                      </h3>
+                    </div>
+                  </div>
                 </div>
 
                 {!selectedLevel ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <button
                       onClick={() => setSelectedLevel('STATE')}
-                      className="p-10 text-center bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 group"
+                      className="group relative p-12 text-center bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 overflow-hidden"
                     >
-                      <Briefcase className="h-16 w-16 mx-auto mb-4 opacity-80 group-hover:scale-110 transition-transform" />
-                      <h4 className="text-3xl font-bold mb-2">State Level Committee</h4>
-                      <p className="text-blue-100">32 Members dedicated to state-wide development</p>
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="relative z-10">
+                        <div className="h-24 w-24 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                          <Briefcase className="h-12 w-12 text-blue-600" />
+                        </div>
+                        <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tight">State Committee</h4>
+                        <p className="text-gray-500 font-medium">32 Members dedicated to state-wide development and strategic planning</p>
+                      </div>
                     </button>
                     <button
                       onClick={() => setSelectedLevel('DISTRICT')}
-                      className="p-10 text-center bg-gradient-to-br from-green-500 to-teal-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 group"
+                      className="group relative p-12 text-center bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 overflow-hidden"
                     >
-                      <MapPin className="h-16 w-16 mx-auto mb-4 opacity-80 group-hover:scale-110 transition-transform" />
-                      <h4 className="text-3xl font-bold mb-2">District Committee</h4>
-                      <p className="text-green-100">Local leadership across districts</p>
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="relative z-10">
+                        <div className="h-24 w-24 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
+                          <MapPin className="h-12 w-12 text-green-600" />
+                        </div>
+                        <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tight">District Committee</h4>
+                        <p className="text-gray-500 font-medium">Local grassroots leadership across all districts within the state</p>
+                      </div>
                     </button>
                   </div>
                 ) : selectedLevel === 'STATE' ? (
                   <div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                       {stateCommitteeMembers.length > 0 ? (
                         stateCommitteeMembers.map((member) => (
                           <MemberCard key={member._id} member={member} />
                         ))
                       ) : (
-                        <div className="col-span-full text-center py-12 text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                          No members found for this State Committee.
+                        <div className="col-span-full text-center py-24 text-gray-500 bg-white rounded-3xl border border-dashed border-gray-200">
+                          <div className="flex flex-col items-center gap-4">
+                            <Users className="h-12 w-12 text-gray-200" />
+                            <p className="font-medium">No members found for this State Committee.</p>
+                          </div>
                         </div>
                       )}
                     </div>
                     {stateCommitteeMembers.length > 0 && stateCommitteeMembers.length < 32 && (
-                      <p className="mt-8 text-center text-gray-500 italic">Showing {stateCommitteeMembers.length} of 32 committee positions.</p>
+                      <p className="mt-8 text-center text-gray-400 font-medium italic tracking-wide">Showing {stateCommitteeMembers.length} of 32 committee positions.</p>
                     )}
                   </div>
                 ) : (
-                  <div className="space-y-8">
+                  <div className="space-y-12">
                     {!selectedDistrict ? (
-                      <div className="bg-gray-50 p-8 rounded-2xl border border-gray-200">
-                        <h4 className="text-xl font-bold mb-6 flex items-center gap-2">
-                          <MapPin className="h-5 w-5 text-green-600" />
+                      <div className="bg-white p-10 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50">
+                        <h4 className="text-2xl font-black mb-8 flex items-center gap-4">
+                          <div className="h-8 w-8 bg-green-50 rounded-lg flex items-center justify-center">
+                            <MapPin className="h-5 w-5 text-green-600" />
+                          </div>
                           Select District in {selectedState}
                         </h4>
                         {isDistrictsLoading ? (
-                          <div className="text-center py-8 text-gray-500">Loading districts...</div>
+                          <PremiumLoader />
                         ) : availableDistricts.length > 0 ? (
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {availableDistricts.map((dist) => (
                               <button
                                 key={dist}
                                 onClick={() => setSelectedDistrict(dist)}
-                                className="p-4 bg-white border border-gray-200 rounded-lg hover:border-green-500 hover:shadow-md transition-all text-gray-700 font-semibold"
+                                className="p-4 bg-gray-50 border border-transparent rounded-xl hover:bg-white hover:border-green-500 hover:shadow-md transition-all text-gray-700 font-bold text-sm text-center"
                               >
                                 {dist}
                               </button>
                             ))}
-                            <div className="col-span-full mt-4">
-                              <input 
-                                type="text" 
-                                placeholder="Search or enter other district..." 
-                                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    setSelectedDistrict((e.target as HTMLInputElement).value);
-                                  }
-                                }}
-                              />
+                            <div className="col-span-full mt-8">
+                              <div className="relative group">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
+                                <input 
+                                  type="text" 
+                                  placeholder="Search or enter other district..." 
+                                  className="w-full pl-12 pr-4 py-5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all font-medium"
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      setSelectedDistrict((e.target as HTMLInputElement).value);
+                                    }
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
                         ) : (
-                          <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300">
-                            <p className="text-gray-500 mb-6 font-medium">No district data is available for this state.</p>
+                          <div className="text-center py-20 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
+                            <p className="text-gray-500 mb-8 font-bold text-lg">No district data available for this state.</p>
                             <div className="max-w-md mx-auto px-4">
-                              <p className="text-sm text-gray-400 mb-2">You can still search for a specific district:</p>
-                              <input 
-                                type="text" 
-                                placeholder="Enter district name..." 
-                                className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none shadow-sm"
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    setSelectedDistrict((e.target as HTMLInputElement).value);
-                                  }
-                                }}
-                              />
+                              <p className="text-sm text-gray-400 mb-4 font-medium uppercase tracking-widest">Search for a specific district:</p>
+                              <div className="relative group">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
+                                <input 
+                                  type="text" 
+                                  placeholder="Enter district name..." 
+                                  className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none shadow-sm transition-all"
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      setSelectedDistrict((e.target as HTMLInputElement).value);
+                                    }
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
                         )}
                       </div>
                     ) : (
                       <div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="flex overflow-x-auto pb-6 -mx-4 px-4 snap-x snap-mandatory sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                           {districtCommitteeMembers.length > 0 ? (
                             districtCommitteeMembers.map((member) => (
                               <MemberCard key={member._id} member={member} />
                             ))
                           ) : (
-                            <div className="col-span-full text-center py-12 text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                              No members found for this District Committee.
+                            <div className="col-span-full text-center py-24 text-gray-500 bg-white rounded-3xl border border-dashed border-gray-200">
+                              <div className="flex flex-col items-center gap-4">
+                                <Users className="h-12 w-12 text-gray-200" />
+                                <p className="font-medium">No members found for this District Committee.</p>
+                              </div>
                             </div>
                           )}
                         </div>
                         {districtCommitteeMembers.length > 0 && districtCommitteeMembers.length < 53 && (
-                          <p className="mt-8 text-center text-gray-500 italic">Showing {districtCommitteeMembers.length} of 53 committee positions (including District President).</p>
+                          <p className="mt-8 text-center text-gray-400 font-medium italic">Showing {districtCommitteeMembers.length} of 53 committee positions.</p>
                         )}
                       </div>
                     )}
@@ -1272,6 +1221,8 @@ export default function LeadershipPage() {
           </div>
         </div>
       </section>
+    </>
+  )}
 
       <Footer />
       {selectedMember && (

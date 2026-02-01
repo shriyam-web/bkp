@@ -153,16 +153,29 @@ export default function ManifestoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#fcfcfc]">
       <Header />
 
-      <section className="relative bg-gradient-to-r from-red-600 to-blue-600 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-[#0a0a0a] pt-56 pb-40">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/15 rounded-full blur-[140px] animate-pulse" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-              {t('manifesto.title', 'Our Manifesto')}
+            <div className="inline-flex items-center rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-10 backdrop-blur-xl uppercase shadow-2xl">
+              {locale === 'hi' ? 'हमारा विजन' : 'OUR VISION'}
+            </div>
+            <h1 className="text-6xl font-black tracking-tighter text-white sm:text-9xl mb-10 leading-[0.95] drop-shadow-2xl">
+              {t('manifesto.title', 'Our Manifesto')} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-500 italic font-serif">
+                {locale === 'hi' ? 'समृद्ध भारत का संकल्प' : 'COMMITMENT TO PROSPERITY'}
+              </span>
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed border-l-2 border-red-600/30 pl-8">
               {t('manifesto.subtitle', 'A comprehensive vision for India\'s progress and prosperity')}
             </p>
           </div>

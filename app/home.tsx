@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown } from 'lucide-react';
+import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import NewsCard from '@/components/NewsCard';
@@ -34,6 +34,17 @@ export default function HomePage() {
   const [news, setNews] = useState<News[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [subscribed, setSubscribed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setSubmitting(false);
+    setSubscribed(true);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -80,22 +91,79 @@ export default function HomePage() {
 
   const initiatives = [
     {
-      icon: HandHeart,
-      title: t('home.healthcare', 'Healthcare for All'),
-      description: t('home.healthcareDesc', 'Universal healthcare coverage ensuring no citizen is left behind'),
-      color: 'from-red-500 to-red-600',
+      icon: BookOpen,
+      title: locale === 'hi' ? 'शिक्षा नीति' : 'Education Policy',
+      description: locale === 'hi' ? 'राष्ट्रवादी और मूल्य-आधारित शिक्षा प्रणाली जो हर बच्चे के भविष्य को संवारती है।' : 'A nationalistic and value-based education system that shapes every child\'s future.',
+      color: 'from-orange-500 to-red-600',
     },
+    {
+      icon: Shield,
+      title: locale === 'hi' ? 'सेना व अखंड भारत' : 'Army & Akhand Bharat',
+      description: locale === 'hi' ? 'शक्तिशाली सेना का निर्माण और अखंड भारत के गौरव को पुनः प्राप्त करने का संकल्प।' : 'Building a powerful military and a commitment to reclaiming the glory of Akhand Bharat.',
+      color: 'from-red-600 to-red-800',
+    },
+    {
+      icon: MapPin,
+      title: locale === 'hi' ? 'फर्रुखाबाद विकास' : 'Farrukhabad Development',
+      description: locale === 'hi' ? 'फर्रुखाबाद के सर्वांगीण विकास के लिए एक समर्पित और आधुनिक मास्टर प्लान।' : 'A dedicated and modern master plan for the all-round development of Farrukhabad.',
+      color: 'from-green-600 to-green-800',
+    },
+    {
+      icon: Scale,
+      title: locale === 'hi' ? 'न्याय व्यवस्था' : 'Judicial System',
+      description: locale === 'hi' ? 'प्रत्येक नागरिक के लिए सुलभ, तीव्र और पारदर्शी न्याय सुनिश्चित करने के लिए व्यापक सुधार।' : 'Comprehensive reforms to ensure accessible, swift, and transparent justice for every citizen.',
+      color: 'from-blue-600 to-blue-800',
+    },
+    {
+      icon: Heart,
+      title: locale === 'hi' ? 'परिवार व संस्कृति रक्षा' : 'Family & Cultural Protection',
+      description: locale === 'hi' ? 'पारंपरिक पारिवारिक मूल्यों और हमारी सांस्कृतिक जड़ों को आधुनिकता के प्रहार से बचाना।' : 'Protecting traditional family values and our cultural roots from the onslaught of modernity.',
+      color: 'from-purple-600 to-purple-800',
+    },
+    {
+      icon: Flag,
+      title: locale === 'hi' ? 'संस्कृति बचाओ कार्यक्रम' : 'Sanskriti Bachao Karyakram',
+      description: locale === 'hi' ? 'भारत की समृद्ध विरासत और गौरवशाली परंपराओं को संरक्षित करने का हमारा प्रमुख अभियान।' : 'Our flagship movement to preserve Bharat\'s rich heritage and glorious traditions.',
+      color: 'from-yellow-500 to-orange-600',
+    },
+  ];
+
+  const manifestoItems = [
     {
       icon: BookOpen,
-      title: t('home.education', 'Education Revolution'),
-      description: t('home.educationDesc', 'Quality education accessible to every child across the nation'),
-      color: 'from-blue-500 to-blue-600',
+      title: locale === 'hi' ? 'शिक्षा नीति' : 'Education Policy',
+      description: locale === 'hi' ? 'राष्ट्रवादी और मूल्य-आधारित शिक्षा प्रणाली जो हर बच्चे के भविष्य को संवारती है।' : 'A nationalistic and value-based education system that shapes every child\'s future.',
+      color: 'from-orange-500 to-red-600',
     },
     {
-      icon: Users,
-      title: t('home.employment', 'Employment Generation'),
-      description: t('home.employmentDesc', 'Creating millions of jobs through skill development and entrepreneurship'),
-      color: 'from-green-500 to-green-600',
+      icon: Shield,
+      title: locale === 'hi' ? 'सेना व अखंड भारत' : 'Army & Akhand Bharat',
+      description: locale === 'hi' ? 'शक्तिशाली सेना का निर्माण और अखंड भारत के गौरव को पुनः प्राप्त करने का संकल्प।' : 'Building a powerful military and a commitment to reclaiming the glory of Akhand Bharat.',
+      color: 'from-red-600 to-red-800',
+    },
+    {
+      icon: Scale,
+      title: locale === 'hi' ? 'न्याय व्यवस्था' : 'Judicial System',
+      description: locale === 'hi' ? 'प्रत्येक नागरिक के लिए सुलभ, तीव्र और पारदर्शी न्याय सुनिश्चित करने के लिए व्यापक सुधार।' : 'Comprehensive reforms to ensure accessible, swift, and transparent justice for every citizen.',
+      color: 'from-blue-600 to-blue-800',
+    },
+    {
+      icon: MapPin,
+      title: locale === 'hi' ? 'फर्रुखाबाद विकास योजना' : 'Farrukhabad Development',
+      description: locale === 'hi' ? 'फर्रुखाबाद के सर्वांगीण विकास के लिए एक समर्पित और आधुनिक मास्टर प्लान।' : 'A dedicated and modern master plan for the all-round development of Farrukhabad.',
+      color: 'from-green-600 to-green-800',
+    },
+    {
+      icon: Heart,
+      title: locale === 'hi' ? 'परिवार व संस्कृति रक्षा' : 'Family & Cultural Protection',
+      description: locale === 'hi' ? 'पारंपरिक पारिवारिक मूल्यों और हमारी सांस्कृतिक जड़ों को आधुनिकता के प्रहार से बचाना।' : 'Protecting traditional family values and our cultural roots from the onslaught of modernity.',
+      color: 'from-purple-600 to-purple-800',
+    },
+    {
+      icon: Flag,
+      title: locale === 'hi' ? 'संस्कृति बचाओ कार्यक्रम' : 'Sanskriti Bachao Karyakram',
+      description: locale === 'hi' ? 'भारत की समृद्ध विरासत और गौरवशाली परंपराओं को संरक्षित करने का हमारा प्रमुख अभियान।' : 'Our flagship movement to preserve Bharat\'s rich heritage and glorious traditions.',
+      color: 'from-yellow-500 to-orange-600',
     },
   ];
 
@@ -120,14 +188,14 @@ export default function HomePage() {
               {locale === 'hi' ? 'परिवर्तन की लहर' : 'A MOVEMENT FOR CHANGE'}
             </div>
 
-            <h1 className="text-4xl font-black tracking-tight text-white sm:text-6xl mb-6 leading-tight drop-shadow-xl">
+            <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl mb-6 leading-tight drop-shadow-xl">
               {locale === 'hi' ? 'बहुजन क्रांति पार्टी' : 'BAHUJAN KRANTI'} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-600 animate-gradient-x italic">
                 {locale === 'hi' ? '(मार्क्सवाद-अंबेडकरवाद)' : 'PARTY (MARXWAAD-AMBEDKARWAAD)'}
               </span>
             </h1>
 
-            <p className="text-lg text-gray-300 mb-10 leading-relaxed max-w-2xl font-medium border-l-4 border-red-600 pl-6 backdrop-blur-sm bg-black/5 py-2">
+            <p className="text-base text-gray-300 mb-10 leading-relaxed max-w-2xl font-medium border-l-4 border-red-600 pl-6 backdrop-blur-sm bg-black/5 py-2">
               {locale === 'hi'
                 ? 'मार्क्सवादी और अंबेडकरवादी सिद्धांतों के प्रति प्रतिबद्ध एक राजनीतिक आंदोलन, जो सामाजिक समानता और श्रमिकों के अधिकारों के लिए समर्पित है।'
                 : 'A political movement committed to Marxist and Ambedkarite principles, dedicated to social equality and empowering the masses.'}
@@ -135,13 +203,13 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-4 items-center">
               <Link href={`/${locale}/join`}>
-                <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white text-lg px-8 h-14 rounded-full shadow-lg shadow-red-900/20 transition-all hover:scale-105 active:scale-95 group">
+                <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white text-base px-8 h-12 rounded-full shadow-lg shadow-red-900/20 transition-all hover:scale-105 active:scale-95 group">
                   {t('home.ctaJoin', 'Join Our Movement')}
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link href={`/${locale}/manifesto`}>
-                <Button size="lg" variant="outline" className="bg-white/5 text-white border-white/30 hover:bg-white/10 backdrop-blur-md text-lg px-8 h-14 rounded-full border-2 transition-all">
+                <Button size="lg" variant="outline" className="bg-white/5 text-white border-white/30 hover:bg-white/10 backdrop-blur-md text-base px-8 h-12 rounded-full border-2 transition-all">
                   {t('home.ctaLearnMore', 'Read Our Vision')}
                 </Button>
               </Link>
@@ -150,7 +218,7 @@ export default function HomePage() {
                 <div className="flex h-8 w-8 rounded-full border-2 border-white/20 bg-white/5 items-center justify-center">
                   <Heart className="h-4 w-4 text-red-500" />
                 </div>
-                <span className="text-xs font-bold tracking-widest">{locale === 'hi' ? 'सक्रिय स्वयंसेवक' : 'ACTIVE VOLUNTEERS'}</span>
+                <span className="text-[10px] font-bold tracking-widest">{locale === 'hi' ? 'राष्ट्र निर्माण के लिए' : 'DEDICATED TO NATION'}</span>
               </div>
             </div>
           </div>
@@ -291,6 +359,39 @@ export default function HomePage() {
                   {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Vision for Bharat Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-5xl mb-6">
+              {locale === 'hi' ? 'भारत के लिए हमारा संकल्प' : 'Our Commitment to Bharat'}
+            </h2>
+            <div className="w-24 h-1.5 bg-red-600 mx-auto rounded-full mb-6" />
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-medium">
+              {locale === 'hi'
+                ? 'बहुजन क्रांति पार्टी के घोषणा पत्र के मुख्य स्तंभ जो एक सशक्त और समृद्ध राष्ट्र की नींव रखते हैं।'
+                : 'The core pillars of Bahujan Kranti Party\'s manifesto that lay the foundation for a strong and prosperous nation.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {manifestoItems.map((item, index) => (
+              <div key={index} className="bg-white rounded-3xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <item.icon className="h-8 w-8" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-red-600 transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed font-medium">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
@@ -463,28 +564,64 @@ export default function HomePage() {
             </div>
 
             <div className="bg-white/10 backdrop-blur-lg p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl">
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <label htmlFor="email-address" className="sr-only">Email address</label>
-                  <input
-                    id="email-address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="w-full rounded-2xl border-0 bg-white px-6 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 text-lg"
-                    placeholder={locale === 'hi' ? 'अपना ईमेल दर्ज करें' : 'Enter your email'}
-                  />
+              {subscribed ? (
+                <div className="text-center py-8 animate-fade-in">
+                  <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 text-green-400 mb-6">
+                    <Award className="h-10 w-10" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">
+                    {locale === 'hi' ? 'सदस्यता सफल!' : 'Subscribed Successfully!'}
+                  </h3>
+                  <p className="text-white/70">
+                    {locale === 'hi' 
+                      ? 'धन्यवाद! अब आप हमारे न्यूज़लेटर के लिए नामांकित हैं।' 
+                      : 'Thank you for joining! You are now enrolled in our newsletter.'}
+                  </p>
+                  <Button 
+                    variant="link" 
+                    className="mt-6 text-white/50 hover:text-white"
+                    onClick={() => setSubscribed(false)}
+                  >
+                    {locale === 'hi' ? 'एक और ईमेल जोड़ें' : 'Add another email'}
+                  </Button>
                 </div>
-                <Button size="lg" className="w-full bg-red-600 hover:bg-red-700 text-white h-14 rounded-2xl text-lg font-bold transition-all shadow-lg shadow-red-900/20">
-                  {locale === 'hi' ? 'अभी सदस्यता लें' : 'Subscribe Now'}
-                </Button>
-                <p className="text-xs text-center text-white/60">
-                  {locale === 'hi'
-                    ? 'हम आपकी गोपनीयता का सम्मान करते हैं। कभी भी अनसब्सक्राइब करें।'
-                    : 'We respect your privacy. Unsubscribe at any time.'}
-                </p>
-              </form>
+              ) : (
+                <form className="space-y-4" onSubmit={handleSubscribe}>
+                  <div>
+                    <label htmlFor="email-address" className="sr-only">Email address</label>
+                    <input
+                      id="email-address"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className="w-full rounded-2xl border-0 bg-white px-6 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 text-lg disabled:opacity-50"
+                      placeholder={locale === 'hi' ? 'अपना ईमेल दर्ज करें' : 'Enter your email'}
+                      disabled={submitting}
+                    />
+                  </div>
+                  <Button 
+                    type="submit"
+                    size="lg" 
+                    className="w-full bg-red-600 hover:bg-red-700 text-white h-14 rounded-2xl text-lg font-bold transition-all shadow-lg shadow-red-900/20 disabled:opacity-70"
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <span className="flex items-center gap-2">
+                        <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        {locale === 'hi' ? 'प्रक्रिया जारी है...' : 'Processing...'}
+                      </span>
+                    ) : (
+                      locale === 'hi' ? 'अभी सदस्यता लें' : 'Subscribe Now'
+                    )}
+                  </Button>
+                  <p className="text-xs text-center text-white/60">
+                    {locale === 'hi'
+                      ? 'हम आपकी गोपनीयता का सम्मान करते हैं। कभी भी अनसब्सक्राइब करें।'
+                      : 'We respect your privacy. Unsubscribe at any time.'}
+                  </p>
+                </form>
+              )}
 
               <div className="mt-8 pt-8 border-t border-white/10 flex justify-center gap-6">
                 <Link href={`/${locale}/join`}>
