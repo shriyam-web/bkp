@@ -14,13 +14,13 @@ export default function OrganizationPage() {
       icon: Building2,
       title: locale === 'hi' ? 'राष्ट्रीय मुख्यालय' : 'National Headquarters',
       color: 'red',
-      description: locale === 'hi' 
+      description: locale === 'hi'
         ? 'पार्टी का केंद्रीय प्रशासनिक केंद्र जहां सभी महत्वपूर्ण निर्णय लिए जाते हैं।'
         : 'The central administrative hub of the party where all important decisions are made.',
     },
     {
       icon: Users,
-      title: locale === 'hi' ? 'राष्ट्रीय पार्षद' : 'National Council',
+      title: locale === 'hi' ? 'राष्ट्रीय परिषद्' : 'National Council',
       color: 'blue',
       description: locale === 'hi'
         ? 'पार्टी के शीर्ष नेतृत्व और निर्णय लेने वाली संस्था।'
@@ -101,7 +101,7 @@ export default function OrganizationPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             {locale === 'hi' ? 'संगठनात्मक पदानुक्रम' : 'Organizational Hierarchy'}
           </h2>
-          
+
           <div className="max-w-4xl mx-auto">
             <div className="bg-white p-8 rounded-lg shadow">
               <div className="space-y-6">
