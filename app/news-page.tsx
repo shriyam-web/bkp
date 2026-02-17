@@ -37,10 +37,10 @@ export default function NewsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -49,16 +49,16 @@ export default function NewsPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'नवीनतम अपडेट' : 'LATEST UPDATES'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'प्रेस विज्ञप्ति' : 'Press Release'} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'ताज़ा घोषणाएं' : 'OFFICIAL ANNOUNCEMENTS'}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
+            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'हमारी आधिकारिक घोषणाओं और महत्वपूर्ण समाचारों के बारे में अवगत रहें'
                 : 'Stay informed about our official announcements and important updates'
@@ -73,7 +73,7 @@ export default function NewsPage() {
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-red-600 border-r-transparent"></div>
-              <p className="mt-4 text-gray-600">{locale === 'hi' ? 'प्रेस विज्ञप्ति लोड हो रही है...' : 'Loading press releases...'}</p>
+              <p className="mt-4 text-muted-foreground">{locale === 'hi' ? 'प्रेस विज्ञप्ति लोड हो रही है...' : 'Loading press releases...'}</p>
             </div>
           ) : news.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -83,7 +83,7 @@ export default function NewsPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">
+              <p className="text-muted-foreground text-lg">
                 {locale === 'hi'
                   ? 'इस समय कोई प्रेस विज्ञप्ति उपलब्ध नहीं है। जल्द ही वापस जांचें!'
                   : 'No press releases available at the moment. Check back soon!'

@@ -571,7 +571,7 @@ export default function LeadershipPage() {
 
   const MemberDetailModal = ({ member, onClose }: { member: CommitteeMember; onClose: () => void }) => (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-      <div className="bg-white rounded-[2rem] shadow-2xl max-w-xl w-full overflow-hidden border border-gray-100 animate-in zoom-in-95 duration-300">
+      <div className="bg-card rounded-[2rem] shadow-2xl max-w-xl w-full overflow-hidden border border-border animate-in zoom-in-95 duration-300">
         <div className="relative h-32 sm:h-40 bg-gradient-to-br from-red-600 via-red-500 to-blue-600">
           <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
           <button
@@ -582,7 +582,7 @@ export default function LeadershipPage() {
           </button>
           
           <div className="absolute -bottom-12 left-8">
-            <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-gray-100 relative">
+            <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl border-4 border-background shadow-xl overflow-hidden bg-muted relative">
               {member.image ? (
                 <Image
                   src={member.image}
@@ -591,8 +591,8 @@ export default function LeadershipPage() {
                   className="object-cover"
                 />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                  <span className="text-3xl font-black text-gray-400">
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-accent">
+                  <span className="text-3xl font-black text-muted-foreground/40">
                     {getNameText(member.name).split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </span>
                 </div>
@@ -603,17 +603,17 @@ export default function LeadershipPage() {
 
         <div className="pt-16 px-8 pb-8">
           <div className="mb-6">
-            <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-0.5">
+            <h2 className="text-xl sm:text-2xl font-black text-foreground mb-0.5">
               {getNameText(member.name)}
             </h2>
             <div className="flex items-center gap-2">
-              <span className="text-blue-600 font-bold uppercase tracking-wider text-xs">
+              <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-xs">
                 {getPositionText(member.position)}
               </span>
               {member.state && (
                 <>
-                  <span className="text-gray-300">•</span>
-                  <span className="text-gray-500 font-medium flex items-center gap-1 text-xs">
+                  <span className="text-muted-foreground/30">•</span>
+                  <span className="text-muted-foreground font-medium flex items-center gap-1 text-xs">
                     <MapPin className="h-3 w-3" />
                     {member.state}
                   </span>
@@ -624,17 +624,17 @@ export default function LeadershipPage() {
 
           <div className="space-y-5">
             <div>
-              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">Biography</h3>
-              <p className="text-sm text-gray-600 leading-relaxed font-medium">
+              <h3 className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em] mb-2">Biography</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
                 {getBioText(member.bio) || t('leadership.noBioAvailable', 'No bio available')}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-5 border-t border-gray-50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-5 border-t border-border">
               {member.mobileNumber && (
                 <button
                   onClick={() => handleCall(member.mobileNumber)}
-                  className="group flex items-center justify-center gap-2.5 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-green-100 hover:shadow-green-200 active:scale-95 text-sm"
+                  className="group flex items-center justify-center gap-2.5 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-green-100 dark:shadow-none hover:shadow-green-200 active:scale-95 text-sm"
                 >
                   <Phone className="h-4 w-4 group-hover:animate-bounce" />
                   CALL NOW
@@ -642,7 +642,7 @@ export default function LeadershipPage() {
               )}
               <button
                 onClick={() => generateIdentityCard(member)}
-                className="flex items-center justify-center gap-2.5 bg-gray-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-gray-200 active:scale-95 text-sm"
+                className="flex items-center justify-center gap-2.5 bg-foreground text-background font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg active:scale-95 text-sm"
               >
                 <Download className="h-4 w-4" />
                 GET IDENTITY CARD
@@ -652,7 +652,7 @@ export default function LeadershipPage() {
             <div className="flex justify-center pt-2">
               <button
                 onClick={() => { shareToWhatsApp(member); }}
-                className="flex items-center gap-2 text-gray-400 hover:text-green-600 font-bold text-xs transition-colors"
+                className="flex items-center gap-2 text-muted-foreground/60 hover:text-green-600 font-bold text-xs transition-colors"
               >
                 <MessageCircle className="h-3.5 w-3.5" />
                 SHARE ON WHATSAPP
@@ -666,9 +666,9 @@ export default function LeadershipPage() {
 
   const MemberCard = ({ member }: { member: CommitteeMember }) => (
     <div
-      className="group relative flex flex-col h-full bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 min-w-[280px] sm:min-w-0 snap-center"
+      className="group relative flex flex-col h-full bg-card rounded-3xl overflow-hidden border border-border shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 min-w-[280px] sm:min-w-0 snap-center"
     >
-      <div className="aspect-[4/5] relative overflow-hidden bg-gray-50">
+      <div className="aspect-[4/5] relative overflow-hidden bg-muted">
         {member.image ? (
           <Image
             src={member.image}
@@ -677,8 +677,8 @@ export default function LeadershipPage() {
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-red-50 to-blue-50">
-            <span className="text-5xl font-black text-gray-200 uppercase">
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-red-50 to-blue-50 dark:from-red-950/20 dark:to-blue-950/20">
+            <span className="text-5xl font-black text-muted-foreground/20 uppercase">
               {getNameText(member.name).split(' ').map(n => n[0]).join('').slice(0, 2)}
             </span>
           </div>
@@ -696,10 +696,10 @@ export default function LeadershipPage() {
       </div>
       
       <div className="p-6 flex flex-col flex-grow">
-        <h3 className="text-xl font-black text-gray-900 mb-1 group-hover:text-red-600 transition-colors">
+        <h3 className="text-xl font-black text-foreground mb-1 group-hover:text-red-600 transition-colors">
           {getNameText(member.name)}
         </h3>
-        <p className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-4">
+        <p className="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-4">
           {getPositionText(member.position)}
         </p>
         
@@ -707,7 +707,7 @@ export default function LeadershipPage() {
           {member.mobileNumber && (
             <button
               onClick={() => handleCall(member.mobileNumber)}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-sm hover:bg-green-50 hover:text-green-600 transition-all border border-gray-100"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-muted text-foreground font-bold text-sm hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 transition-all border border-border"
             >
               <Phone className="h-4 w-4" />
               CALL NOW
@@ -717,14 +717,14 @@ export default function LeadershipPage() {
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => generateIdentityCard(member)}
-              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-xs hover:bg-blue-50 hover:text-blue-600 transition-all border border-gray-100"
+              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-muted text-foreground font-bold text-xs hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-border"
             >
               <Download className="h-3.5 w-3.5" />
               CARD
             </button>
             <button
               onClick={() => setShareMenuOpen(shareMenuOpen === member._id ? null : member._id)}
-              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-xs hover:bg-purple-50 hover:text-purple-600 transition-all border border-gray-100"
+              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-muted text-foreground font-bold text-xs hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all border border-border"
             >
               <Share2 className="h-3.5 w-3.5" />
               SHARE
@@ -734,17 +734,17 @@ export default function LeadershipPage() {
       </div>
 
       {shareMenuOpen === member._id && (
-        <div className="absolute bottom-20 left-6 right-6 bg-white rounded-2xl shadow-2xl border border-gray-100 p-2 z-20 animate-in slide-in-from-bottom-2 duration-200">
+        <div className="absolute bottom-20 left-6 right-6 bg-card rounded-2xl shadow-2xl border border-border p-2 z-20 animate-in slide-in-from-bottom-2 duration-200">
           <button
             onClick={() => { shareToWhatsApp(member); setShareMenuOpen(null); }}
-            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-xl transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-foreground hover:bg-accent rounded-xl transition-colors"
           >
             <MessageCircle className="h-5 w-5 text-green-500" />
             WHATSAPP
           </button>
           <button
             onClick={() => { shareWithCard(member); setShareMenuOpen(null); }}
-            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-xl transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-foreground hover:bg-accent rounded-xl transition-colors"
           >
             <Share2 className="h-5 w-5 text-purple-500" />
             SHARE PROFILE
@@ -757,10 +757,10 @@ export default function LeadershipPage() {
   const availableDistricts = Array.from(new Set(allDistrictMembersForState.map(m => m.district).filter(Boolean))) as string[];
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -769,27 +769,27 @@ export default function LeadershipPage() {
        
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'हमारा नेतृत्व' : 'OUR LEADERSHIP'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
               {t('leadership.title', 'Visionary Leadership')} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
                 {t('leadership.subtitle', 'for a Better India')}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6 mb-10">
+            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6 mb-10">
               {t('leadership.description', 'Dedicated individuals united in their mission to create positive change and empower every citizen')}
             </p>
             
             <div className="max-w-2xl relative group">
               <div className="relative">
-                <blockquote className="text-base font-medium italic text-slate-600 px-8 py-6 bg-white shadow-sm rounded-xl border border-slate-200">
+                <blockquote className="text-base font-medium italic text-muted-foreground px-8 py-6 bg-card shadow-sm rounded-xl border border-border">
                   {locale === 'hi' 
                     ? 'सत्ता के लिए संघर्ष में सर्वहारा के पास संगठन के अलावा कोई दूसरा हथियार नहीं है - व्लादिमीर लेनिन'
                     : 'In the struggle for power, the proletariat has no weapon other than organization.'}
-                  <footer className="mt-3 text-[10px] not-italic text-slate-400 font-bold tracking-widest uppercase flex items-center gap-2">
-                    <div className="w-4 h-[1px] bg-slate-300"></div>
+                  <footer className="mt-3 text-[10px] not-italic text-muted-foreground/40 font-bold tracking-widest uppercase flex items-center gap-2">
+                    <div className="w-4 h-[1px] bg-border"></div>
                     V. Lenin
                   </footer>
                 </blockquote>
@@ -811,18 +811,18 @@ export default function LeadershipPage() {
           <div className="mb-8 relative">
             <button
               onClick={() => setIsNationalExpanded(!isNationalExpanded)}
-              className="w-full flex items-center justify-between group bg-white p-6 rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 hover:border-red-500/20 transition-all duration-500"
+              className="w-full flex items-center justify-between group bg-card p-6 rounded-2xl shadow-lg shadow-black/5 border border-border hover:border-red-500/20 transition-all duration-500"
             >
               <div className="text-left">
                 <div className="flex items-center gap-4 mb-1">
                   <div className="h-8 w-1 bg-gradient-to-b from-red-600 to-blue-600 rounded-full"></div>
-                  <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
                     {t('leadership.nationalLeadership', 'National Leadership')}
                   </h2>
                 </div>
-                <p className="text-sm text-gray-500 font-medium ml-5">{t('leadership.nationalDescription', 'Our central governing body and visionary pioneers')}</p>
+                <p className="text-sm text-muted-foreground font-medium ml-5">{t('leadership.nationalDescription', 'Our central governing body and visionary pioneers')}</p>
               </div>
-              <div className={`p-3 rounded-xl transition-all duration-500 ${isNationalExpanded ? 'bg-red-600 text-white shadow-red-200' : 'bg-gray-50 text-gray-400'}`}>
+              <div className={`p-3 rounded-xl transition-all duration-500 ${isNationalExpanded ? 'bg-red-600 text-white shadow-red-200' : 'bg-muted text-muted-foreground'}`}>
                 {isNationalExpanded ? (
                   <ChevronUp className="h-6 w-6" />
                 ) : (
@@ -910,15 +910,15 @@ export default function LeadershipPage() {
             <div className="mb-8">
               <button
                 onClick={() => setIsParishadExpanded(!isParishadExpanded)}
-                className="w-full flex items-center justify-between group bg-white/50 backdrop-blur-sm p-5 rounded-xl border border-gray-100 hover:border-red-500/20 transition-all duration-300"
+                className="w-full flex items-center justify-between group bg-card/50 backdrop-blur-sm p-5 rounded-xl border border-border hover:border-red-500/20 transition-all duration-300"
               >
                 <div className="text-left flex items-center gap-4">
                   <div className="h-6 w-1 bg-red-500 rounded-full"></div>
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-red-600 transition-colors">
                     {t('leadership.rashtriyaParishad', 'National Council (Rashtriya Parishad)')}
                   </h3>
                 </div>
-                <div className={`p-1.5 rounded-lg transition-all duration-300 ${isParishadExpanded ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-400'}`}>
+                <div className={`p-1.5 rounded-lg transition-all duration-300 ${isParishadExpanded ? 'bg-red-100 dark:bg-red-900/30 text-red-600' : 'bg-muted text-muted-foreground'}`}>
                   {isParishadExpanded ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
@@ -935,12 +935,12 @@ export default function LeadershipPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200 shadow-inner">
+                  <div className="text-center py-16 text-muted-foreground bg-card rounded-2xl border border-dashed border-border shadow-inner">
                     {loading ? (
                       <PremiumLoader />
                     ) : (
                       <div className="flex flex-col items-center gap-3">
-                        <Users className="h-10 w-10 text-gray-200" />
+                        <Users className="h-10 w-10 text-muted" />
                         <p className="text-sm font-medium">No members found in National Council.</p>
                       </div>
                     )}
@@ -953,15 +953,15 @@ export default function LeadershipPage() {
             <div className="mb-8">
               <button
                 onClick={() => setIsKaaryasamitiExpanded(!isKaaryasamitiExpanded)}
-                className="w-full flex items-center justify-between group bg-white/50 backdrop-blur-sm p-5 rounded-xl border border-gray-100 hover:border-red-500/20 transition-all duration-300"
+                className="w-full flex items-center justify-between group bg-card/50 backdrop-blur-sm p-5 rounded-xl border border-border hover:border-red-500/20 transition-all duration-300"
               >
                 <div className="text-left flex items-center gap-4">
                   <div className="h-6 w-1 bg-red-500 rounded-full"></div>
-                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-red-600 transition-colors">
                     {t('leadership.rashtriyaKaaryasamiti', 'National Executive Committee (Rashtriya Karyasamiti)')}
                   </h3>
                 </div>
-                <div className={`p-1.5 rounded-lg transition-all duration-300 ${isKaaryasamitiExpanded ? 'bg-red-50 text-red-600' : 'bg-gray-50 text-gray-400'}`}>
+                <div className={`p-1.5 rounded-lg transition-all duration-300 ${isKaaryasamitiExpanded ? 'bg-red-100 dark:bg-red-900/30 text-red-600' : 'bg-muted text-muted-foreground'}`}>
                   {isKaaryasamitiExpanded ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
@@ -978,12 +978,12 @@ export default function LeadershipPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-16 text-gray-500 bg-white rounded-2xl border border-dashed border-gray-200 shadow-inner">
+                  <div className="text-center py-16 text-muted-foreground bg-card rounded-2xl border border-dashed border-border shadow-inner">
                     {loading ? (
                       <PremiumLoader />
                     ) : (
                       <div className="flex flex-col items-center gap-3">
-                        <Users className="h-10 w-10 text-gray-200" />
+                        <Users className="h-10 w-10 text-muted" />
                         <p className="text-sm font-medium">No members found in National Executive Committee.</p>
                       </div>
                     )}
@@ -1029,14 +1029,14 @@ export default function LeadershipPage() {
                   <button
                     key={state}
                     onClick={() => setSelectedState(state)}
-                    className="group relative p-8 text-left bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/30 transition-all duration-300 overflow-hidden"
+                    className="group relative p-8 text-left bg-card border border-border rounded-2xl shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/30 transition-all duration-300 overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                       <ChevronRight className="h-5 w-5 text-blue-500" />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">STATE</span>
-                      <span className="text-lg font-black text-gray-800 group-hover:text-blue-600 transition-colors leading-tight">{state}</span>
+                      <span className="text-xs font-bold text-muted-foreground tracking-widest uppercase mb-1">STATE</span>
+                      <span className="text-lg font-black text-foreground group-hover:text-blue-600 transition-colors leading-tight">{state}</span>
                     </div>
                     <div className="mt-4 h-1 w-0 bg-blue-500 rounded-full group-hover:w-12 transition-all duration-500"></div>
                   </button>
@@ -1044,7 +1044,7 @@ export default function LeadershipPage() {
               </div>
             ) : (
               <div className="space-y-12">
-                <div className="flex items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between bg-card p-6 rounded-2xl shadow-sm border border-border">
                   <div className="flex items-center gap-6">
                     <button
                       onClick={() => {
@@ -1055,16 +1055,16 @@ export default function LeadershipPage() {
                           setSelectedState(null);
                         }
                       }}
-                      className="flex items-center justify-center h-12 w-12 bg-gray-50 rounded-full text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                      className="flex items-center justify-center h-12 w-12 bg-muted rounded-full text-muted-foreground hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
                     >
                       <ChevronLeft className="h-6 w-6" />
                     </button>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <MapPin className="h-4 w-4 text-red-500" />
-                        <span className="text-xs font-black tracking-widest text-gray-400 uppercase">{selectedState}</span>
+                        <span className="text-xs font-black tracking-widest text-muted-foreground uppercase">{selectedState}</span>
                       </div>
-                      <h3 className="text-2xl font-black text-gray-900">
+                      <h3 className="text-2xl font-black text-foreground">
                         {selectedLevel ? (selectedLevel === 'STATE' ? 'State Committee' : 'District Committee') : 'Select Level'}
                         {selectedDistrict ? ` - ${selectedDistrict}` : ''}
                       </h3>
@@ -1076,28 +1076,28 @@ export default function LeadershipPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <button
                       onClick={() => setSelectedLevel('STATE')}
-                      className="group relative p-12 text-center bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 overflow-hidden"
+                      className="group relative p-12 text-center bg-card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-border overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div className="relative z-10">
-                        <div className="h-24 w-24 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                        <div className="h-24 w-24 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
                           <Briefcase className="h-12 w-12 text-blue-600" />
                         </div>
-                        <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tight">State Committee</h4>
-                        <p className="text-gray-500 font-medium">32 Members dedicated to state-wide development and strategic planning</p>
+                        <h4 className="text-2xl font-black text-foreground mb-4 tracking-tight">State Committee</h4>
+                        <p className="text-muted-foreground font-medium">32 Members dedicated to state-wide development and strategic planning</p>
                       </div>
                     </button>
                     <button
                       onClick={() => setSelectedLevel('DISTRICT')}
-                      className="group relative p-12 text-center bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 overflow-hidden"
+                      className="group relative p-12 text-center bg-card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-border overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div className="relative z-10">
-                        <div className="h-24 w-24 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
+                        <div className="h-24 w-24 bg-green-50 dark:bg-green-900/20 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
                           <MapPin className="h-12 w-12 text-green-600" />
                         </div>
-                        <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tight">District Committee</h4>
-                        <p className="text-gray-500 font-medium">Local grassroots leadership across all districts within the state</p>
+                        <h4 className="text-2xl font-black text-foreground mb-4 tracking-tight">District Committee</h4>
+                        <p className="text-muted-foreground font-medium">Local grassroots leadership across all districts within the state</p>
                       </div>
                     </button>
                   </div>
@@ -1109,24 +1109,24 @@ export default function LeadershipPage() {
                           <MemberCard key={member._id} member={member} />
                         ))
                       ) : (
-                        <div className="col-span-full text-center py-24 text-gray-500 bg-white rounded-3xl border border-dashed border-gray-200">
+                        <div className="col-span-full text-center py-24 text-muted-foreground bg-card rounded-3xl border border-dashed border-border">
                           <div className="flex flex-col items-center gap-4">
-                            <Users className="h-12 w-12 text-gray-200" />
+                            <Users className="h-12 w-12 text-muted" />
                             <p className="font-medium">No members found for this State Committee.</p>
                           </div>
                         </div>
                       )}
                     </div>
                     {stateCommitteeMembers.length > 0 && stateCommitteeMembers.length < 32 && (
-                      <p className="mt-8 text-center text-gray-400 font-medium italic tracking-wide">Showing {stateCommitteeMembers.length} of 32 committee positions.</p>
+                      <p className="mt-8 text-center text-muted-foreground font-medium italic tracking-wide">Showing {stateCommitteeMembers.length} of 32 committee positions.</p>
                     )}
                   </div>
                 ) : (
                   <div className="space-y-12">
                     {!selectedDistrict ? (
-                      <div className="bg-white p-10 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/50">
-                        <h4 className="text-2xl font-black mb-8 flex items-center gap-4">
-                          <div className="h-8 w-8 bg-green-50 rounded-lg flex items-center justify-center">
+                      <div className="bg-card p-10 rounded-3xl border border-border shadow-xl shadow-black/5">
+                        <h4 className="text-2xl font-black mb-8 flex items-center gap-4 text-foreground">
+                          <div className="h-8 w-8 bg-green-50 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
                             <MapPin className="h-5 w-5 text-green-600" />
                           </div>
                           Select District in {selectedState}
@@ -1139,18 +1139,18 @@ export default function LeadershipPage() {
                               <button
                                 key={dist}
                                 onClick={() => setSelectedDistrict(dist)}
-                                className="p-4 bg-gray-50 border border-transparent rounded-xl hover:bg-white hover:border-green-500 hover:shadow-md transition-all text-gray-700 font-bold text-sm text-center"
+                                className="p-4 bg-muted border border-transparent rounded-xl hover:bg-card hover:border-green-500 hover:shadow-md transition-all text-foreground font-bold text-sm text-center"
                               >
                                 {dist}
                               </button>
                             ))}
                             <div className="col-span-full mt-8">
                               <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-green-500 transition-colors" />
                                 <input 
                                   type="text" 
                                   placeholder="Search or enter other district..." 
-                                  className="w-full pl-12 pr-4 py-5 bg-gray-50 border border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all font-medium"
+                                  className="w-full pl-12 pr-4 py-5 bg-muted border border-transparent rounded-2xl focus:bg-card focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all font-medium text-foreground"
                                   onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                       setSelectedDistrict((e.target as HTMLInputElement).value);
@@ -1161,16 +1161,16 @@ export default function LeadershipPage() {
                             </div>
                           </div>
                         ) : (
-                          <div className="text-center py-20 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
-                            <p className="text-gray-500 mb-8 font-bold text-lg">No district data available for this state.</p>
+                          <div className="text-center py-20 bg-muted rounded-3xl border border-dashed border-border">
+                            <p className="text-muted-foreground mb-8 font-bold text-lg">No district data available for this state.</p>
                             <div className="max-w-md mx-auto px-4">
-                              <p className="text-sm text-gray-400 mb-4 font-medium uppercase tracking-widest">Search for a specific district:</p>
+                              <p className="text-sm text-muted-foreground mb-4 font-medium uppercase tracking-widest">Search for a specific district:</p>
                               <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-green-500 transition-colors" />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-green-500 transition-colors" />
                                 <input 
                                   type="text" 
                                   placeholder="Enter district name..." 
-                                  className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none shadow-sm transition-all"
+                                  className="w-full pl-12 pr-4 py-4 bg-card border border-border rounded-xl focus:ring-2 focus:ring-green-500 outline-none shadow-sm transition-all text-foreground"
                                   onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                       setSelectedDistrict((e.target as HTMLInputElement).value);
@@ -1190,16 +1190,16 @@ export default function LeadershipPage() {
                               <MemberCard key={member._id} member={member} />
                             ))
                           ) : (
-                            <div className="col-span-full text-center py-24 text-gray-500 bg-white rounded-3xl border border-dashed border-gray-200">
+                            <div className="col-span-full text-center py-24 text-muted-foreground bg-card rounded-3xl border border-dashed border-border">
                               <div className="flex flex-col items-center gap-4">
-                                <Users className="h-12 w-12 text-gray-200" />
+                                <Users className="h-12 w-12 text-muted" />
                                 <p className="font-medium">No members found for this District Committee.</p>
                               </div>
                             </div>
                           )}
                         </div>
                         {districtCommitteeMembers.length > 0 && districtCommitteeMembers.length < 53 && (
-                          <p className="mt-8 text-center text-gray-400 font-medium italic">Showing {districtCommitteeMembers.length} of 53 committee positions.</p>
+                          <p className="mt-8 text-center text-muted-foreground font-medium italic">Showing {districtCommitteeMembers.length} of 53 committee positions.</p>
                         )}
                       </div>
                     )}

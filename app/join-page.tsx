@@ -167,11 +167,11 @@ export default function JoinPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-background">
       <Toaster />
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -180,16 +180,16 @@ export default function JoinPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'सदस्यता' : 'MEMBERSHIP'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'हमारे आंदोलन में शामिल हों' : 'Join Our Movement'} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'परिवर्तन का हिस्सा बनें' : 'BE THE CHANGE'}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
+            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'एक सदस्य बनें और सभी के लिए एक बेहतर भारत बनाने में हमारी मदद करें'
                 : 'Become a member and help us build a better India for all'
@@ -203,54 +203,54 @@ export default function JoinPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {showConfirmation ? (
             <div className="max-w-2xl mx-auto" ref={confirmationRef} tabIndex={-1}>
-              <Card className="border-2 border-green-500 bg-gradient-to-br from-green-50 to-blue-50">
+              <Card className="border-2 border-green-500 bg-card">
                 <CardContent className="pt-12 pb-12 text-center">
                   <div className="flex justify-center mb-6">
-                    <div className="h-20 w-20 bg-green-100 rounded-full flex items-center justify-center">
+                    <div className="h-20 w-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
                       <CheckCircle2 className="h-12 w-12 text-green-600" />
                     </div>
                   </div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-3xl font-bold text-foreground mb-4">
                     {locale === 'hi'
                       ? 'बहुजन क्रांति पार्टी में स्वागत है!'
                       : 'Welcome to Bahujan Kranti Party!'}
                   </h2>
-                  <p className="text-lg text-gray-700 mb-8">
+                  <p className="text-lg text-muted-foreground mb-8">
                     {locale === 'hi'
                       ? 'आपने सफलतापूर्वक बहुजन क्रांति पार्टी की सदस्यता के लिए पंजीकृत किया गया है।'
                       : 'You have successfully registered for Bahujan Kranti Party membership.'}
                   </p>
 
-                  <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 mb-8">
+                  <Card className="bg-muted border-2 border-border mb-8">
                     <CardContent className="pt-6 pb-6">
-                      <p className="text-center text-yellow-900 font-bold mb-4">
+                      <p className="text-center text-foreground font-bold mb-4">
                         {locale === 'hi'
                           ? '⚠️ कृपया आपना सदस्य ID नोट कर लें ⚠️'
                           : '⚠️ Please Note Down Your Member ID ⚠️'}
                       </p>
-                      <p className="text-gray-600 mb-3">
+                      <p className="text-muted-foreground mb-3">
                         {locale === 'hi' ? 'आपका सदस्य ID:' : 'Your Member ID:'}
                       </p>
                       <div className="flex items-center justify-center gap-3">
-                        <p className="text-3xl font-bold text-blue-600 tracking-widest border-2 border-blue-600 px-4 py-2 rounded">
+                        <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 tracking-widest border-2 border-blue-600 dark:border-blue-400 px-4 py-2 rounded">
                           {memberId}
                         </p>
                         <button
                           onClick={copyMemberId}
-                          className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+                          className="p-2 hover:bg-accent rounded-md transition-colors"
                           title={locale === 'hi' ? 'कॉपी करें' : 'Copy'}
                         >
-                          <Copy className="h-5 w-5 text-gray-600" />
+                          <Copy className="h-5 w-5 text-muted-foreground" />
                         </button>
                       </div>
                     </CardContent>
                   </Card>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
-                    <p className="text-sm text-blue-900 font-semibold mb-2">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-4 mb-8">
+                    <p className="text-sm text-blue-900 dark:text-blue-400 font-semibold mb-2">
                       {locale === 'hi' ? '⭐ महत्वपूर्ण:' : '⭐ Important:'}
                     </p>
-                    <p className="text-sm text-blue-800">
+                    <p className="text-sm text-blue-800 dark:text-blue-300">
                       {locale === 'hi'
                         ? 'कृपया अपने सदस्य ID को अपने नोटबुक में, मोबाइल में, या किसी सुरक्षित स्थान पर नोट कर लें। यह भविष्य के सभी संदर्भों के लिए आवश्यक होगा।'
                         : 'Please save your member ID in your notebook, mobile, or any safe place. You will need it for all future references.'}
@@ -278,23 +278,23 @@ export default function JoinPage() {
           ) : !showForm ? (
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                <h2 className="text-3xl font-bold text-foreground mb-4">
                   {t('join.selectMembershipTitle')}
                 </h2>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-muted-foreground">
                   {t('join.selectMembershipSubtitle')}
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Normal Membership */}
-                <Card className="flex flex-col h-full border-2 hover:border-blue-500 transition-colors cursor-pointer" onClick={() => handleSelectMembership('Normal Membership')}>
+                <Card className="flex flex-col h-full border-2 hover:border-blue-500 transition-colors cursor-pointer bg-card" onClick={() => handleSelectMembership('Normal Membership')}>
                   <CardContent className="pt-8 flex-grow flex flex-col items-center text-center">
-                    <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                      <Users className="h-8 w-8 text-blue-600" />
+                    <div className="h-16 w-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-6">
+                      <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-4">{t('join.normalMembershipLabel')}</h3>
-                    <p className="text-gray-600 mb-8 flex-grow">
+                    <h3 className="text-2xl font-bold mb-4 text-foreground">{t('join.normalMembershipLabel')}</h3>
+                    <p className="text-muted-foreground mb-8 flex-grow">
                       {t('join.normalMembershipDesc')}
                     </p>
                     <Button className="w-full bg-blue-600 hover:bg-blue-700">
@@ -304,13 +304,13 @@ export default function JoinPage() {
                 </Card>
 
                 {/* Active Membership */}
-                <Card className="flex flex-col h-full border-2 hover:border-red-500 transition-colors cursor-pointer" onClick={() => handleSelectMembership('Active Membership')}>
+                <Card className="flex flex-col h-full border-2 hover:border-red-500 transition-colors cursor-pointer bg-card" onClick={() => handleSelectMembership('Active Membership')}>
                   <CardContent className="pt-8 flex-grow flex flex-col items-center text-center">
-                    <div className="h-16 w-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
-                      <Users className="h-8 w-8 text-red-600" />
+                    <div className="h-16 w-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-6">
+                      <Users className="h-8 w-8 text-red-600 dark:text-red-400" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-4">{t('join.activeMembershipLabel')}</h3>
-                    <p className="text-gray-600 mb-8 flex-grow">
+                    <h3 className="text-2xl font-bold mb-4 text-foreground">{t('join.activeMembershipLabel')}</h3>
+                    <p className="text-muted-foreground mb-8 flex-grow">
                       {t('join.activeMembershipDesc')}
                     </p>
                     <Button className="w-full bg-red-600 hover:bg-red-700">
@@ -324,15 +324,15 @@ export default function JoinPage() {
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
               <div>
                 <div className="flex items-center space-x-3 mb-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
-                    <Users className="h-6 w-6 text-red-600" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
+                    <Users className="h-6 w-6 text-red-600 dark:text-red-400" />
                   </div>
-                  <h2 className="text-3xl font-bold text-gray-900">
+                  <h2 className="text-3xl font-bold text-foreground">
                     {locale === 'hi' ? 'हमसे क्यों जुड़ें?' : 'Why Join Us?'}
                   </h2>
                 </div>
 
-                <p className="text-gray-600 mb-8">
+                <p className="text-muted-foreground mb-8">
                   {locale === 'hi'
                     ? 'बहुजन क्रांति पार्टी से जुड़कर, आप हमारे राष्ट्र में सकारात्मक परिवर्तन लाने के लिए समर्पित एक आंदोलन का हिस्सा बनते हैं। आपकी आवाज महत्वपूर्ण है, और एक साथ हम भारत के भविष्य को आकार दे सकते हैं।'
                     : 'By joining Bahujan Kranti Party, you become part of a movement dedicated to creating positive change in our nation. Your voice matters, and together we can shape the future of India.'
@@ -342,16 +342,16 @@ export default function JoinPage() {
                 <div className="space-y-4 mb-8">
                   {benefits.map((benefit, index) => (
                     <div key={index} className="flex items-start space-x-3">
-                      <CheckCircle2 className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{benefit}</span>
+                      <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground">{benefit}</span>
                     </div>
                   ))}
                 </div>
 
-                <Card className="bg-gradient-to-br from-red-50 to-blue-50 border-red-200">
+                <Card className="bg-muted/50 border-border">
                   <CardContent className="pt-6">
-                    <h3 className="text-lg font-semibold mb-2">{locale === 'hi' ? 'सदस्यता निःशुल्क है' : 'Membership is Free'}</h3>
-                    <p className="text-gray-600">
+                    <h3 className="text-lg font-semibold mb-2 text-foreground">{locale === 'hi' ? 'सदस्यता निःशुल्क है' : 'Membership is Free'}</h3>
+                    <p className="text-muted-foreground">
                       {locale === 'hi'
                         ? 'कोई सदस्यता शुल्क नहीं है। हम एक मजबूत, समावेशी आंदोलन बनाने में विश्वास करते हैं जहां हर कोई अपनी वित्तीय स्थिति की परवाह किए बिना भाग ले सके।'
                         : 'There are no membership fees. We believe in building a strong, inclusive movement where everyone can participate regardless of their financial status.'
@@ -371,13 +371,13 @@ export default function JoinPage() {
 
               <div>
                 {formData.membershipType === 'Active Membership' ? (
-                  <Card>
+                  <Card className="bg-card">
                     <CardContent className="pt-6">
                       <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-center mb-2 text-red-600">
+                        <h2 className="text-2xl font-bold text-center mb-2 text-red-600 dark:text-red-400">
                           {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
                         </h2>
-                        <p className="text-center text-sm text-gray-600 mb-6">
+                        <p className="text-center text-sm text-muted-foreground mb-6">
                           {locale === 'hi' ? '(मार्क्सवाद – अम्बेडकरवाद)' : '(Marxism - Ambedkarism)'}
                         </p>
                       </div>
@@ -385,16 +385,16 @@ export default function JoinPage() {
                       <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'क्रमांक' : 'Serial No.'}
                             </label>
-                            <Input type="text" readOnly value={formData.serialNo} className="border-b border-t-0 border-l-0 border-r-0 bg-gray-100" />
+                            <Input type="text" readOnly value={formData.serialNo} className="border-b border-t-0 border-l-0 border-r-0 bg-muted text-foreground" />
                           </div>
                           <div></div>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'नाम' : 'Name'} *
                           </label>
                           <Input
@@ -402,13 +402,13 @@ export default function JoinPage() {
                             required
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'आयु' : 'Age'} *
                             </label>
                             <Input
@@ -418,14 +418,14 @@ export default function JoinPage() {
                               max="120"
                               value={formData.age}
                               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                              className="border-b border-t-0 border-l-0 border-r-0"
+                              className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                             />
                           </div>
                           <div></div>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पिता/पति का नाम' : 'Father\'s/Husband\'s Name'} *
                           </label>
                           <Input
@@ -433,12 +433,12 @@ export default function JoinPage() {
                             required
                             value={formData.fathersOrHusbandsName}
                             onChange={(e) => setFormData({ ...formData, fathersOrHusbandsName: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पता' : 'Address'} *
                           </label>
                           <Textarea
@@ -446,19 +446,19 @@ export default function JoinPage() {
                             rows={3}
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            className="border"
+                            className="border-border bg-transparent text-foreground focus:ring-red-500"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'राज्य' : 'State'} *
                           </label>
                           <select
                             required
                             value={formData.state}
                             onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 bg-white"
+                            className="w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 bg-background text-foreground"
                           >
                             <option value="">{locale === 'hi' ? '- राज्य चुनें -' : '- Select State -'}</option>
                             {INDIAN_STATES.map((state) => (
@@ -471,7 +471,7 @@ export default function JoinPage() {
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'पिन कोड' : 'PIN Code'} *
                             </label>
                             <Input
@@ -481,14 +481,14 @@ export default function JoinPage() {
                               pattern="[0-9]{6}"
                               value={formData.pincode}
                               onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                              className="border-b border-t-0 border-l-0 border-r-0"
+                              className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                             />
                           </div>
                           <div></div>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'मो नं' : 'Mobile No.'} *
                           </label>
                           <Input
@@ -509,39 +509,39 @@ export default function JoinPage() {
                                 }
                               }
                             }}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                             placeholder="+91 XXXXXXXXXX"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'Email Id' : 'Email ID'}
                           </label>
                           <Input
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                             placeholder="email@example.com"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पहचान हेतु आधार नं / मतदाता पहचान नं' : 'Aadhar No. / Voter ID No.'}
                           </label>
                           <Input
                             type="text"
                             value={formData.aadharNumber || formData.voterIdCardNo}
                             onChange={(e) => setFormData({ ...formData, voterIdCardNo: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'दिनांक' : 'Date'} *
                             </label>
                             <Input
@@ -549,33 +549,33 @@ export default function JoinPage() {
                               required
                               value={formData.date}
                               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                              className="border-b border-t-0 border-l-0 border-r-0"
+                              className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                             />
                           </div>
                           <div></div>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पोलिंग स्टेशन का नाम' : 'Polling Station Name'}
                           </label>
                           <Input
                             type="text"
                             value={formData.pollingStation}
                             onChange={(e) => setFormData({ ...formData, pollingStation: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'विधानसभा निर्वाचन क्षेत्र' : 'Assembly Constituency'}
                           </label>
                           <Input
                             type="text"
                             value={formData.constituency}
                             onChange={(e) => setFormData({ ...formData, constituency: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                           />
                         </div>
 
@@ -590,20 +590,20 @@ export default function JoinPage() {
                     </CardContent>
                   </Card>
                 ) : (
-                  <Card>
+                  <Card className="bg-card">
                     <CardContent className="pt-6">
                       <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-center mb-2 text-blue-600">
+                        <h2 className="text-2xl font-bold text-center mb-2 text-blue-600 dark:text-blue-400">
                           {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
                         </h2>
-                        <p className="text-center text-sm text-gray-600 mb-6">
+                        <p className="text-center text-sm text-muted-foreground mb-6">
                           {locale === 'hi' ? '(मार्क्सवाद – अम्बेडकरवाद)' : '(Marxism - Ambedkarism)'}
                         </p>
                       </div>
 
                       <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'नाम' : 'Name'} *
                           </label>
                           <Input
@@ -611,13 +611,13 @@ export default function JoinPage() {
                             required
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-red-500 rounded-none px-0"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'जन्म तिथि' : 'Date of Birth'} *
                             </label>
                             <Input
@@ -625,11 +625,11 @@ export default function JoinPage() {
                               required
                               value={formData.dateOfBirth}
                               onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                              className="border-b border-t-0 border-l-0 border-r-0"
+                              className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'आयु' : 'Age'} *
                             </label>
                             <Input
@@ -639,13 +639,13 @@ export default function JoinPage() {
                               max="120"
                               value={formData.age}
                               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                              className="border-b border-t-0 border-l-0 border-r-0"
+                              className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                             />
                           </div>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पिता/पति का नाम' : 'Father\'s/Husband\'s Name'} *
                           </label>
                           <Input
@@ -653,12 +653,12 @@ export default function JoinPage() {
                             required
                             value={formData.fathersOrHusbandsName}
                             onChange={(e) => setFormData({ ...formData, fathersOrHusbandsName: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पता' : 'Address'} *
                           </label>
                           <Textarea
@@ -666,19 +666,19 @@ export default function JoinPage() {
                             rows={3}
                             value={formData.address}
                             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            className="border"
+                            className="border-border bg-transparent text-foreground focus:ring-blue-500"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'राज्य' : 'State'} *
                           </label>
                           <select
                             required
                             value={formData.state}
                             onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white"
+                            className="w-full px-3 py-2 border border-border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-background text-foreground"
                           >
                             <option value="">{locale === 'hi' ? '- राज्य चुनें -' : '- Select State -'}</option>
                             {INDIAN_STATES.map((state) => (
@@ -690,7 +690,7 @@ export default function JoinPage() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'जिला/शहर' : 'District/City'} *
                           </label>
                           <Input
@@ -698,12 +698,12 @@ export default function JoinPage() {
                             required
                             value={formData.district}
                             onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पिन कोड' : 'PIN Code'} *
                           </label>
                           <Input
@@ -713,24 +713,24 @@ export default function JoinPage() {
                             pattern="[0-9]{6}"
                             value={formData.pincode}
                             onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'ईमेल' : 'Email'}
                           </label>
                           <Input
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'मो नं' : 'Mobile No.'} *
                           </label>
                           <Input
@@ -751,38 +751,38 @@ export default function JoinPage() {
                                 }
                               }
                             }}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                             placeholder="+91 XXXXXXXXXX"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'पोलिंग स्टेशन का नाम' : 'Polling Station Name'}
                           </label>
                           <Input
                             type="text"
                             value={formData.pollingStation}
                             onChange={(e) => setFormData({ ...formData, pollingStation: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">
+                          <label className="block text-sm font-medium mb-2 text-foreground">
                             {locale === 'hi' ? 'विधानसभा निर्वाचन क्षेत्र' : 'Assembly Constituency'}
                           </label>
                           <Input
                             type="text"
                             value={formData.constituency}
                             onChange={(e) => setFormData({ ...formData, constituency: e.target.value })}
-                            className="border-b border-t-0 border-l-0 border-r-0"
+                            className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                           />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-medium mb-2">
+                            <label className="block text-sm font-medium mb-2 text-foreground">
                               {locale === 'hi' ? 'दिनांक' : 'Date'} *
                             </label>
                             <Input
@@ -790,7 +790,7 @@ export default function JoinPage() {
                               required
                               value={formData.date}
                               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                              className="border-b border-t-0 border-l-0 border-r-0"
+                              className="border-b border-border border-t-0 border-l-0 border-r-0 bg-transparent text-foreground focus:ring-0 focus:border-blue-500 rounded-none px-0"
                             />
                           </div>
                           <div></div>
@@ -814,14 +814,14 @@ export default function JoinPage() {
       </section>
 
       {showPledgeModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <Card className="max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <CardContent className="pt-8">
-              <h2 className="text-2xl font-bold text-center mb-6 text-red-600">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Card className="max-w-3xl w-full max-h-[90vh] overflow-y-auto bg-card border-border shadow-2xl">
+            <CardContent className="pt-8 bg-card">
+              <h2 className="text-2xl font-bold text-center mb-6 text-red-600 dark:text-red-400">
                 {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
               </h2>
 
-              <div className="bg-gray-50 p-6 rounded-lg mb-8 text-sm leading-relaxed space-y-4 max-h-80 overflow-y-auto">
+              <div className="bg-muted p-6 rounded-lg mb-8 text-sm leading-relaxed space-y-4 max-h-80 overflow-y-auto border border-border">
                 {formData.membershipType === 'Normal Membership' ? (
                   locale === 'hi' ? (
                     <>
@@ -900,9 +900,9 @@ export default function JoinPage() {
                     id="pledgeAccepted"
                     checked={pledgeAccepted}
                     onChange={(e) => setPledgeAccepted(e.target.checked)}
-                    className="mt-1"
+                    className="mt-1 accent-red-600"
                   />
-                  <label htmlFor="pledgeAccepted" className="text-sm text-gray-700">
+                  <label htmlFor="pledgeAccepted" className="text-sm text-foreground">
                     {locale === 'hi'
                       ? 'मैं ने ऊपर दिए गए घोषणापत्र को पढ़ा और इससे सहमत हूँ'
                       : 'I have read and accept the pledge mentioned above'}
@@ -915,9 +915,9 @@ export default function JoinPage() {
                     id="informationConfirmed"
                     checked={informationConfirmed}
                     onChange={(e) => setInformationConfirmed(e.target.checked)}
-                    className="mt-1"
+                    className="mt-1 accent-red-600"
                   />
-                  <label htmlFor="informationConfirmed" className="text-sm text-gray-700">
+                  <label htmlFor="informationConfirmed" className="text-sm text-foreground">
                     {locale === 'hi'
                       ? 'मैं प्रमाणित करता/करती हूँ कि मेरा दर्ज सभी सूचना सत्य है'
                       : 'I confirm that all information entered by me is true'}

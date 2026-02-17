@@ -407,38 +407,38 @@ export default function HomePage() {
             { label: locale === 'hi' ? 'आयोजित कार्यक्रम' : 'Events Held', value: locale === 'hi' ? 'नियमित' : 'Regular', icon: Award, color: 'text-blue-600' },
             { label: locale === 'hi' ? 'स्वयंसेवक' : 'Volunteers', value: locale === 'hi' ? 'समर्पित' : 'Dedicated', icon: Heart, color: 'text-red-600' },
           ].map((stat, i) => (
-            <div key={i} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-gray-100 dark:border-zinc-800 hover:scale-105 transition-transform">
-              <div className={`p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 ${stat.color} mb-3`}>
+            <div key={i} className="bg-card rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-border hover:scale-105 transition-transform">
+              <div className={`p-3 rounded-xl bg-muted ${stat.color} mb-3`}>
                 <stat.icon className="h-6 w-6" />
               </div>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.label}</div>
+              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+              <div className="text-sm font-medium text-muted-foreground">{stat.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-b from-red-50 to-white dark:from-zinc-950 dark:to-zinc-900">
+      <section className="py-16 bg-gradient-to-b from-red-50 to-background dark:from-red-950/20 dark:to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4">
+            <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
               {t('home.values', 'Our Core Values')}
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {locale === 'hi' ? 'सिद्धांत जो हम राष्ट्र के लिए हर निर्णय में लागू करते हैं' : 'Principles that guide every decision we make for the nation'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
-              <Card key={index} className="group border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden dark:bg-zinc-800">
+              <Card key={index} className="group border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden bg-card">
                 <CardContent className="pt-8 pb-8 flex flex-col items-center text-center relative">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/30 text-red-600 mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
                     <value.icon className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{value.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{value.description}</p>
+                  <h3 className="text-xl font-bold mb-3 text-foreground">{value.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{value.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -499,13 +499,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-white dark:bg-zinc-950">
+      <section className="py-16 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4">
+            <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
               {locale === 'hi' ? 'मुख्य पहल' : 'Key Initiatives'}
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {locale === 'hi' ? 'प्रत्येक भारतीय को उन्नत करने के लिए डिजाइन किए गए परिवर्तनकारी कार्यक्रम' : 'Transformative programs designed to uplift every Indian'}
             </p>
           </div>
@@ -514,14 +514,14 @@ export default function HomePage() {
             {initiatives.map((initiative, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800"
+                className="group relative overflow-hidden rounded-2xl bg-card p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-border"
               >
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${initiative.color} opacity-0 group-hover:opacity-10 rounded-bl-full transition-opacity duration-500`} />
                 <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${initiative.color} mb-6 shadow-lg shadow-gray-200 dark:shadow-none group-hover:scale-110 transition-transform duration-300`}>
                   <initiative.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{initiative.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">{initiative.description}</p>
+                <h3 className="text-2xl font-bold mb-4 text-foreground">{initiative.title}</h3>
+                <p className="text-muted-foreground leading-relaxed mb-6">{initiative.description}</p>
                 <button 
                   onClick={() => setSelectedTopic({
                     title: initiative.title,
@@ -530,7 +530,7 @@ export default function HomePage() {
                     color: initiative.color,
                     icon: initiative.icon
                   })}
-                  className="inline-flex items-center text-sm font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors group-hover:translate-x-2 transition-transform duration-300"
+                  className="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 transition-colors group-hover:translate-x-2 transition-transform duration-300"
                 >
                   {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -542,14 +542,14 @@ export default function HomePage() {
       </section>
 
       {/* Vision for Bharat Section */}
-      <section className="py-20 bg-gray-50 dark:bg-zinc-900/50">
+      <section className="py-20 bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-5xl mb-6">
+            <h2 className="text-3xl font-bold text-foreground sm:text-5xl mb-6">
               {locale === 'hi' ? 'भारत के लिए हमारा संकल्प' : 'Our Commitment to Bharat'}
             </h2>
             <div className="w-24 h-1.5 bg-red-600 mx-auto rounded-full mb-6" />
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-medium">
               {locale === 'hi'
                 ? 'बहुजन क्रांति पार्टी के घोषणा पत्र के मुख्य स्तंभ जो एक सशक्त और समृद्ध राष्ट्र की नींव रखते हैं।'
                 : 'The core pillars of Bahujan Kranti Party\'s manifesto that lay the foundation for a strong and prosperous nation.'}
@@ -558,14 +558,14 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {manifestoItems.map((item, index) => (
-              <div key={index} className="bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-zinc-800 group">
+              <div key={index} className="bg-card rounded-3xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-border group">
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   <item.icon className="h-8 w-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
+                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-red-600 transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium mb-6">
+                <p className="text-muted-foreground leading-relaxed font-medium mb-6">
                   {item.description}
                 </p>
                 <button 
@@ -576,7 +576,7 @@ export default function HomePage() {
                     color: item.color,
                     icon: item.icon
                   })}
-                  className="inline-flex items-center text-sm font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors group-hover:translate-x-2 transition-transform duration-300"
+                  className="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 transition-colors group-hover:translate-x-2 transition-transform duration-300"
                 >
                   {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -588,19 +588,19 @@ export default function HomePage() {
       </section>
 
       {/* Leadership Preview */}
-      <section className="py-24 bg-gray-50 dark:bg-zinc-950 overflow-hidden">
+      <section className="py-24 bg-muted/20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
             <div className="text-center md:text-left">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4">
+              <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
                 {locale === 'hi' ? 'हमारा नेतृत्व' : 'Our Leadership'}
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
+              <p className="text-lg text-muted-foreground max-w-2xl">
                 {locale === 'hi' ? 'एक समृद्ध और न्यायपूर्ण भारत के लिए आंदोलन का नेतृत्व करने वाले समर्पित क्रांतिकारी' : 'Dedicated revolutionaries leading the movement for a prosperous and just India'}
               </p>
             </div>
             <Link href={`/${locale}/leadership`}>
-              <Button variant="outline" className="rounded-full px-8 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all dark:border-red-500 dark:text-red-500 dark:hover:bg-red-500 dark:hover:text-white">
+              <Button variant="outline" className="rounded-full px-8 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all">
                 {locale === 'hi' ? 'सभी नेताओं से मिलें' : 'Meet All Leaders'}
               </Button>
             </Link>
@@ -608,7 +608,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* President Card - Featured */}
-            <div className="lg:col-span-1 bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-lg border border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-all duration-500 group">
+            <div className="lg:col-span-1 bg-card rounded-3xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 group">
               <div className="aspect-[4/5] relative overflow-hidden">
                 <img src="/president.jpg" alt="National President" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
@@ -620,11 +620,11 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="p-6">
-                <p className="text-gray-600 dark:text-gray-400 italic mb-6">
+                <p className="text-muted-foreground italic mb-6">
                   "{locale === 'hi' ? 'हमारा मिशन हर नागरिक को सशक्त बनाना और सामाजिक न्याय सुनिश्चित करना है।' : 'Our mission is to empower every citizen and ensure social justice.'}"
                 </p>
                 <Link href={`/${locale}/leadership?memberId=president`}>
-                  <Button variant="ghost" className="w-full justify-between hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 group/btn">
+                  <Button variant="ghost" className="w-full justify-between hover:bg-red-50 dark:hover:bg-accent hover:text-red-600 group/btn">
                     {locale === 'hi' ? 'प्रोफ़ाइल देखें' : 'View Profile'}
                     <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
@@ -671,14 +671,14 @@ export default function HomePage() {
       </section>
 
       {news.length > 0 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-muted/30">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+                <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
                   {t('news.title', 'Latest News')}
                 </h2>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-muted-foreground">
                   {locale === 'hi' ? 'हमारी हाल की गतिविधियों और घोषणाओं के साथ अपडेट रहें' : 'Stay updated with our recent activities and announcements'}
                 </p>
               </div>
@@ -700,14 +700,14 @@ export default function HomePage() {
       )}
 
       {events.length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-background">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+                <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
                   {t('events.title', 'Upcoming Events')}
                 </h2>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-muted-foreground">
                   {locale === 'hi' ? 'हमारे कार्यक्रमों में शामिल हों और परिवर्तन का हिस्सा बनें' : 'Join us at our events and be part of the change'}
                 </p>
               </div>

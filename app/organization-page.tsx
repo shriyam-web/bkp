@@ -13,7 +13,7 @@ export default function OrganizationPage() {
     {
       icon: Building2,
       title: locale === 'hi' ? 'राष्ट्रीय मुख्यालय' : 'National Headquarters',
-      color: 'red',
+      colorClasses: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
       description: locale === 'hi'
         ? 'पार्टी का केंद्रीय प्रशासनिक केंद्र जहां सभी महत्वपूर्ण निर्णय लिए जाते हैं।'
         : 'The central administrative hub of the party where all important decisions are made.',
@@ -21,7 +21,7 @@ export default function OrganizationPage() {
     {
       icon: Users,
       title: locale === 'hi' ? 'राष्ट्रीय परिषद्' : 'National Council',
-      color: 'blue',
+      colorClasses: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
       description: locale === 'hi'
         ? 'पार्टी के शीर्ष नेतृत्व और निर्णय लेने वाली संस्था।'
         : 'The top leadership and decision-making body of the party.',
@@ -29,7 +29,7 @@ export default function OrganizationPage() {
     {
       icon: Briefcase,
       title: locale === 'hi' ? 'राष्ट्रीय कार्य समिति' : 'National Executive Committee',
-      color: 'green',
+      colorClasses: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
       description: locale === 'hi'
         ? 'राष्ट्रीय स्तर पर कार्यान्वयन और प्रशासन के लिए जिम्मेदार।'
         : 'Responsible for implementation and administration at the national level.',
@@ -37,7 +37,7 @@ export default function OrganizationPage() {
     {
       icon: Shield,
       title: locale === 'hi' ? 'राज्य संगठन' : 'State Organization',
-      color: 'yellow',
+      colorClasses: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
       description: locale === 'hi'
         ? 'प्रत्येक राज्य में पार्टी के संगठनात्मक ढांचे और प्रशासन।'
         : 'Party organizational structure and administration in each state.',
@@ -45,7 +45,7 @@ export default function OrganizationPage() {
     {
       icon: BarChart3,
       title: locale === 'hi' ? 'जिला स्तरीय संगठन' : 'District Level Organization',
-      color: 'purple',
+      colorClasses: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
       description: locale === 'hi'
         ? 'जिला स्तर पर पार्टी की गतिविधियों और संगठन का संचालन।'
         : 'Conducting party activities and organization at the district level.',
@@ -53,10 +53,10 @@ export default function OrganizationPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -65,16 +65,16 @@ export default function OrganizationPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'संगठन' : 'ORGANIZATION'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'संगठनात्मक ढांचा' : 'Organizational Structure'} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'हमारी कार्य प्रणाली' : 'OUR WORKING SYSTEM'}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
+            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'बहुजन क्रांति पार्टी का संगठनात्मक ढांचा और कार्य प्रणाली'
                 : 'Bahujan Kranti Party\'s Organizational Structure and Working System'}
@@ -89,15 +89,15 @@ export default function OrganizationPage() {
             {structure.map((item, index) => {
               const Icon = item.icon;
               return (
-                <Card key={index} className="hover:shadow-lg transition-shadow">
+                <Card key={index} className="hover:shadow-lg transition-shadow bg-card">
                   <CardContent className="pt-8">
-                    <div className={`h-12 w-12 rounded-lg flex items-center justify-center mb-6 bg-${item.color}-100`}>
-                      <Icon className={`h-6 w-6 text-${item.color}-600`} />
+                    <div className={`h-12 w-12 rounded-lg flex items-center justify-center mb-6 ${item.colorClasses}`}>
+                      <Icon className="h-6 w-6" />
                     </div>
-                    <h3 className="text-xl font-bold mb-3 text-gray-900">
+                    <h3 className="text-xl font-bold mb-3 text-foreground">
                       {item.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-muted-foreground">
                       {item.description}
                     </p>
                   </CardContent>
@@ -108,60 +108,60 @@ export default function OrganizationPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             {locale === 'hi' ? 'संगठनात्मक पदानुक्रम' : 'Organizational Hierarchy'}
           </h2>
 
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white p-8 rounded-lg shadow">
+            <div className="bg-card p-8 rounded-lg shadow-lg border border-border">
               <div className="space-y-6">
-                <div className="text-center py-4 bg-red-50 rounded-lg border-2 border-red-600">
-                  <h4 className="text-xl font-bold text-red-600">
+                <div className="text-center py-4 bg-red-50 dark:bg-red-900/30 rounded-lg border-2 border-red-600">
+                  <h4 className="text-xl font-bold text-red-600 dark:text-red-400">
                     {locale === 'hi' ? 'राष्ट्रीय अध्यक्ष' : 'National President'}
                   </h4>
                 </div>
 
                 <div className="flex justify-center">
-                  <div className="w-1 h-8 bg-gray-400"></div>
+                  <div className="w-1 h-8 bg-muted-foreground/30"></div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="py-4 bg-blue-50 rounded-lg border-2 border-blue-600 text-center">
-                    <h4 className="font-bold text-blue-600">
+                  <div className="py-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-2 border-blue-600 text-center">
+                    <h4 className="font-bold text-blue-600 dark:text-blue-400">
                       {locale === 'hi' ? 'महासचिव' : 'General Secretary'}
                     </h4>
                   </div>
-                  <div className="py-4 bg-blue-50 rounded-lg border-2 border-blue-600 text-center">
-                    <h4 className="font-bold text-blue-600">
+                  <div className="py-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-2 border-blue-600 text-center">
+                    <h4 className="font-bold text-blue-600 dark:text-blue-400">
                       {locale === 'hi' ? 'कोषाध्यक्ष' : 'Treasurer'}
                     </h4>
                   </div>
                 </div>
 
                 <div className="flex justify-center">
-                  <div className="w-1 h-8 bg-gray-400"></div>
+                  <div className="w-1 h-8 bg-muted-foreground/30"></div>
                 </div>
 
-                <div className="py-4 bg-green-50 rounded-lg border-2 border-green-600 text-center">
-                  <h4 className="font-bold text-green-600">
+                <div className="py-4 bg-green-50 dark:bg-green-900/30 rounded-lg border-2 border-green-600 text-center">
+                  <h4 className="font-bold text-green-600 dark:text-green-400">
                     {locale === 'hi' ? 'राज्य अध्यक्ष' : 'State Presidents'}
                   </h4>
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="text-sm text-muted-foreground mt-2">
                     {locale === 'hi' ? 'सभी राज्यों में' : 'In all states'}
                   </p>
                 </div>
 
                 <div className="flex justify-center">
-                  <div className="w-1 h-8 bg-gray-400"></div>
+                  <div className="w-1 h-8 bg-muted-foreground/30"></div>
                 </div>
 
-                <div className="py-4 bg-yellow-50 rounded-lg border-2 border-yellow-600 text-center">
-                  <h4 className="font-bold text-yellow-600">
+                <div className="py-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg border-2 border-yellow-600 text-center">
+                  <h4 className="font-bold text-yellow-600 dark:text-yellow-400">
                     {locale === 'hi' ? 'जिला अध्यक्ष' : 'District Presidents'}
                   </h4>
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="text-sm text-muted-foreground mt-2">
                     {locale === 'hi' ? 'सभी जिलों में' : 'In all districts'}
                   </p>
                 </div>
@@ -173,7 +173,7 @@ export default function OrganizationPage() {
 
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
             {locale === 'hi' ? 'मुख्य विभाग' : 'Main Departments'}
           </h2>
 
@@ -186,10 +186,10 @@ export default function OrganizationPage() {
               { name: locale === 'hi' ? 'आर्थिक विभाग' : 'Economic Department', desc: locale === 'hi' ? 'वित्तीय प्रबंधन' : 'Financial management' },
               { name: locale === 'hi' ? 'सामाजिक कल्याण विभाग' : 'Social Welfare Department', desc: locale === 'hi' ? 'सामाजिक कार्यक्रम और सहायता' : 'Social programs and support' },
             ].map((dept, index) => (
-              <Card key={index} className="hover:shadow-md transition-shadow">
+              <Card key={index} className="hover:shadow-md transition-shadow bg-card">
                 <CardContent className="pt-6">
-                  <h4 className="font-bold text-lg mb-2 text-gray-900">{dept.name}</h4>
-                  <p className="text-gray-600">{dept.desc}</p>
+                  <h4 className="font-bold text-lg mb-2 text-foreground">{dept.name}</h4>
+                  <p className="text-muted-foreground">{dept.desc}</p>
                 </CardContent>
               </Card>
             ))}

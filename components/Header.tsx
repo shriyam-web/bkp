@@ -40,7 +40,7 @@ export default function Header() {
 
   return (
     <header className={cn(
-      "fixed top-0 z-50 w-full bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 transition-all duration-300"
+      "fixed top-0 z-50 w-full bg-background border-b border-border transition-all duration-300"
     )}>
       <nav className={cn(
         "mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
@@ -48,7 +48,7 @@ export default function Header() {
         <div className="flex shrink-0 lg:mr-16">
           <Link href={`/${locale}/`} className="flex items-center group">
             <div className="flex flex-col leading-none">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-foreground whitespace-nowrap">
                 {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
               </span>
               <span className="text-[9px] sm:text-[10px] font-bold tracking-[0.15em] text-red-600 uppercase whitespace-nowrap mt-1">
@@ -63,7 +63,7 @@ export default function Header() {
           <LanguageSwitcher isDark={false} />
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-lg p-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-accent transition-all"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <span className="sr-only">{locale === 'hi' ? 'मेनू खोलें' : 'Toggle menu'}</span>
@@ -86,7 +86,7 @@ export default function Header() {
                   "px-2.5 py-2 text-[13px] font-bold tracking-tight uppercase transition-all duration-200",
                   isActive 
                     ? "text-red-600 border-b-2 border-red-600 rounded-none" 
-                    : "text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500"
+                    : "text-muted-foreground hover:text-red-600"
                 )}
               >
                 {locale === 'hi' ? item.name_hi : item.name}
@@ -109,14 +109,14 @@ export default function Header() {
 
       {/* Mobile Menu Overlay */}
       <div className={cn(
-        "lg:hidden fixed inset-0 z-50 bg-white dark:bg-zinc-950 transition-all duration-500 ease-in-out transform",
+        "lg:hidden fixed inset-0 z-50 bg-background transition-all duration-500 ease-in-out transform",
         mobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       )}>
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-6 border-b dark:border-zinc-800">
+          <div className="flex items-center justify-between p-6 border-b border-border">
             <Link href={`/${locale}/`} onClick={() => setMobileMenuOpen(false)}>
               <div className="flex flex-col leading-none">
-                <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
+                <span className="text-xl font-black tracking-tight text-foreground whitespace-nowrap">
                   {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
                 </span>
                 <span className="text-[9px] font-bold tracking-[0.12em] text-red-600 uppercase whitespace-nowrap mt-1">
@@ -126,7 +126,7 @@ export default function Header() {
             </Link>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2 rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-gray-100"
+              className="p-2 rounded-full bg-accent text-foreground"
             >
               <X className="h-6 w-6" />
             </button>
@@ -141,18 +141,18 @@ export default function Header() {
                   href={item.href}
                   className={cn(
                     "flex items-center justify-between px-4 py-4 rounded-2xl text-lg font-bold transition-all",
-                    isActive ? "bg-red-50 dark:bg-red-900/20 text-red-600" : "text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-zinc-800"
+                    isActive ? "bg-red-50 dark:bg-red-900/20 text-red-600" : "text-foreground hover:bg-accent"
                   )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {locale === 'hi' ? item.name_hi : item.name}
-                  <ChevronDown className={cn("h-5 w-5 -rotate-90", isActive ? "text-red-600" : "text-gray-400 dark:text-gray-500")} />
+                  <ChevronDown className={cn("h-5 w-5 -rotate-90", isActive ? "text-red-600" : "text-muted-foreground")} />
                 </Link>
               );
             })}
           </div>
 
-          <div className="p-6 border-t dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900/50">
+          <div className="p-6 border-t border-border bg-muted/50">
             <Link href={`/${locale}/join`} onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full h-14 rounded-2xl bg-red-600 text-white text-lg font-bold shadow-xl shadow-red-600/20">
                 {locale === 'hi' ? 'हमसे जुड़ें' : 'Join Us'}

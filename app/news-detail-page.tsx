@@ -58,14 +58,14 @@ export default function NewsDetailPage() {
   const formattedDate = news ? formatDate(news.published_at, true) : '';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <section className="py-8 bg-gray-50 border-b">
+      <section className="py-8 bg-muted/30 border-b border-border">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 transition-colors"
+            className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 mb-6 transition-colors"
           >
             <ArrowLeft className="h-5 w-5" />
             Back to News
@@ -77,17 +77,17 @@ export default function NewsDetailPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600 dark:text-blue-400" />
             </div>
           ) : error || !news ? (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">News article not found.</p>
+              <p className="text-muted-foreground text-lg">News article not found.</p>
             </div>
           ) : (
-            <article className="prose prose-lg max-w-none">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">{news.title}</h1>
+            <article className="prose dark:prose-invert prose-lg max-w-none">
+              <h1 className="text-4xl font-bold text-foreground mb-4">{news.title}</h1>
 
-              <div className="flex items-center gap-2 text-gray-600 mb-8">
+              <div className="flex items-center gap-2 text-muted-foreground mb-8">
                 <Calendar className="h-5 w-5" />
                 <time dateTime={news.published_at}>{formattedDate}</time>
               </div>
@@ -102,13 +102,13 @@ export default function NewsDetailPage() {
                 </div>
               )}
 
-              <div className="prose prose-lg max-w-none">
-                <p className="text-xl text-gray-700 leading-relaxed whitespace-pre-wrap">
+              <div className="prose dark:prose-invert prose-lg max-w-none">
+                <p className="text-xl text-foreground leading-relaxed whitespace-pre-wrap">
                   {news.excerpt}
                 </p>
               </div>
 
-              <div className="mt-12 pt-8 border-t">
+              <div className="mt-12 pt-8 border-t border-border">
                 <button
                   onClick={() => router.back()}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"

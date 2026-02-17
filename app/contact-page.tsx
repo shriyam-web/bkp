@@ -57,11 +57,11 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-background">
       <Toaster />
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -70,16 +70,16 @@ export default function ContactPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'संपर्क केंद्र' : 'CONTACT HUB'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'संपर्क करें' : 'Contact Us'} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'हम आपकी सुन रहे हैं' : 'WE ARE LISTENING'}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
+            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'हम आपकी चिंताओं को सुनने और आपके प्रश्नों का उत्तर देने के लिए यहां हैं'
                 : 'We\'re here to listen to your concerns and answer your questions'
@@ -93,10 +93,10 @@ export default function ContactPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-foreground mb-6">
                 {locale === 'hi' ? 'संपर्क में रहें' : 'Get in Touch'}
               </h2>
-              <p className="text-gray-600 mb-8">
+              <p className="text-muted-foreground mb-8">
                 {locale === 'hi'
                   ? 'प्रश्न हैं, सुझाव हैं, या शामिल होना चाहते हैं? हम आपकी सुनना पसंद करेंगे। फॉर्म भरें और हमारी टीम जल्दी से जल्दी जवाब देगी।'
                   : 'Have questions, suggestions, or want to get involved? We\'d love to hear from you. Fill out the form and our team will respond as soon as possible.'
@@ -107,12 +107,12 @@ export default function ContactPage() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="flex items-start space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
                         <MapPin className="h-6 w-6 text-red-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'पता' : 'Address'}</h3>
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                           141, Dhansua PO Central Jail Fatehgarh Farrukhabad, 209602, Uttar Pradesh, India
                         </p>
                       </div>
@@ -123,12 +123,12 @@ export default function ContactPage() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="flex items-start space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
                         <Phone className="h-6 w-6 text-red-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'फोन' : 'Phone'}</h3>
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                           +91 7376264269
                         </p>
                       </div>
@@ -139,12 +139,12 @@ export default function ContactPage() {
                 <Card>
                   <CardContent className="pt-6">
                     <div className="flex items-start space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
                         <Mail className="h-6 w-6 text-red-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'ईमेल' : 'Email'}</h3>
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                           bahujankrantipartyma@gmail.com
                         </p>
                       </div>

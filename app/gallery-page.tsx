@@ -39,10 +39,10 @@ export default function GalleryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -51,16 +51,16 @@ export default function GalleryPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'विजुअल जर्नी' : 'VISUAL JOURNEY'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'गैलरी' : 'Gallery'} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'हमारी स्मृतियां' : 'OUR MOMENTS'}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
+            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'हमारे कार्यक्रमों और गतिविधियों की तस्वीरें'
                 : 'Photos from our events and activities'
@@ -74,7 +74,7 @@ export default function GalleryPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600 dark:text-blue-400" />
             </div>
           ) : gallery.length > 0 ? (
             <>
@@ -82,7 +82,7 @@ export default function GalleryPage() {
                 {gallery.map((item) => (
                   <div
                     key={item._id}
-                    className="group relative overflow-hidden rounded-lg bg-gray-100 cursor-pointer"
+                    className="group relative overflow-hidden rounded-lg bg-muted cursor-pointer border border-border"
                     onClick={() => setSelectedImage(item)}
                   >
                     <img
@@ -101,21 +101,21 @@ export default function GalleryPage() {
 
               {selectedImage && (
                 <div
-                  className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+                  className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm"
                   onClick={() => setSelectedImage(null)}
                 >
                   <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
                     <img
                       src={selectedImage.image_url}
                       alt={selectedImage.title}
-                      className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                      className="w-full h-auto max-h-[80vh] object-contain rounded-lg shadow-2xl"
                     />
                     <div className="mt-4 text-center">
                       <h3 className="text-xl font-semibold text-white">{selectedImage.title}</h3>
                     </div>
                     <button
                       onClick={() => setSelectedImage(null)}
-                      className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+                      className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors p-2"
                     >
                       <svg
                         className="h-8 w-8"
@@ -137,7 +137,7 @@ export default function GalleryPage() {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">
+              <p className="text-muted-foreground text-lg">
                 {locale === 'hi'
                   ? 'इस समय कोई तस्वीरें उपलब्ध नहीं हैं'
                   : 'No photos available at the moment'
