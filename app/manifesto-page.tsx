@@ -169,10 +169,10 @@ export default function ManifestoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-[#fcfcfc] dark:bg-zinc-950">
       <Header />
 
-      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
+      <section className="relative overflow-hidden bg-slate-50 dark:bg-zinc-900/50 pt-32 pb-20 border-b border-slate-200 dark:border-zinc-800">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
@@ -181,16 +181,16 @@ export default function ManifestoPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'हमारा विजन' : 'OUR VISION'}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl mb-6 leading-tight">
               {t('manifesto.title', 'Our Manifesto')} <br />
-              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
+              <span className="text-slate-500 dark:text-gray-400 font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'समृद्ध भारत का संकल्प' : 'COMMITMENT TO PROSPERITY'}
               </span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
+            <p className="text-lg text-slate-600 dark:text-gray-400 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {t('manifesto.subtitle', 'A comprehensive vision for India\'s progress and prosperity')}
             </p>
           </div>
@@ -200,10 +200,10 @@ export default function ManifestoPage() {
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               {locale === 'hi' ? 'कल का भारत बनाना' : 'Building Tomorrow\'s India'}
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 dark:text-gray-400">
               {locale === 'hi'
                 ? 'हमारा घोषणापत्र लाखों भारतीयों की सामूहिक आकांक्षाओं का प्रतिनिधित्व करता है। ये नीतियां एक समावेशी, समृद्ध और टिकाऊ राष्ट्र बनाने के लिए डिज़ाइन की गई हैं।'
                 : 'Our manifesto represents the collective aspirations of millions of Indians. These policies are designed to create an inclusive, prosperous, and sustainable nation for current and future generations.'
@@ -215,17 +215,17 @@ export default function ManifestoPage() {
             {policies.map((policy, index) => {
               const colors = getColorClasses(policy.color);
               return (
-                <Card key={index} className={`border-t-4 ${colors.border} hover:shadow-lg transition-shadow`}>
+                <Card key={index} className={`border-t-4 ${colors.border} dark:bg-zinc-900 hover:shadow-lg transition-shadow`}>
                   <CardContent className="pt-6">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${colors.bg} mb-4`}>
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${colors.bg} dark:opacity-80 mb-4`}>
                       <policy.icon className={`h-6 w-6 ${colors.text}`} />
                     </div>
-                    <h3 className="text-2xl font-bold mb-4">{policy.title}</h3>
+                    <h3 className="text-2xl font-bold mb-4 dark:text-white">{policy.title}</h3>
                     <ul className="space-y-2">
                       {policy.points.map((point, idx) => (
                         <li key={idx} className="flex items-start">
                           <span className={`inline-block w-2 h-2 rounded-full ${colors.bg} ${colors.text} mr-3 mt-2 flex-shrink-0`} />
-                          <span className="text-gray-600">{point}</span>
+                          <span className="text-gray-600 dark:text-gray-400">{point}</span>
                         </li>
                       ))}
                     </ul>
@@ -237,13 +237,13 @@ export default function ManifestoPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 dark:bg-zinc-900/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
               {locale === 'hi' ? 'हमारी प्रतिबद्धता' : 'Our Commitment'}
             </h2>
-            <div className="space-y-4 text-gray-600 text-lg">
+            <div className="space-y-4 text-gray-600 dark:text-gray-400 text-lg">
               <p>
                 {locale === 'hi'
                   ? 'हम इन नीतियों को पूर्ण पारदर्शिता और जवाबदेही के साथ लागू करने का वचन देते हैं। हर नागरिक को प्रगति रिपोर्ट तक पहुंच होगी और वे हमें अपनी प्रतिबद्धताओं के लिए जिम्मेदार ठहरा सकते हैं।'
