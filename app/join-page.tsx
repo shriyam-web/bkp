@@ -171,25 +171,25 @@ export default function JoinPage() {
       <Toaster />
       <Header />
 
-      <section className="relative overflow-hidden bg-[#0a0a0a] pt-48 pb-32">
+      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/10 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px]" />
+          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center rounded-full bg-white/5 px-4 py-2 text-xs font-bold tracking-[0.2em] text-red-500 border border-white/10 mb-8 backdrop-blur-md uppercase">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
               {locale === 'hi' ? 'सदस्यता' : 'MEMBERSHIP'}
             </div>
-            <h1 className="text-5xl font-black tracking-tighter text-white sm:text-8xl mb-8 leading-[1.1] drop-shadow-2xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'हमारे आंदोलन में शामिल हों' : 'Join Our Movement'} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 italic font-serif">
+              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'परिवर्तन का हिस्सा बनें' : 'BE THE CHANGE'}
               </span>
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed">
+            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'एक सदस्य बनें और सभी के लिए एक बेहतर भारत बनाने में हमारी मदद करें'
                 : 'Become a member and help us build a better India for all'

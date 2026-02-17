@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout } from 'lucide-react';
+import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import NewsCard from '@/components/NewsCard';
@@ -36,6 +36,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [subscribed, setSubscribed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<{title: string, description: string, points: string[], color: string, icon: any} | null>(null);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,36 +96,119 @@ export default function HomePage() {
       title: locale === 'hi' ? 'शिक्षा नीति' : 'Education Policy',
       description: locale === 'hi' ? 'राष्ट्रवादी और मूल्य-आधारित शिक्षा प्रणाली जो हर बच्चे के भविष्य को संवारती है।' : 'A nationalistic and value-based education system that shapes every child\'s future.',
       color: 'from-orange-500 to-red-600',
+      points: locale === 'hi' ? [
+        'निशुल्क और गुणवत्तापूर्ण शिक्षा की गारंटी।',
+        'कौशल विकास पर आधारित आधुनिक पाठ्यक्रम।',
+        'शिक्षकों के लिए बेहतर प्रशिक्षण और सुविधाएं।',
+        'भारतीय संस्कृति और आधुनिक विज्ञान का समन्वय।'
+      ] : [
+        'Guarantee of free and quality education.',
+        'Modern curriculum based on skill development.',
+        'Better training and facilities for teachers.',
+        'Coordination of Indian culture and modern science.'
+      ]
     },
     {
       icon: Shield,
       title: locale === 'hi' ? 'सेना व अखंड भारत' : 'Army & Akhand Bharat',
       description: locale === 'hi' ? 'शक्तिशाली सेना का निर्माण और अखंड भारत के गौरव को पुनः प्राप्त करने का संकल्प।' : 'Building a powerful military and a commitment to reclaiming the glory of Akhand Bharat.',
       color: 'from-red-600 to-red-800',
+      points: locale === 'hi' ? [
+        'सेना का आधुनिकीकरण और स्वदेशी हथियारों का निर्माण।',
+        'सैनिकों और उनके परिवारों के कल्याण के लिए विशेष योजनाएं।',
+        'अखंड भारत की सांस्कृतिक एकता को सुदृढ़ करना।',
+        'सीमा सुरक्षा और आतंकवाद के विरुद्ध शून्य सहिष्णुता।'
+      ] : [
+        'Modernization of the military and indigenous weapon production.',
+        'Special schemes for the welfare of soldiers and their families.',
+        'Strengthening the cultural unity of Akhand Bharat.',
+        'Zero tolerance for cross-border security and terrorism.'
+      ]
     },
     {
       icon: MapPin,
       title: locale === 'hi' ? 'फर्रुखाबाद विकास' : 'Farrukhabad Development',
       description: locale === 'hi' ? 'फर्रुखाबाद के सर्वांगीण विकास के लिए एक समर्पित और आधुनिक मास्टर प्लान।' : 'A dedicated and modern master plan for the all-round development of Farrukhabad.',
       color: 'from-green-600 to-green-800',
+      points: locale === 'hi' ? [
+        'फर्रुखाबाद को औद्योगिक हब के रूप में विकसित करना।',
+        'आधुनिक बुनियादी ढांचा और स्मार्ट सिटी सुविधाएं।',
+        'कृषि और आलू उत्पादकों के लिए विशेष कोल्ड स्टोरेज और मार्केट।',
+        'ऐतिहासिक स्थलों का विकास और पर्यटन को बढ़ावा।'
+      ] : [
+        'Developing Farrukhabad as an industrial hub.',
+        'Modern infrastructure and smart city facilities.',
+        'Special cold storage and markets for potato farmers.',
+        'Development of historical sites and tourism promotion.'
+      ]
     },
     {
       icon: Scale,
       title: locale === 'hi' ? 'न्याय व्यवस्था' : 'Judicial System',
       description: locale === 'hi' ? 'प्रत्येक नागरिक के लिए सुलभ, तीव्र और पारदर्शी न्याय सुनिश्चित करने के लिए व्यापक सुधार।' : 'Comprehensive reforms to ensure accessible, swift, and transparent justice for every citizen.',
       color: 'from-blue-600 to-blue-800',
+      points: locale === 'hi' ? [
+        'फास्ट-ट्रैक अदालतों की संख्या में वृद्धि।',
+        'गरीबों के लिए निशुल्क कानूनी सहायता कार्यक्रम।',
+        'न्यायपालिका का पूर्ण डिजिटलीकरण।',
+        'न्यायिक जवाबदेही और पारदर्शिता सुनिश्चित करना।'
+      ] : [
+        'Increase in the number of fast-track courts.',
+        'Free legal aid programs for the underprivileged.',
+        'Complete digitalization of the judiciary.',
+        'Ensuring judicial accountability and transparency.'
+      ]
     },
     {
       icon: Heart,
       title: locale === 'hi' ? 'परिवार व संस्कृति रक्षा' : 'Family & Cultural Protection',
       description: locale === 'hi' ? 'पारंपरिक पारिवारिक मूल्यों और हमारी सांस्कृतिक जड़ों को आधुनिकता के प्रहार से बचाना।' : 'Protecting traditional family values and our cultural roots from the onslaught of modernity.',
       color: 'from-purple-600 to-purple-800',
+      points: locale === 'hi' ? [
+        'संयुक्त परिवार प्रणाली को प्रोत्साहित करना।',
+        'सांस्कृतिक विरासत स्थलों का संरक्षण।',
+        'युवाओं में नैतिक और सांस्कृतिक मूल्यों का विकास।',
+        'पारंपरिक त्योहारों और लोक कलाओं को बढ़ावा।'
+      ] : [
+        'Encouraging the joint family system.',
+        'Preservation of cultural heritage sites.',
+        'Developing moral and cultural values in youth.',
+        'Promoting traditional festivals and folk arts.'
+      ]
     },
     {
       icon: Flag,
       title: locale === 'hi' ? 'संस्कृति बचाओ कार्यक्रम' : 'Sanskriti Bachao Karyakram',
       description: locale === 'hi' ? 'भारत की समृद्ध विरासत और गौरवशाली परंपराओं को संरक्षित करने का हमारा प्रमुख अभियान।' : 'Our flagship movement to preserve Bharat\'s rich heritage and glorious traditions.',
       color: 'from-yellow-500 to-orange-600',
+      points: locale === 'hi' ? [
+        'प्राचीन स्मारकों और मंदिरों का जीर्णोद्धार।',
+        'भारतीय भाषाओं के प्रचार और प्रसार के लिए अभियान।',
+        'सांस्कृतिक प्रदूषण के विरुद्ध जन जागरूकता।',
+        'भावी पीढ़ियों के लिए परंपराओं का प्रलेखन।'
+      ] : [
+        'Restoration of ancient monuments and temples.',
+        'Campaigns for the promotion of Indian languages.',
+        'Public awareness against cultural pollution.',
+        'Documentation of traditions for future generations.'
+      ]
+    },
+    {
+      icon: Scale,
+      title: locale === 'hi' ? 'पारिवारिक विवाद एवं कानून' : 'Family Disputes & Law',
+      description: locale === 'hi' ? 'दहेज, घरेलू हिंसा और BNS 69 जैसे कानूनों के दुरुपयोग को रोकना और न्याय सुनिश्चित करना।' : 'Preventing misuse of laws like dowry, domestic violence and BNS 69 and ensuring justice.',
+      color: 'from-blue-500 to-indigo-600',
+      points: locale === 'hi' ? [
+        'दहेज और घरेलू हिंसा कानूनों के दुरुपयोग पर रोक के लिए पारदर्शी जांच।',
+        'BNS 69 जैसे गंभीर प्रावधानों में निष्पक्षता सुनिश्चित करना।',
+        'पारिवारिक विवादों के समाधान हेतु जिला स्तर पर सुलह केंद्रों की स्थापना।',
+        'महिलाओं की सुरक्षा के साथ निर्दोषों को झूठे मुकदमों से बचाने के लिए कड़े नियम।'
+      ] : [
+        'Transparent investigation to prevent misuse of dowry and domestic violence laws.',
+        'Ensuring fairness in serious legal provisions like BNS 69.',
+        'Establishment of reconciliation centers at the district level for family disputes.',
+        'Strict rules to protect the innocent from false cases while ensuring women\'s safety.'
+      ]
     },
   ];
 
@@ -134,36 +218,119 @@ export default function HomePage() {
       title: locale === 'hi' ? 'आयुर्वेदिक सुपर-स्पेशलिटी' : 'Ayurvedic Super-Specialty',
       description: locale === 'hi' ? 'प्रत्येक जिले में गंभीर रोगों के इलाज हेतु सुपर स्पेशलिटी आयुर्वेदिक अस्पतालों का निर्माण।' : 'Construction of super-specialty Ayurvedic hospitals in every district for serious ailments.',
       color: 'from-red-500 to-red-700',
+      points: locale === 'hi' ? [
+        'प्रत्येक जिले में गंभीर रोगों के इलाज हेतु सुपर स्पेशलिटी आयुर्वेदिक अस्पतालों का निर्माण।',
+        'असाध्य रोगों के लिए इन अस्पतालों में इन-पेशेंट (भर्ती) की पूर्ण सुविधा।',
+        'राज्य स्तर पर आधुनिक आयुर्वेदिक मेडिकल कॉलेजों की स्थापना।',
+        'आयुर्वेद के माध्यम से स्वस्थ और दीर्घायु भारत का निर्माण।'
+      ] : [
+        'Construction of super-specialty Ayurvedic hospitals in every district for serious ailments.',
+        'Full in-patient (admission) facilities for chronic and incurable diseases.',
+        'Establishment of state-of-the-art Ayurvedic Medical Colleges.',
+        'Promoting holistic health and longevity through traditional Ayurvedic sciences.'
+      ]
     },
     {
       icon: Briefcase,
       title: locale === 'hi' ? 'कर्ज मुक्त भारत' : 'Debt-Free India',
       description: locale === 'hi' ? 'किसानों और मध्यम वर्ग को ₹50 प्रति लीटर पर पेट्रोलियम की उपलब्धता और आयकर की समाप्ति।' : 'Ensuring petroleum at ₹50/liter for farmers and middle class, and abolition of Income Tax.',
       color: 'from-green-500 to-green-700',
+      points: locale === 'hi' ? [
+        'किसानों और मध्यम वर्ग को ₹50 प्रति लीटर पर पेट्रोलियम की उपलब्धता सुनिश्चित करना।',
+        'कृषि को पूर्ण रूप से "उद्योग" का दर्जा देना ताकि किसानों को औद्योगिक लाभ मिले।',
+        'आम जनता और मध्यम वर्ग के बोझ को कम करने के लिए "आयकर" (Income Tax) की समाप्ति।',
+        'पूंजीपतियों के बजाय जनता के हितों को केंद्र में रखने वाली आर्थिक नीतियां।'
+      ] : [
+        'Ensuring petroleum at ₹50/liter for farmers and the middle class.',
+        'Granting full "Industry" status to agriculture to provide industrial benefits to farmers.',
+        'Abolition of Income Tax to reduce the financial burden on the common man.',
+        'Economic policies centered on public welfare rather than corporate interests.'
+      ]
     },
     {
       icon: Sprout,
       title: locale === 'hi' ? 'राजकीय कृषि एवं गौ-रक्षा' : 'State Agriculture & Cow Protection',
       description: locale === 'hi' ? 'गाय-बैल को राजकीय धर्म पशु घोषित करना और कृषि का पूर्ण आधुनिकरण।' : 'Declaring cows as State Religious Animals and complete modernization of agriculture.',
       color: 'from-blue-500 to-blue-700',
+      points: locale === 'hi' ? [
+        'गाय-बैल को "राजकीय धर्म पशु" घोषित कर उनकी पूर्ण सुरक्षा सुनिश्चित करना।',
+        'बुजुर्ग पशुओं को गौशाला दान करने पर ₹5000 प्रति पशु की अनुदान राशि।',
+        'गोबर ₹50/ली., गोमूत्र ₹60/ली. और गाय का दूध ₹90/ली. की दर पर सरकार द्वारा खरीद।',
+        'सामूहिक खेती और राजकीय स्वामित्व के माध्यम से कृषि का आधुनिकरण।'
+      ] : [
+        'Declaring cows and oxen as "State Religious Animals" for their complete protection.',
+        'Grant of ₹5000 per animal to those donating elderly cattle to shelters.',
+        'Govt procurement: Dung @₹50/L, Urine @₹60/L, and Cow Milk @₹90/L.',
+        'Modernizing agriculture through collective farming and state ownership.'
+      ]
     },
     {
       icon: Globe,
       title: locale === 'hi' ? 'विदेशी काला धन' : 'Foreign Black Money',
       description: locale === 'hi' ? 'विदेशी बैंकों में जमा काले धन को राष्ट्रीय संपत्ति घोषित करना और उसे वापस लाना।' : 'Declaring black money in foreign banks as National Property and its repatriation.',
       color: 'from-indigo-500 to-indigo-700',
+      points: locale === 'hi' ? [
+        'विदेशी बैंकों में जमा काले धन को "राष्ट्रीय संपत्ति" घोषित करने हेतु संसद में बिल।',
+        'स्विस बैंकों में जमा राशि की वापसी सुनिश्चित कर उसे राष्ट्र निर्माण में लगाना।',
+        'घोटालों की राशि को पुनः देश की अर्थव्यवस्था में लाकर प्रत्येक भारतीय को लाभ पहुँचाना।',
+        'वित्तीय लूट को रोकने के लिए कड़े अंतर्राष्ट्रीय और राष्ट्रीय कानून।'
+      ] : [
+        'Parliamentary bill to declare black money in foreign banks as "National Property."',
+        'Repatriation of Swiss Bank deposits to be utilized for nation-building.',
+        'Redirecting recovered scam money back into the economy for public benefit.',
+        'Strict international and national laws to prevent further financial drain.'
+      ]
     },
     {
       icon: Users,
       title: locale === 'hi' ? 'सामाजिक सुरक्षा' : 'Social Security',
       description: locale === 'hi' ? 'प्रत्येक भारतीय को भोजन, आवास और 65 वर्ष से अधिक आयु के वृद्धों के लिए पेंशन।' : 'Guaranteed food, housing, and pension for senior citizens above 65 years.',
       color: 'from-purple-500 to-purple-700',
+      points: locale === 'hi' ? [
+        'प्रत्येक भारतीय को भोजन, आवास और सम्मानजनक रोजगार की पूर्ण गारंटी।',
+        '65 वर्ष से अधिक आयु के वृद्धों के लिए आजीवन सम्मानजनक पेंशन योजना।',
+        'समाज के गरीब और कमजोर वर्गों के लिए व्यापक कल्याणकारी कार्यक्रम।',
+        'असमानता को कम कर अमीरी-गरीबी की खाई को पाटने का संकल्प।'
+      ] : [
+        'Guaranteed food, housing, and dignified employment for every citizen.',
+        'Lifelong dignity pension for senior citizens above 65 years of age.',
+        'Comprehensive welfare programs for the poor and vulnerable sections.',
+        'Commitment to bridging the gap between the rich and the poor.'
+      ]
     },
     {
       icon: Building2,
       title: locale === 'hi' ? 'भ्रष्टाचार मुक्त शासन' : 'Corruption-Free Governance',
       description: locale === 'hi' ? 'संविधान में भ्रष्टाचार की स्पष्ट परिभाषा और बैंकों का पूर्ण राष्ट्रीयकरण।' : 'Clear definition of corruption in constitution and complete nationalization of banks.',
       color: 'from-gray-500 to-gray-700',
+      points: locale === 'hi' ? [
+        'संविधान में "भ्रष्टाचार" की स्पष्ट परिभाषा तय कर कड़े दंड का प्रावधान।',
+        'व्यक्तिगत संपत्ति की सीमा निर्धारण कर अनैतिक संपत्ति की जब्ती।',
+        'बैंकों और बीमा क्षेत्रों का पूर्ण राष्ट्रीयकरण ताकि धन का दुरुपयोग न हो।',
+        'पूंजीपतियों के कर्ज माफी की परंपरा को समाप्त कर जनहित में धन का उपयोग।'
+      ] : [
+        'Defining "Corruption" clearly in the constitution with stringent penalties.',
+        'Limiting individual property ownership and seizing unethical assets.',
+        'Complete nationalization of Banks and Insurance for secure public funds.',
+        'Ending the practice of corporate loan waivers to focus on public welfare.'
+      ]
+    },
+    {
+      icon: Scale,
+      title: locale === 'hi' ? 'पारिवारिक विवाद निवारण' : 'Family Dispute Resolution',
+      description: locale === 'hi' ? 'दहेज, घरेलू हिंसा और BNS 69 जैसे कानूनों के दुरुपयोग पर रोक और निष्पक्ष जांच।' : 'Preventing misuse of laws like dowry, domestic violence and BNS 69 through fair investigation.',
+      color: 'from-blue-600 to-blue-800',
+      points: locale === 'hi' ? [
+        'दहेज और घरेलू हिंसा कानूनों के दुरुपयोग पर रोक के लिए पारदर्शी जांच।',
+        'BNS 69 जैसे गंभीर प्रावधानों में निष्पक्षता और साक्ष्य-आधारित कार्यवाही सुनिश्चित करना।',
+        'पारिवारिक विवादों के समाधान हेतु जिला स्तर पर "पारिवारिक सुलह केंद्रों" की स्थापना।',
+        'महिलाओं की वास्तविक सुरक्षा के साथ-साथ निर्दोषों को झूठे मुकदमों से बचाने के लिए कड़े नियम।'
+      ] : [
+        'Transparent investigation to prevent misuse of dowry and domestic violence laws.',
+        'Ensuring fairness and evidence-based action in serious provisions like BNS 69.',
+        'Establishment of "Family Reconciliation Centers" at the district level for dispute resolution.',
+        'Strict rules for the actual safety of women while protecting the innocent from false cases.'
+      ]
     },
   ];
 
@@ -171,7 +338,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       <Header />
 
-      <section className="relative h-[700px] flex items-center overflow-hidden">
+      <section className="relative h-[700px] flex items-center overflow-hidden pt-20">
         <div className="absolute inset-0 z-0 h-full w-full">
           <PoliticalCarousel />
         </div>
@@ -240,38 +407,38 @@ export default function HomePage() {
             { label: locale === 'hi' ? 'आयोजित कार्यक्रम' : 'Events Held', value: locale === 'hi' ? 'नियमित' : 'Regular', icon: Award, color: 'text-blue-600' },
             { label: locale === 'hi' ? 'स्वयंसेवक' : 'Volunteers', value: locale === 'hi' ? 'समर्पित' : 'Dedicated', icon: Heart, color: 'text-red-600' },
           ].map((stat, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-gray-100 hover:scale-105 transition-transform">
-              <div className={`p-3 rounded-xl bg-gray-50 ${stat.color} mb-3`}>
+            <div key={i} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-gray-100 dark:border-zinc-800 hover:scale-105 transition-transform">
+              <div className={`p-3 rounded-xl bg-gray-50 dark:bg-zinc-800 ${stat.color} mb-3`}>
                 <stat.icon className="h-6 w-6" />
               </div>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-              <div className="text-sm font-medium text-gray-500">{stat.label}</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
+              <div className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-b from-red-50 to-white">
+      <section className="py-16 bg-gradient-to-b from-red-50 to-white dark:from-zinc-950 dark:to-zinc-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4">
               {t('home.values', 'Our Core Values')}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {locale === 'hi' ? 'सिद्धांत जो हम राष्ट्र के लिए हर निर्णय में लागू करते हैं' : 'Principles that guide every decision we make for the nation'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
-              <Card key={index} className="group border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+              <Card key={index} className="group border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden dark:bg-zinc-800">
                 <CardContent className="pt-8 pb-8 flex flex-col items-center text-center relative">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 text-red-600 mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
                     <value.icon className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">{value.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                  <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{value.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{value.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -332,13 +499,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-zinc-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4">
               {locale === 'hi' ? 'मुख्य पहल' : 'Key Initiatives'}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {locale === 'hi' ? 'प्रत्येक भारतीय को उन्नत करने के लिए डिजाइन किए गए परिवर्तनकारी कार्यक्रम' : 'Transformative programs designed to uplift every Indian'}
             </p>
           </div>
@@ -347,18 +514,27 @@ export default function HomePage() {
             {initiatives.map((initiative, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-2xl bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
+                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800"
               >
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${initiative.color} opacity-0 group-hover:opacity-10 rounded-bl-full transition-opacity duration-500`} />
-                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${initiative.color} mb-6 shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${initiative.color} mb-6 shadow-lg shadow-gray-200 dark:shadow-none group-hover:scale-110 transition-transform duration-300`}>
                   <initiative.icon className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">{initiative.title}</h3>
-                <p className="text-gray-600 leading-relaxed mb-6">{initiative.description}</p>
-                <Link href={`/${locale}/manifesto`} className="inline-flex items-center text-sm font-bold text-red-600 group-hover:translate-x-2 transition-transform duration-300">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{initiative.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">{initiative.description}</p>
+                <button 
+                  onClick={() => setSelectedTopic({
+                    title: initiative.title,
+                    description: initiative.description,
+                    points: initiative.points,
+                    color: initiative.color,
+                    icon: initiative.icon
+                  })}
+                  className="inline-flex items-center text-sm font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors group-hover:translate-x-2 transition-transform duration-300"
+                >
                   {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </button>
               </div>
             ))}
           </div>
@@ -366,14 +542,14 @@ export default function HomePage() {
       </section>
 
       {/* Vision for Bharat Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-zinc-900/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-5xl mb-6">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-5xl mb-6">
               {locale === 'hi' ? 'भारत के लिए हमारा संकल्प' : 'Our Commitment to Bharat'}
             </h2>
             <div className="w-24 h-1.5 bg-red-600 mx-auto rounded-full mb-6" />
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-medium">
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
               {locale === 'hi'
                 ? 'बहुजन क्रांति पार्टी के घोषणा पत्र के मुख्य स्तंभ जो एक सशक्त और समृद्ध राष्ट्र की नींव रखते हैं।'
                 : 'The core pillars of Bahujan Kranti Party\'s manifesto that lay the foundation for a strong and prosperous nation.'}
@@ -382,16 +558,29 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {manifestoItems.map((item, index) => (
-              <div key={index} className="bg-white rounded-3xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group">
+              <div key={index} className="bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-zinc-800 group">
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                   <item.icon className="h-8 w-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-red-600 transition-colors">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed font-medium">
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium mb-6">
                   {item.description}
                 </p>
+                <button 
+                  onClick={() => setSelectedTopic({
+                    title: item.title,
+                    description: item.description,
+                    points: item.points,
+                    color: item.color,
+                    icon: item.icon
+                  })}
+                  className="inline-flex items-center text-sm font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors group-hover:translate-x-2 transition-transform duration-300"
+                >
+                  {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
               </div>
             ))}
           </div>
@@ -399,19 +588,19 @@ export default function HomePage() {
       </section>
 
       {/* Leadership Preview */}
-      <section className="py-24 bg-gray-50 overflow-hidden">
+      <section className="py-24 bg-gray-50 dark:bg-zinc-950 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
             <div className="text-center md:text-left">
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4">
                 {locale === 'hi' ? 'हमारा नेतृत्व' : 'Our Leadership'}
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl">
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
                 {locale === 'hi' ? 'एक समृद्ध और न्यायपूर्ण भारत के लिए आंदोलन का नेतृत्व करने वाले समर्पित क्रांतिकारी' : 'Dedicated revolutionaries leading the movement for a prosperous and just India'}
               </p>
             </div>
             <Link href={`/${locale}/leadership`}>
-              <Button variant="outline" className="rounded-full px-8 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all">
+              <Button variant="outline" className="rounded-full px-8 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all dark:border-red-500 dark:text-red-500 dark:hover:bg-red-500 dark:hover:text-white">
                 {locale === 'hi' ? 'सभी नेताओं से मिलें' : 'Meet All Leaders'}
               </Button>
             </Link>
@@ -419,7 +608,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* President Card - Featured */}
-            <div className="lg:col-span-1 bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 group">
+            <div className="lg:col-span-1 bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-lg border border-gray-100 dark:border-zinc-800 hover:shadow-2xl transition-all duration-500 group">
               <div className="aspect-[4/5] relative overflow-hidden">
                 <img src="/president.jpg" alt="National President" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
@@ -431,11 +620,11 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="p-6">
-                <p className="text-gray-600 italic mb-6">
+                <p className="text-gray-600 dark:text-gray-400 italic mb-6">
                   "{locale === 'hi' ? 'हमारा मिशन हर नागरिक को सशक्त बनाना और सामाजिक न्याय सुनिश्चित करना है।' : 'Our mission is to empower every citizen and ensure social justice.'}"
                 </p>
                 <Link href={`/${locale}/leadership?memberId=president`}>
-                  <Button variant="ghost" className="w-full justify-between hover:bg-red-50 hover:text-red-600 group/btn">
+                  <Button variant="ghost" className="w-full justify-between hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 group/btn">
                     {locale === 'hi' ? 'प्रोफ़ाइल देखें' : 'View Profile'}
                     <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
@@ -641,6 +830,67 @@ export default function HomePage() {
       </section>
 
       <Footer />
+      
+      {/* Detailed Info Modal */}
+      {selectedTopic && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 transition-all animate-in fade-in duration-300">
+          <div 
+            className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`h-2 w-full bg-gradient-to-r ${selectedTopic.color}`} />
+            <button 
+              onClick={() => setSelectedTopic(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors z-10"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            
+            <div className="p-8 md:p-10">
+              <div className="flex items-center gap-6 mb-8">
+                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${selectedTopic.color} shadow-lg text-white`}>
+                  <selectedTopic.icon className="h-8 w-8" />
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{selectedTopic.title}</h3>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <p className="text-lg text-gray-600 leading-relaxed font-medium">
+                  {selectedTopic.description}
+                </p>
+                
+                <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
+                  <h4 className="text-sm font-bold tracking-widest text-gray-400 uppercase mb-4">
+                    {locale === 'hi' ? 'मुख्य बिंदु' : 'KEY HIGHLIGHTS'}
+                  </h4>
+                  <ul className="space-y-4">
+                    {selectedTopic.points.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-4">
+                        <div className={`h-6 w-6 rounded-full bg-gradient-to-br ${selectedTopic.color} flex-shrink-0 flex items-center justify-center mt-0.5`}>
+                          <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                        </div>
+                        <span className="text-gray-700 font-medium leading-relaxed">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="pt-4 flex justify-end">
+                  <Button 
+                    onClick={() => setSelectedTopic(null)}
+                    className={`bg-gradient-to-r ${selectedTopic.color} text-white px-8 h-12 rounded-full font-bold shadow-lg hover:scale-105 transition-transform`}
+                  >
+                    {locale === 'hi' ? 'ठीक है' : 'Got it'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-0 z-[-1]" onClick={() => setSelectedTopic(null)} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import WebsiteLoader from '@/components/WebsiteLoader';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const interClassName = "antialiased font-sans"; // Use system font to avoid build timeout
 
@@ -56,8 +57,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={interClassName}>
-        <WebsiteLoader />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <WebsiteLoader />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

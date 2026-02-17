@@ -11,29 +11,28 @@ export default function AboutPage() {
   const { locale } = useTranslations();
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc]">
+    <div className="min-h-screen bg-[#fcfcfc] dark:bg-zinc-950">
       <Header />
 
-      <section className="relative overflow-hidden bg-[#0a0a0a] pt-56 pb-40">
+      <section className="relative overflow-hidden bg-slate-50 dark:bg-zinc-900/50 pt-32 pb-20 border-b border-slate-200 dark:border-zinc-800">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/15 rounded-full blur-[140px] animate-pulse" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-10 backdrop-blur-xl uppercase shadow-2xl">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
               {locale === 'hi' ? 'हमारी पहचान' : 'OUR IDENTITY'}
             </div>
-            <h1 className="text-6xl font-black tracking-tighter text-white sm:text-9xl mb-10 leading-[0.95] drop-shadow-2xl">
-              {locale === 'hi' ? 'बहुजन क्रांति पार्टी के बारे में' : 'ABOUT BAHUJAN KRANTI'} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 italic font-serif">
-                {locale === 'hi' ? 'हमारा इतिहास और विचारधारा' : 'PARTY & OUR CORE IDEOLOGY'}
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl mb-6 leading-tight">
+              {locale === 'hi' ? 'बहुजन क्रांति पार्टी' : 'Bahujan Kranti Party'} <br />
+              <span className="text-slate-500 dark:text-gray-400 font-medium text-3xl sm:text-5xl">
+                {locale === 'hi' ? 'इतिहास और विचारधारा' : 'History & Ideology'}
               </span>
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed border-l-2 border-red-600/30 pl-8">
+            <p className="text-lg text-slate-600 dark:text-gray-400 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'समर्पित सेवा और जनकेंद्रित नीतियों के माध्यम से एक प्रगतिशील, समावेशी भारत का निर्माण'
                 : 'Building a progressive, inclusive India through dedicated service and people-centric policies'}
@@ -46,10 +45,10 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                 {locale === 'hi' ? 'हमारी कहानी' : 'Our Story'}
               </h2>
-              <div className="space-y-4 text-gray-600">
+              <div className="space-y-4 text-gray-600 dark:text-gray-400">
                 <p>
                   {locale === 'hi'
                     ? '2012 में स्थापित, बहुजन क्रांति पार्टी एक राजनीतिक आंदोलन बनाने की दृष्टि से उभरी जो वास्तव में हर भारतीय नागरिक की आकांक्षाओं का प्रतिनिधित्व करती है। हमारी यात्रा समर्पित व्यक्तियों के एक छोटे समूह के साथ शुरू हुई जो हमारे राष्ट्र में सकारात्मक परिवर्तन लाने के लिए प्रतिबद्ध थे।'
@@ -81,29 +80,29 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-blue-50">
+      <section className="py-16 bg-blue-50 dark:bg-zinc-900/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               {locale === 'hi' ? 'वैज्ञानिक समाजवाद और विचारधारा' : 'Scientific Socialism & Ideology'}
             </h2>
             <div className="w-20 h-1 bg-red-600 mx-auto"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-6">
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 {locale === 'hi'
                   ? 'बहुजन क्रांति पार्टी (मा.अ.) का मानना है कि वर्तमान पूंजीवादी व्यवस्था ही समाज में व्याप्त अव्यवस्था, शोषण और आमजन के दुखों का मूल कारण है। यह व्यवस्था पूंजीपति वर्ग द्वारा श्रमिक वर्ग के शोषण पर टिकी है। हमारा संकल्प इस पूंजीवादी व्यवस्था को उखाड़ फेंककर "वैज्ञानिक समाजवाद" की स्थापना करना है, जहाँ मनुष्य द्वारा मनुष्य का शोषण असंभव होगा।'
                   : 'Bahujan Kranti Party (M.A.) asserts that the current capitalist system is the root cause of social disorder, exploitation, and the suffering of the masses. This system thrives on the exploitation of the working class by the capitalist elite. Our resolve is to uproot this system and establish "Scientific Socialism," ensuring an end to the exploitation of one human by another.'}
               </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 {locale === 'hi'
                   ? 'हमारा लक्ष्य डॉ. कार्ल मार्क्स और डॉ. बी.आर. अंबेडकर के सम्मिलित विजन—"वर्ग-विहीन और जाति-विहीन समाज"—की स्थापना करना है। हम एक ऐसी व्यवस्था के पक्षधर हैं जहाँ संपत्ति का समान वितरण हो और राज्य समाजवाद के माध्यम से प्रत्येक नागरिक को भोजन, आवास और सम्मानजनक रोजगार की गारंटी मिले।'
                   : 'Our goal is to realize the shared vision of Dr. Karl Marx and Dr. B.R. Ambedkar: a "classless and casteless society." We advocate for a system of equitable wealth distribution and state socialism, guaranteeing every citizen food, housing, and dignified employment.'}
               </p>
             </div>
             <div className="space-y-6">
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 {locale === 'hi'
                   ? 'पूंजीवाद शोषण का जनक है। इसके उन्मूलन के बिना मानवीय मूल्यों की स्थापना असंभव है। बहुजन क्रांति पार्टी का संघर्ष उसी आर्थिक विषमता को समाप्त करने के लिए है, जिसके बारे में बाबा साहब ने 15 मार्च 1947 को संविधान सभा को सौंपे गए अपने ज्ञापन में सविस्तार चर्चा की थी। हम राज्य समाजवाद के माध्यम से कृषि का राष्ट्रीयकरण और उद्योगों पर जन-स्वामित्व सुनिश्चित करेंगे।'
                   : 'Capitalism is the progenitor of exploitation. Without its abolition, the establishment of true human values is impossible. BKP’s struggle is dedicated to ending the economic disparity that Babasaheb detailed in his memorandum to the Constituent Assembly on March 15, 1947. We aim to ensure the nationalization of agriculture and public ownership of industries through State Socialism.'}
@@ -120,18 +119,18 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 dark:bg-zinc-900/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="border-t-4 border-red-600">
+            <Card className="border-t-4 border-red-600 dark:bg-zinc-900">
               <CardContent className="pt-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 mb-4">
-                  <Target className="h-6 w-6 text-red-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-950/30 mb-4">
+                  <Target className="h-6 w-6 text-red-600 dark:text-red-400" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">
+                <h3 className="text-xl font-bold mb-3 dark:text-white">
                   {locale === 'hi' ? 'हमारा मिशन' : 'Our Mission'}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   {locale === 'hi'
                     ? 'एक मजबूत, आत्मनिर्भर और समृद्ध भारत बनाना जहां हर नागरिक को गुणवत्तापूर्ण शिक्षा, स्वास्थ्यसेवा, रोजगार और न्याय तक पहुंच हो।'
                     : 'To build a strong, self-reliant, and prosperous India where every citizen has access to quality education, healthcare, employment, and justice.'}
@@ -139,15 +138,15 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-t-4 border-green-500">
+            <Card className="border-t-4 border-green-500 dark:bg-zinc-900">
               <CardContent className="pt-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 mb-4">
-                  <Eye className="h-6 w-6 text-green-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-950/30 mb-4">
+                  <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">
+                <h3 className="text-xl font-bold mb-3 dark:text-white">
                   {locale === 'hi' ? 'हमारी दृष्टि' : 'Our Vision'}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   {locale === 'hi'
                     ? 'हम एक ऐसा भारत देखते हैं जो आर्थिक विकास, तकनीकी प्रगति और मानव विकास में दुनिया का नेतृत्व करे।'
                     : 'We envision an India that leads the world in economic growth, technological advancement, and human development.'}
@@ -155,15 +154,15 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-t-4 border-blue-500">
+            <Card className="border-t-4 border-blue-500 dark:bg-zinc-900">
               <CardContent className="pt-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 mb-4">
-                  <Award className="h-6 w-6 text-blue-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-950/30 mb-4">
+                  <Award className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">
+                <h3 className="text-xl font-bold mb-3 dark:text-white">
                   {locale === 'hi' ? 'हमारे मूल्य' : 'Our Values'}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   {locale === 'hi'
                     ? 'ईमानदारी, पारदर्शिता, समावेशिता और राष्ट्र की सेवा हमारी पार्टी की नींव बनाती हैं।'
                     : 'Integrity, transparency, inclusivity, and service to the nation form the bedrock of our party.'}
@@ -178,7 +177,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center mb-8">
             <History className="h-8 w-8 text-red-600 mr-3" />
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               {locale === 'hi' ? 'हमारी यात्रा' : 'Our Journey'}
             </h2>
           </div>
@@ -186,15 +185,15 @@ export default function AboutPage() {
           <div className="space-y-8">
             <div className="flex gap-6">
               <div className="flex-shrink-0">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 font-bold">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/30 text-red-600 dark:text-red-400 font-bold">
                   2012
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-semibold mb-2 dark:text-white">
                   {locale === 'hi' ? 'स्थापना और राजनीतिक घोषणा' : 'Foundation & Political Declaration'}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   {locale === 'hi'
                     ? '1 सितंबर 2012 को उत्तर प्रदेश राज्य संपत्ति विभाग के बी-ब्लॉक कॉमन हॉल, दारुल शफा, लखनऊ में बहुजन क्रांति पार्टी (मा.अ.) की आधिकारिक घोषणा की गई।'
                     : 'On September 1, 2012, Bahujan Kranti Party (M.A.) was officially announced at B-Block Common Hall, Darul Shafa, Lucknow, Uttar Pradesh.'}

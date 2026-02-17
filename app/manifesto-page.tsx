@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, Briefcase, GraduationCap, Heart, Building2, Sprout, Users, Globe } from 'lucide-react';
+import { Shield, Briefcase, GraduationCap, Heart, Building2, Sprout, Users, Globe, Scale } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -123,6 +123,22 @@ export default function ManifestoPage() {
       ],
     },
     {
+      icon: Scale,
+      title: locale === 'hi' ? 'पारिवारिक विवाद एवं महिला सुरक्षा' : 'Family Disputes & Women\'s Protection',
+      color: 'blue',
+      points: locale === 'hi' ? [
+        'दहेज और घरेलू हिंसा कानूनों के दुरुपयोग पर रोक के लिए पारदर्शी जांच।',
+        'BNS 69 जैसे गंभीर प्रावधानों में निष्पक्षता और साक्ष्य-आधारित कार्यवाही सुनिश्चित करना।',
+        'पारिवारिक विवादों के समाधान हेतु जिला स्तर पर "पारिवारिक सुलह केंद्रों" की स्थापना।',
+        'महिलाओं की वास्तविक सुरक्षा के साथ-साथ निर्दोषों को झूठे मुकदमों से बचाने के लिए कड़े नियम।',
+      ] : [
+        'Transparent investigation to prevent misuse of dowry and domestic violence laws.',
+        'Ensuring fairness and evidence-based action in serious provisions like BNS 69.',
+        'Establishment of "Family Reconciliation Centers" at the district level for dispute resolution.',
+        'Strict rules for the actual safety of women while protecting the innocent from false cases.',
+      ],
+    },
+    {
       icon: GraduationCap,
       title: locale === 'hi' ? 'शुद्ध भोजन और मिलावटखोरी पर रोक' : 'Pure Food & Anti-Adulteration',
       color: 'blue',
@@ -156,26 +172,25 @@ export default function ManifestoPage() {
     <div className="min-h-screen bg-[#fcfcfc]">
       <Header />
 
-      <section className="relative overflow-hidden bg-[#0a0a0a] pt-56 pb-40">
+      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/15 rounded-full blur-[140px] animate-pulse" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center rounded-full bg-white/5 px-6 py-2.5 text-[10px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-10 backdrop-blur-xl uppercase shadow-2xl">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
               {locale === 'hi' ? 'हमारा विजन' : 'OUR VISION'}
             </div>
-            <h1 className="text-6xl font-black tracking-tighter text-white sm:text-9xl mb-10 leading-[0.95] drop-shadow-2xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
               {t('manifesto.title', 'Our Manifesto')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-500 italic font-serif">
+              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'समृद्ध भारत का संकल्प' : 'COMMITMENT TO PROSPERITY'}
               </span>
             </h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed border-l-2 border-red-600/30 pl-8">
+            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {t('manifesto.subtitle', 'A comprehensive vision for India\'s progress and prosperity')}
             </p>
           </div>

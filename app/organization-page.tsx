@@ -56,25 +56,25 @@ export default function OrganizationPage() {
     <div className="min-h-screen bg-white">
       <Header />
 
-      <section className="relative overflow-hidden bg-[#0a0a0a] pt-40 pb-24">
+      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-red-600/20 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px]" />
+          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-sm font-bold text-red-500 ring-1 ring-inset ring-white/20 mb-8 backdrop-blur-md">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
               {locale === 'hi' ? 'संगठन' : 'ORGANIZATION'}
             </div>
-            <h1 className="text-4xl font-black tracking-tight text-white sm:text-7xl mb-6 leading-tight drop-shadow-2xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
               {locale === 'hi' ? 'संगठनात्मक ढांचा' : 'Organizational Structure'} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 italic">
+              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
                 {locale === 'hi' ? 'हमारी कार्य प्रणाली' : 'OUR WORKING SYSTEM'}
               </span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto font-medium leading-relaxed">
+            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
               {locale === 'hi'
                 ? 'बहुजन क्रांति पार्टी का संगठनात्मक ढांचा और कार्य प्रणाली'
                 : 'Bahujan Kranti Party\'s Organizational Structure and Working System'}

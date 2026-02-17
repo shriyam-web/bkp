@@ -760,53 +760,42 @@ export default function LeadershipPage() {
     <div className="min-h-screen bg-[#fcfcfc]">
       <Header />
 
-      <section className="relative overflow-hidden bg-[#0a0a0a] pt-32 pb-16">
+      <section className="relative overflow-hidden bg-slate-50 pt-32 pb-20 border-b border-slate-200">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-600/15 rounded-full blur-[140px] animate-pulse" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
         </div>
        
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-flex items-center rounded-full bg-white/5 px-5 py-2 text-[9px] font-black tracking-[0.3em] text-red-500 border border-white/10 mb-8 backdrop-blur-xl uppercase shadow-2xl">
-              <Star className="h-2.5 w-2.5 mr-2.5 fill-red-500 animate-spin-slow" />
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 mb-6 uppercase">
               {locale === 'hi' ? 'हमारा नेतृत्व' : 'OUR LEADERSHIP'}
-              <Star className="h-2.5 w-2.5 ml-2.5 fill-red-500 animate-spin-slow" />
             </div>
-            <h1 className="text-3xl font-black tracking-tighter text-white sm:text-5xl mb-6 leading-[1.1] drop-shadow-2xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
               {t('leadership.title', 'Visionary Leadership')} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-500 italic font-serif">
+              <span className="text-slate-500 font-medium text-3xl sm:text-5xl">
                 {t('leadership.subtitle', 'for a Better India')}
               </span>
             </h1>
-            <p className="text-base text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed mb-12 border-l-2 border-red-600/30 pl-6">
+            <p className="text-lg text-slate-600 max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6 mb-10">
               {t('leadership.description', 'Dedicated individuals united in their mission to create positive change and empower every citizen')}
             </p>
             
-            <div className="max-w-3xl mx-auto relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+            <div className="max-w-2xl relative group">
               <div className="relative">
-                <div className="absolute -left-4 -top-8 text-7xl text-red-600/10 font-serif pointer-events-none">"</div>
-                <blockquote className="text-base sm:text-lg font-bold italic text-white/90 px-10 py-8 bg-white/[0.03] backdrop-blur-2xl rounded-2xl text-left border border-white/10 shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-600/10 to-transparent rounded-bl-full"></div>
+                <blockquote className="text-base font-medium italic text-slate-600 px-8 py-6 bg-white shadow-sm rounded-xl border border-slate-200">
                   {locale === 'hi' 
                     ? 'सत्ता के लिए संघर्ष में सर्वहारा के पास संगठन के अलावा कोई दूसरा हथियार नहीं है - व्लादिमीर लेनिन'
                     : 'In the struggle for power, the proletariat has no weapon other than organization.'}
-                  <footer className="mt-4 text-[10px] not-italic text-gray-500 font-black tracking-[0.2em] uppercase flex items-center gap-2">
-                    <div className="w-6 h-[1px] bg-gray-800"></div>
+                  <footer className="mt-3 text-[10px] not-italic text-slate-400 font-bold tracking-widest uppercase flex items-center gap-2">
+                    <div className="w-4 h-[1px] bg-slate-300"></div>
                     V. Lenin
                   </footer>
                 </blockquote>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Scroll hint */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 animate-bounce opacity-20">
-          <div className="w-[1px] h-8 bg-gradient-to-b from-white to-transparent"></div>
         </div>
       </section>
 
