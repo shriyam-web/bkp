@@ -837,7 +837,7 @@ export default function LeadershipPage() {
               {loading ? (
                 <PremiumLoader />
               ) : nationalCommittee.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-muted-foreground">
                   No national committee members found.
                 </div>
               ) : (
@@ -845,8 +845,8 @@ export default function LeadershipPage() {
                   {/* Featured President Card */}
                   <div className="relative group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-[2rem] blur opacity-5 group-hover:opacity-10 transition duration-1000"></div>
-                    <div className="relative bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-xl flex flex-col lg:flex-row">
-                      <div className="lg:w-1/3 aspect-[4/5] lg:aspect-auto relative bg-gray-50">
+                    <div className="relative bg-card rounded-[2rem] overflow-hidden border border-border shadow-xl flex flex-col lg:grid lg:grid-cols-3">
+                      <div className="lg:col-span-1 aspect-[4/5] lg:aspect-auto relative bg-muted">
                         <Image
                           src="/president.jpg"
                           alt={t('leadership.nationalPresident', 'National President')}
@@ -855,15 +855,15 @@ export default function LeadershipPage() {
                           priority
                         />
                       </div>
-                      <div className="lg:w-2/3 p-6 sm:p-10 flex flex-col justify-center">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 text-red-600 text-[10px] font-black tracking-widest uppercase mb-4">
+                      <div className="lg:col-span-2 p-6 sm:p-10 flex flex-col justify-center">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-50 dark:bg-red-950/30 text-red-600 border border-red-100 dark:border-red-900/50 text-[10px] font-black tracking-widest uppercase mb-4">
                           <Star className="h-2.5 w-2.5 fill-red-600" />
                           {t('leadership.nationalPresident', 'National President')}
                         </div>
-                        <h3 className="text-2xl sm:text-4xl font-black text-gray-900 mb-4 leading-tight">
+                        <h3 className="text-2xl sm:text-4xl font-black text-foreground mb-4 leading-tight">
                           {locale === 'hi' ? 'श्री रंजीत सिंह' : 'Mr. Ranjeet Singh'}
                         </h3>
-                        <p className="text-base text-gray-600 leading-relaxed mb-8 font-medium">
+                        <p className="text-base text-muted-foreground leading-relaxed mb-8 font-medium">
                           {t('leadership.leadingTheMovement', 'Leading the Movement for Social Justice and Equality. Dedicated to the empowerment of every citizen through organization and awareness.')}
                         </p>
                         <div className="flex flex-wrap gap-4">
@@ -876,7 +876,7 @@ export default function LeadershipPage() {
                               bio: { en: 'Leading the Movement', hi: 'आंदोलन का नेतृत्व' },
                               type: 'NATIONAL'
                             })}
-                            className="bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-gray-200 active:scale-95 text-sm"
+                            className="bg-foreground text-background px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg active:scale-95 text-sm"
                           >
                             <Eye className="h-4 w-4" />
                             VIEW FULL PROFILE
@@ -888,10 +888,10 @@ export default function LeadershipPage() {
 
                   {/* Other National Members Grid */}
                   {nationalCommittee.length > 0 && (
-                    <div className="pt-12 border-t border-gray-100">
+                    <div className="pt-12 border-t border-border">
                       <div className="flex items-center gap-4 mb-10">
                         <div className="h-8 w-1 bg-blue-600 rounded-full"></div>
-                        <h4 className="text-xl font-black text-gray-900 uppercase tracking-widest">
+                        <h4 className="text-xl font-black text-foreground uppercase tracking-widest">
                           {t('leadership.nationalCommittee', 'National Committee Members')}
                         </h4>
                       </div>
@@ -1001,18 +1001,18 @@ export default function LeadershipPage() {
           <div className="mb-8 relative">
             <button
               onClick={() => setIsStateExpanded(!isStateExpanded)}
-              className="w-full flex items-center justify-between group bg-white p-6 rounded-2xl shadow-lg shadow-gray-200/40 border border-gray-100 hover:border-blue-500/20 transition-all duration-500"
+              className="w-full flex items-center justify-between group bg-card p-6 rounded-2xl shadow-lg border border-border hover:border-blue-500/20 transition-all duration-500"
             >
               <div className="text-left">
                 <div className="flex items-center gap-4 mb-1">
                   <div className="h-8 w-1 bg-gradient-to-b from-blue-600 to-green-600 rounded-full"></div>
-                  <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
                     {t('leadership.stateLeadership', 'State Leadership')}
                   </h2>
                 </div>
-                <p className="text-sm text-gray-500 font-medium ml-5">{t('leadership.stateDescription', 'Empowering regional voices and local governance')}</p>
+                <p className="text-sm text-muted-foreground font-medium ml-5">{t('leadership.stateDescription', 'Empowering regional voices and local governance')}</p>
               </div>
-              <div className={`p-3 rounded-xl transition-all duration-500 ${isStateExpanded ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-gray-50 text-gray-400'}`}>
+              <div className={`p-3 rounded-xl transition-all duration-500 ${isStateExpanded ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-muted text-muted-foreground'}`}>
                 {isStateExpanded ? (
                   <ChevronUp className="h-6 w-6" />
                 ) : (

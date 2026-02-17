@@ -335,7 +335,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Header />
 
       <section className="relative h-[700px] flex items-center overflow-hidden pt-20">
@@ -835,13 +835,13 @@ export default function HomePage() {
       {selectedTopic && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 transition-all animate-in fade-in duration-300">
           <div 
-            className="bg-white dark:bg-zinc-900 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 relative"
+            className="bg-card rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 relative border border-border"
             onClick={(e) => e.stopPropagation()}
           >
             <div className={`h-2 w-full bg-gradient-to-r ${selectedTopic.color}`} />
             <button 
               onClick={() => setSelectedTopic(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-500 dark:text-gray-400 transition-colors z-10"
+              className="absolute top-4 right-4 p-2 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground transition-colors z-10"
             >
               <X className="h-5 w-5" />
             </button>
@@ -852,26 +852,26 @@ export default function HomePage() {
                   <selectedTopic.icon className="h-8 w-8" />
                 </div>
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{selectedTopic.title}</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-foreground">{selectedTopic.title}</h3>
                 </div>
               </div>
               
               <div className="space-y-6">
-                <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                <p className="text-lg text-muted-foreground leading-relaxed font-medium">
                   {selectedTopic.description}
                 </p>
                 
-                <div className="bg-gray-50 dark:bg-zinc-950 rounded-2xl p-6 md:p-8">
-                  <h4 className="text-sm font-bold tracking-widest text-gray-400 dark:text-gray-500 uppercase mb-4">
+                <div className="bg-muted rounded-2xl p-6 md:p-8 border border-border">
+                  <h4 className="text-sm font-bold tracking-widest text-muted-foreground uppercase mb-4">
                     {locale === 'hi' ? 'मुख्य बिंदु' : 'KEY HIGHLIGHTS'}
                   </h4>
                   <ul className="space-y-4">
                     {selectedTopic.points.map((point, idx) => (
                       <li key={idx} className="flex items-start gap-4">
                         <div className={`h-6 w-6 rounded-full bg-gradient-to-br ${selectedTopic.color} flex-shrink-0 flex items-center justify-center mt-0.5`}>
-                          <div className="h-1.5 w-1.5 rounded-full bg-white dark:bg-white" />
+                          <div className="h-1.5 w-1.5 rounded-full bg-white" />
                         </div>
-                        <span className="text-gray-700 dark:text-gray-300 font-medium leading-relaxed">{point}</span>
+                        <span className="text-foreground font-medium leading-relaxed">{point}</span>
                       </li>
                     ))}
                   </ul>

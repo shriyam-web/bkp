@@ -22,8 +22,8 @@ export default function NewsCard({ id, title, excerpt, image_url, published_at }
 
   return (
     <Link href={`/${locale}/news/${id}`}>
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full group">
-        <div className="relative h-48 overflow-hidden bg-gray-200">
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full group bg-card border-border">
+        <div className="relative h-48 overflow-hidden bg-muted">
           <img
             src={displayImage}
             alt={title}
@@ -32,16 +32,16 @@ export default function NewsCard({ id, title, excerpt, image_url, published_at }
           />
         </div>
         <CardHeader>
-          <div className="flex items-center text-sm text-gray-600 mb-2">
+          <div className="flex items-center text-sm text-muted-foreground mb-2">
             <Calendar className="h-4 w-4 mr-1" />
             {formattedDate}
           </div>
-          <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-red-600 transition-colors">
+          <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-red-600 transition-colors text-foreground">
             {title}
           </h3>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600 line-clamp-3">{excerpt}</p>
+          <p className="text-muted-foreground line-clamp-3">{excerpt}</p>
         </CardContent>
       </Card>
     </Link>

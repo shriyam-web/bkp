@@ -18,8 +18,8 @@ export default function EventCard({ title, description, location, event_date, im
   const displayImage = !imageError && image_url ? image_url : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-      <div className="relative h-48 overflow-hidden bg-gray-200">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full bg-card border-border">
+      <div className="relative h-48 overflow-hidden bg-muted">
         <img
           src={displayImage}
           alt={title}
@@ -28,16 +28,16 @@ export default function EventCard({ title, description, location, event_date, im
         />
       </div>
       <CardHeader>
-        <h3 className="text-lg font-semibold line-clamp-2">{title}</h3>
+        <h3 className="text-lg font-semibold line-clamp-2 text-foreground">{title}</h3>
       </CardHeader>
       <CardContent className="space-y-2">
-        <p className="text-gray-600 line-clamp-2">{description}</p>
-        <div className="flex items-center text-sm text-gray-600">
-          <Calendar className="h-4 w-4 mr-1 text-red-600" />
+        <p className="text-muted-foreground line-clamp-2">{description}</p>
+        <div className="flex items-center text-sm text-muted-foreground">
+          <Calendar className="h-4 w-4 mr-1 text-red-600 dark:text-red-400" />
           {formattedDate}
         </div>
-        <div className="flex items-center text-sm text-gray-600">
-          <MapPin className="h-4 w-4 mr-1 text-red-600" />
+        <div className="flex items-center text-sm text-muted-foreground">
+          <MapPin className="h-4 w-4 mr-1 text-red-600 dark:text-red-400" />
           {location}
         </div>
       </CardContent>
