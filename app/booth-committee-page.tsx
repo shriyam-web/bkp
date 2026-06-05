@@ -15,10 +15,18 @@ import {
   Phone,
   Loader2,
   X,
+  Download,
+  Share2,
+  Star,
 } from 'lucide-react';
 import { useTranslations } from '@/lib/TranslationContext';
 import { INDIAN_STATES } from '@/lib/indian-states';
 import { cn } from '@/lib/utils';
+import {
+  isBoothIncharge,
+  downloadMemberCard,
+  shareMemberCard,
+} from '@/lib/booth-member-card';
 
 const notoSans = Noto_Sans({
   subsets: ['latin', 'devanagari'],
@@ -39,6 +47,7 @@ interface BoothMember {
   name: { en: string; hi: string };
   position: { en: string; hi: string };
   image?: string | null;
+  isBoothIncharge?: boolean;
   state?: string;
   constituency?: string;
   booth?: string;
@@ -83,6 +92,24 @@ function textMatches(query: string, ...values: (string | number | null | undefin
   return values.some((v) => v != null && String(v).toLowerCase().includes(q));
 }
 
+function assemblyMatchesQuery(query: string, assembly: LegislativeAssembly) {
+  if (textMatches(query, assembly.name.en, assembly.name.hi, assembly.constituencyNumber)) {
+    return true;
+  }
+  const q = query.trim();
+  if (/^\d+$/.test(q) && assembly.constituencyNumber != null) {
+    return String(assembly.constituencyNumber).includes(q);
+  }
+  return false;
+}
+
+function boothMatchesQuery(query: string, booth: string) {
+  if (textMatches(query, booth)) return true;
+  const qNum = query.replace(/\D/g, '');
+  const boothNum = booth.replace(/\D/g, '');
+  return Boolean(qNum) && boothNum.includes(qNum);
+}
+
 export default function BoothCommitteePage() {
   const { locale } = useTranslations();
   const [currentStep, setCurrentStep] = useState<Step>('state');
@@ -99,6 +126,7 @@ export default function BoothCommitteePage() {
   const [stateMembers, setStateMembers] = useState<BoothMember[]>([]);
   const [membersLoading, setMembersLoading] = useState(false);
   const [selectedBooth, setSelectedBooth] = useState<string | null>(null);
+  const [cardActionId, setCardActionId] = useState<string | null>(null);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -130,19 +158,12 @@ export default function BoothCommitteePage() {
 
   const filteredAssemblies = useMemo(() => {
     if (!hasSearch) return assemblies;
+    if (currentStep === 'assembly') {
+      return assemblies.filter((a) => assemblyMatchesQuery(globalSearch, a));
+    }
     const matchedIds = new Set<string>();
     assemblies.forEach((a) => {
-      if (
-        textMatches(
-          globalSearch,
-          a.name.en,
-          a.name.hi,
-          a.constituencyNumber,
-          a.state
-        )
-      ) {
-        matchedIds.add(a._id);
-      }
+      if (assemblyMatchesQuery(globalSearch, a)) matchedIds.add(a._id);
     });
     globalResults.assemblies
       .filter((a) => !selectedState || a.state === selectedState)
@@ -164,7 +185,7 @@ export default function BoothCommitteePage() {
       }
     });
     return assemblies.filter((a) => matchedIds.has(a._id));
-  }, [assemblies, globalSearch, hasSearch, globalResults, stateMembers, selectedState]);
+  }, [assemblies, globalSearch, hasSearch, globalResults, stateMembers, selectedState, currentStep]);
 
   const availableBooths = useMemo(() => {
     return Array.from(
@@ -174,8 +195,11 @@ export default function BoothCommitteePage() {
 
   const filteredBooths = useMemo(() => {
     if (!hasSearch) return availableBooths;
+    if (currentStep === 'booth') {
+      return availableBooths.filter((booth) => boothMatchesQuery(globalSearch, booth));
+    }
     return availableBooths.filter((booth) => {
-      if (textMatches(globalSearch, booth)) return true;
+      if (boothMatchesQuery(globalSearch, booth)) return true;
       return assemblyMembers.some(
         (m) =>
           m.booth === booth &&
@@ -188,7 +212,7 @@ export default function BoothCommitteePage() {
           )
       );
     });
-  }, [availableBooths, assemblyMembers, globalSearch, hasSearch]);
+  }, [availableBooths, assemblyMembers, globalSearch, hasSearch, currentStep]);
 
   const boothMembers = useMemo(() => {
     if (!selectedBooth) return [];
@@ -227,11 +251,43 @@ export default function BoothCommitteePage() {
   }, [globalResults, hasDeepSearch, selectedState]);
 
   const showGlobalPanel =
+    currentStep === 'state' &&
     hasDeepSearch &&
     (scopedGlobalResults.assemblies.length > 0 ||
       scopedGlobalResults.booths.length > 0 ||
       scopedGlobalResults.members.length > 0 ||
-      (currentStep === 'state' && scopedGlobalResults.states.length > 0));
+      scopedGlobalResults.states.length > 0);
+
+  const boothIncharge = useMemo(
+    () => boothMembers.find((m) => isBoothIncharge(m)) || null,
+    [boothMembers]
+  );
+
+  const regularMembers = useMemo(
+    () => filteredMembers.filter((m) => !isBoothIncharge(m)),
+    [filteredMembers]
+  );
+
+  const searchPlaceholder = useMemo(() => {
+    if (currentStep === 'assembly') {
+      return isHi
+        ? 'विधानसभा संख्या या नाम खोजें...'
+        : 'Search by assembly number or name...';
+    }
+    if (currentStep === 'booth') {
+      return isHi
+        ? 'बूथ संख्या या नाम खोजें...'
+        : 'Search by booth number or name...';
+    }
+    if (currentStep === 'committee') {
+      return isHi
+        ? 'सदस्य का नाम या पद खोजें...'
+        : 'Search member name or post...';
+    }
+    return isHi
+      ? 'राज्य, विधानसभा, बूथ या सदस्य खोजें...'
+      : 'Search state, assembly, booth, or member...';
+  }, [currentStep, isHi]);
 
   useEffect(() => {
     const fetchStatesWithData = async () => {
@@ -254,7 +310,7 @@ export default function BoothCommitteePage() {
   }, []);
 
   useEffect(() => {
-    if (!hasDeepSearch) {
+    if (currentStep !== 'state' || !hasDeepSearch) {
       setGlobalResults(EMPTY_RESULTS);
       return;
     }
@@ -273,7 +329,7 @@ export default function BoothCommitteePage() {
       }
     }, 350);
     return () => clearTimeout(timer);
-  }, [globalSearch, hasDeepSearch, selectedState]);
+  }, [globalSearch, hasDeepSearch, selectedState, currentStep]);
 
   useEffect(() => {
     if (!selectedState) {
@@ -492,128 +548,137 @@ export default function BoothCommitteePage() {
     return filteredMembers.length;
   };
 
-  const GlobalSearchBar = ({ className }: { className?: string }) => (
-    <div className={cn('relative', className)}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 pointer-events-none" />
-      <input
-        ref={searchRef}
-        type="search"
-        value={globalSearch}
-        onChange={(e) => setGlobalSearch(e.target.value)}
-        placeholder={
-          isHi
-            ? 'राज्य, विधानसभा, बूथ या सदस्य का नाम खोजें...'
-            : 'Search state, assembly, booth, or member name...'
-        }
-        className="w-full pl-9 pr-10 py-2.5 sm:py-3 text-[14px] font-light bg-[#f8f9fa] dark:bg-muted/40 border border-border/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-foreground/15 focus:bg-white dark:focus:bg-card transition-colors"
-      />
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-        {globalSearching && (
-          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+  const cardContext = useMemo(() => {
+    if (!selectedState || !selectedAssembly || !selectedBooth) return null;
+    return {
+      state: selectedState,
+      assembly: getAssemblyName(selectedAssembly),
+      booth: selectedBooth,
+      locale,
+    };
+  }, [selectedState, selectedAssembly, selectedBooth, locale, isHi]);
+
+  const handleDownloadCard = async (member: BoothMember) => {
+    if (!cardContext) return;
+    setCardActionId(member._id);
+    try {
+      await downloadMemberCard(member, cardContext);
+    } finally {
+      setCardActionId(null);
+    }
+  };
+
+  const handleShareCard = async (member: BoothMember) => {
+    if (!cardContext) return;
+    setCardActionId(member._id);
+    try {
+      await shareMemberCard(member, cardContext, window.location.href);
+    } finally {
+      setCardActionId(null);
+    }
+  };
+
+  const renderMemberCard = (member: BoothMember, featured = false) => {
+    const incharge = isBoothIncharge(member);
+    const busy = cardActionId === member._id;
+    return (
+      <article
+        key={member._id}
+        className={cn(
+          'flex flex-col gap-4 p-4 sm:p-5 bg-white dark:bg-card border rounded-lg',
+          featured || incharge
+            ? 'border-orange-300/80 dark:border-orange-500/40 ring-1 ring-orange-200/50 dark:ring-orange-500/20'
+            : 'border-border/70'
         )}
-        {globalSearch && !globalSearching && (
+      >
+        <div className="flex gap-4">
+          <div
+            className={cn(
+              'shrink-0 relative rounded-md overflow-hidden bg-muted',
+              featured || incharge
+                ? 'w-20 h-24 sm:w-24 sm:h-28'
+                : 'w-16 h-20 sm:w-[72px] sm:h-[88px]'
+            )}
+          >
+            {member.image ? (
+              <Image
+                src={member.image}
+                alt={getText(member.name)}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                <span className="text-lg font-light text-muted-foreground/40 uppercase">
+                  {getText(member.name)
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .slice(0, 2)}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            {incharge && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 mb-2 rounded-full text-[11px] font-medium bg-orange-100 text-orange-800 dark:bg-orange-500/15 dark:text-orange-300">
+                <Star className="h-3 w-3 fill-current" />
+                {isHi ? 'बूथ प्रभारी' : 'Booth Incharge'}
+              </span>
+            )}
+            <h3
+              className={cn(
+                'font-medium text-foreground leading-snug',
+                featured || incharge ? 'text-[17px] sm:text-lg' : 'text-[15px]'
+              )}
+            >
+              {getText(member.name)}
+            </h3>
+            <p className="text-[13px] font-light text-muted-foreground mt-0.5">
+              {getText(member.position)}
+            </p>
+            {formatAddress(member) && (
+              <p className="text-[12px] font-light text-muted-foreground mt-2 leading-relaxed flex items-start gap-1.5">
+                <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-50" />
+                <span>{formatAddress(member)}</span>
+              </p>
+            )}
+            {member.mobileNumber && (
+              <a
+                href={`tel:${member.mobileNumber}`}
+                className="inline-flex items-center gap-1.5 text-[13px] font-normal text-foreground/70 hover:text-foreground mt-2.5 transition-colors"
+              >
+                <Phone className="h-3.5 w-3.5" />
+                {member.mobileNumber}
+              </a>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-2 pt-1 border-t border-border/50">
           <button
             type="button"
-            onClick={() => setGlobalSearch('')}
-            className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60"
-            aria-label={isHi ? 'खोज साफ़ करें' : 'Clear search'}
+            disabled={busy}
+            onClick={() => handleDownloadCard(member)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-normal rounded-md border border-border/70 hover:bg-muted/50 transition-colors disabled:opacity-50"
           >
-            <X className="h-3.5 w-3.5" />
+            {busy ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Download className="h-3.5 w-3.5" />
+            )}
+            {isHi ? 'डाउनलोड' : 'Download'}
           </button>
-        )}
-      </div>
-    </div>
-  );
-
-  const GlobalResultsPanel = () => {
-    if (!showGlobalPanel) return null;
-    return (
-      <div className="bg-white dark:bg-card border border-border/70 rounded-lg overflow-hidden">
-        <div className="px-4 sm:px-5 py-3 border-b border-border/60 flex items-center justify-between">
-          <p className="text-[13px] font-medium text-foreground">
-            {isHi ? 'खोज परिणाम' : 'Search results'}
-          </p>
-          <span className="text-[12px] font-light text-muted-foreground">
-            {isHi ? 'सभी स्तर' : 'All levels'}
-          </span>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => handleShareCard(member)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-normal rounded-md border border-border/70 hover:bg-muted/50 transition-colors disabled:opacity-50"
+          >
+            <Share2 className="h-3.5 w-3.5" />
+            {isHi ? 'साझा करें' : 'Share'}
+          </button>
         </div>
-        <div className="divide-y divide-border/50 max-h-[280px] overflow-y-auto">
-          {currentStep === 'state' &&
-            scopedGlobalResults.states
-              .filter((s) => !(filteredStates as readonly string[]).includes(s))
-              .map((state) => (
-                <button
-                  key={`state-${state}`}
-                  type="button"
-                  onClick={() => handleStateSelect(state)}
-                  className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
-                >
-                  <MapPin className="h-4 w-4 text-muted-foreground/50 shrink-0" />
-                  <div className="min-w-0">
-                    <p className="text-[14px] font-normal text-foreground">{state}</p>
-                    <p className="text-[12px] font-light text-muted-foreground">
-                      {isHi ? 'राज्य' : 'State'}
-                    </p>
-                  </div>
-                </button>
-              ))}
-          {scopedGlobalResults.assemblies.map((assembly) => (
-            <button
-              key={`asm-${assembly._id}`}
-              type="button"
-              onClick={() => navigateToAssembly(assembly)}
-              className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
-            >
-              <Landmark className="h-4 w-4 text-muted-foreground/50 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-[14px] font-normal text-foreground truncate">
-                  {getAssemblyName(assembly)}
-                </p>
-                <p className="text-[12px] font-light text-muted-foreground">
-                  {assembly.state}
-                  {assembly.constituencyNumber != null && ` · #${assembly.constituencyNumber}`}
-                </p>
-              </div>
-            </button>
-          ))}
-          {scopedGlobalResults.booths.map((b) => (
-            <button
-              key={`booth-${b.state}-${b.constituency}-${b.booth}`}
-              type="button"
-              onClick={() => navigateToBooth(b.state, b.constituency, b.booth)}
-              className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
-            >
-              <Vote className="h-4 w-4 text-muted-foreground/50 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-[14px] font-normal text-foreground truncate">{b.booth}</p>
-                <p className="text-[12px] font-light text-muted-foreground truncate">
-                  {b.constituency} · {b.state}
-                </p>
-              </div>
-            </button>
-          ))}
-          {scopedGlobalResults.members.map((member) => (
-            <button
-              key={`mem-${member._id}`}
-              type="button"
-              onClick={() => navigateToMember(member)}
-              className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
-            >
-              <Users className="h-4 w-4 text-muted-foreground/50 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-[14px] font-normal text-foreground truncate">
-                  {getText(member.name)}
-                </p>
-                <p className="text-[12px] font-light text-muted-foreground truncate">
-                  {member.booth && `${member.booth} · `}
-                  {member.constituency}
-                  {member.state && ` · ${member.state}`}
-                </p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+      </article>
     );
   };
 
@@ -638,7 +703,32 @@ export default function BoothCommitteePage() {
 
         <div className="sticky top-16 sm:top-[65px] z-40 bg-white dark:bg-card border-y border-border/60 shadow-sm shadow-black/[0.03]">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3">
-            <GlobalSearchBar />
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 pointer-events-none" />
+              <input
+                ref={searchRef}
+                type="search"
+                value={globalSearch}
+                onChange={(e) => setGlobalSearch(e.target.value)}
+                placeholder={searchPlaceholder}
+                className="w-full pl-9 pr-10 py-2.5 sm:py-3 text-[14px] font-light bg-[#f8f9fa] dark:bg-muted/40 border border-border/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-foreground/15 focus:bg-white dark:focus:bg-card transition-colors"
+              />
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                {globalSearching && (
+                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                )}
+                {globalSearch && !globalSearching && (
+                  <button
+                    type="button"
+                    onClick={() => setGlobalSearch('')}
+                    className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                    aria-label={isHi ? 'खोज साफ़ करें' : 'Clear search'}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -724,7 +814,93 @@ export default function BoothCommitteePage() {
               </p>
             )}
 
-            <GlobalResultsPanel />
+            {showGlobalPanel && (
+              <div className="bg-white dark:bg-card border border-border/70 rounded-lg overflow-hidden">
+                <div className="px-4 sm:px-5 py-3 border-b border-border/60 flex items-center justify-between">
+                  <p className="text-[13px] font-medium text-foreground">
+                    {isHi ? 'खोज परिणाम' : 'Search results'}
+                  </p>
+                  <span className="text-[12px] font-light text-muted-foreground">
+                    {isHi ? 'सभी स्तर' : 'All levels'}
+                  </span>
+                </div>
+                <div className="divide-y divide-border/50 max-h-[280px] overflow-y-auto">
+                  {scopedGlobalResults.states
+                    .filter((s) => !(filteredStates as readonly string[]).includes(s))
+                    .map((state) => (
+                      <button
+                        key={`state-${state}`}
+                        type="button"
+                        onClick={() => handleStateSelect(state)}
+                        className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
+                      >
+                        <MapPin className="h-4 w-4 text-muted-foreground/50 shrink-0" />
+                        <div className="min-w-0">
+                          <p className="text-[14px] font-normal text-foreground">{state}</p>
+                          <p className="text-[12px] font-light text-muted-foreground">
+                            {isHi ? 'राज्य' : 'State'}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  {scopedGlobalResults.assemblies.map((assembly) => (
+                    <button
+                      key={`asm-${assembly._id}`}
+                      type="button"
+                      onClick={() => navigateToAssembly(assembly)}
+                      className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
+                    >
+                      <Landmark className="h-4 w-4 text-muted-foreground/50 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[14px] font-normal text-foreground truncate">
+                          {getAssemblyName(assembly)}
+                        </p>
+                        <p className="text-[12px] font-light text-muted-foreground">
+                          {assembly.state}
+                          {assembly.constituencyNumber != null && ` · #${assembly.constituencyNumber}`}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                  {scopedGlobalResults.booths.map((b) => (
+                    <button
+                      key={`booth-${b.state}-${b.constituency}-${b.booth}`}
+                      type="button"
+                      onClick={() => navigateToBooth(b.state, b.constituency, b.booth)}
+                      className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
+                    >
+                      <Vote className="h-4 w-4 text-muted-foreground/50 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[14px] font-normal text-foreground truncate">{b.booth}</p>
+                        <p className="text-[12px] font-light text-muted-foreground truncate">
+                          {b.constituency} · {b.state}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                  {scopedGlobalResults.members.map((member) => (
+                    <button
+                      key={`mem-${member._id}`}
+                      type="button"
+                      onClick={() => navigateToMember(member)}
+                      className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
+                    >
+                      <Users className="h-4 w-4 text-muted-foreground/50 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-[14px] font-normal text-foreground truncate">
+                          {getText(member.name)}
+                        </p>
+                        <p className="text-[12px] font-light text-muted-foreground truncate">
+                          {member.booth && `${member.booth} · `}
+                          {member.constituency}
+                          {member.state && ` · ${member.state}`}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {currentStep === 'state' && (
               <div>
@@ -853,61 +1029,27 @@ export default function BoothCommitteePage() {
             )}
 
             {currentStep === 'committee' && selectedBooth && (
-              <div>
-                {filteredMembers.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                    {filteredMembers.map((member) => (
-                      <article
-                        key={member._id}
-                        className="flex gap-4 p-4 sm:p-5 bg-white dark:bg-card border border-border/70 rounded-lg"
-                      >
-                        <div className="shrink-0 w-16 h-20 sm:w-[72px] sm:h-[88px] relative rounded-md overflow-hidden bg-muted">
-                          {member.image ? (
-                            <Image
-                              src={member.image}
-                              alt={getText(member.name)}
-                              fill
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="absolute inset-0 flex items-center justify-center bg-muted">
-                              <span className="text-lg font-light text-muted-foreground/40 uppercase">
-                                {getText(member.name)
-                                  .split(' ')
-                                  .map((n) => n[0])
-                                  .join('')
-                                  .slice(0, 2)}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-[15px] font-medium text-foreground leading-snug">
-                            {getText(member.name)}
-                          </h3>
-                          <p className="text-[13px] font-light text-muted-foreground mt-0.5">
-                            {getText(member.position)}
-                          </p>
-                          {formatAddress(member) && (
-                            <p className="text-[12px] font-light text-muted-foreground mt-2 leading-relaxed flex items-start gap-1.5">
-                              <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-50" />
-                              <span>{formatAddress(member)}</span>
-                            </p>
-                          )}
-                          {member.mobileNumber && (
-                            <a
-                              href={`tel:${member.mobileNumber}`}
-                              className="inline-flex items-center gap-1.5 text-[13px] font-normal text-foreground/70 hover:text-foreground mt-2.5 transition-colors"
-                            >
-                              <Phone className="h-3.5 w-3.5" />
-                              {member.mobileNumber}
-                            </a>
-                          )}
-                        </div>
-                      </article>
-                    ))}
+              <div className="space-y-5">
+                {boothIncharge && filteredMembers.some((m) => m._id === boothIncharge._id) && (
+                  <div>
+                    <h3 className="text-[13px] font-medium text-muted-foreground uppercase tracking-wide mb-3">
+                      {isHi ? 'बूथ प्रभारी' : 'Booth Incharge'}
+                    </h3>
+                    {renderMemberCard(boothIncharge, true)}
                   </div>
-                ) : (
+                )}
+                {regularMembers.length > 0 ? (
+                  <div>
+                    {boothIncharge && filteredMembers.some((m) => m._id === boothIncharge._id) && (
+                      <h3 className="text-[13px] font-medium text-muted-foreground uppercase tracking-wide mb-3">
+                        {isHi ? 'समिति सदस्य' : 'Committee Members'}
+                      </h3>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                      {regularMembers.map((member) => renderMemberCard(member))}
+                    </div>
+                  </div>
+                ) : !boothIncharge || !filteredMembers.some((m) => m._id === boothIncharge._id) ? (
                   <div className="bg-white dark:bg-card border border-border/70 rounded-lg px-5 py-16 text-center">
                     <Users className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
                     <p className="text-[14px] font-light text-muted-foreground">
@@ -920,7 +1062,7 @@ export default function BoothCommitteePage() {
                           : 'No members found'}
                     </p>
                   </div>
-                )}
+                ) : null}
               </div>
             )}
           </div>

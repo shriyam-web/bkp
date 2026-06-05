@@ -25,6 +25,7 @@ const CommitteeMemberSchema = new mongoose.Schema({
   district: { type: String },
   constituency: { type: String }, // Legislative assembly name (booth committee)
   booth: { type: String }, // Booth number/name (booth committee)
+  isBoothIncharge: { type: Boolean, default: false },
   mobileNumber: { type: String },
   email: { type: String },
   type: {

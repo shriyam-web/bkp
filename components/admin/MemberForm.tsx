@@ -42,6 +42,7 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
     district: '',
     constituency: '',
     booth: '',
+    isBoothIncharge: false,
     type: type,
     order: 0,
     mobileNumber: '',
@@ -67,6 +68,7 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
         district: initialData.district || '',
         constituency: initialData.constituency || '',
         booth: initialData.booth || '',
+        isBoothIncharge: initialData.isBoothIncharge || false,
         mobileNumber: initialData.mobileNumber || '',
         email: initialData.email || '',
         address: initialData.address || {
@@ -277,6 +279,21 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
                       placeholder="e.g. Booth 142"
                       required
                     />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={formData.isBoothIncharge}
+                        onChange={(e) =>
+                          setFormData({ ...formData, isBoothIncharge: e.target.checked })
+                        }
+                        className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                      />
+                      <span className="text-sm font-medium text-gray-700">
+                        Booth Incharge (प्रभारी) — one lead contact per booth
+                      </span>
+                    </label>
                   </div>
                 </>
               )}

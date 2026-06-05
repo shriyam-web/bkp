@@ -18,6 +18,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       district: body.district,
       constituency: body.constituency,
       booth: body.booth,
+      isBoothIncharge: body.isBoothIncharge ?? false,
       mobileNumber: body.mobileNumber,
       email: body.email,
       type: body.type,

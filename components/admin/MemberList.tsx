@@ -128,7 +128,14 @@ export default function MemberList({ type, title }: MemberListProps) {
                       <div className="text-xs text-gray-500">{member.name.hi}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div>{member.position.en}</div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span>{member.position.en}</span>
+                        {type === 'BOOTH' && member.isBoothIncharge && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-orange-100 text-orange-800">
+                            Incharge
+                          </span>
+                        )}
+                      </div>
                       <div className="text-xs text-gray-500">{member.position.hi}</div>
                     </td>
                     {(type === 'STATE' || type === 'DISTRICT' || type === 'BOOTH') && (
