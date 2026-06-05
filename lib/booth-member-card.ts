@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/site';
+
 export interface BoothCardMember {
   _id: string;
   name: { en: string; hi: string };
@@ -18,6 +20,15 @@ export interface BoothCardContext {
   assembly: string;
   booth: string;
   locale: string;
+}
+
+export function buildMemberCardUrl(
+  memberId: string,
+  locale: string,
+  origin?: string
+) {
+  const base = (origin || SITE_URL).replace(/\/$/, '');
+  return `${base}/${locale}/booth-committee/member/${memberId}`;
 }
 
 export function isBoothIncharge(member: BoothCardMember) {
@@ -243,30 +254,25 @@ export async function downloadMemberCard(
 
 export async function shareMemberCard(
   member: BoothCardMember,
-  context: BoothCardContext,
-  pageUrl: string
-) {
-  const text = buildMemberShareText(member, context, pageUrl);
+  context: BoothCardContext
+): Promise<'shared' | 'copied'> {
+  const cardUrl = buildMemberCardUrl(
+    member._id,
+    context.locale,
+    typeof window !== 'undefined' ? window.location.origin : undefined
+  );
   const title = getText(member.name, context.locale);
+  const text = buildMemberShareText(member, context, cardUrl);
 
   if (navigator.share) {
     try {
-      const blob = await renderMemberCardPng(member, context);
-      const file = new File(
-        [blob],
-        `bkp-${title.replace(/\s+/g, '-')}.png`,
-        { type: 'image/png' }
-      );
-      if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title, text, files: [file] });
-        return;
-      }
-      await navigator.share({ title, text, url: pageUrl });
-      return;
+      await navigator.share({ title, text, url: cardUrl });
+      return 'shared';
     } catch (err) {
-      if ((err as Error).name === 'AbortError') return;
+      if ((err as Error).name === 'AbortError') return 'copied';
     }
   }
 
-  await navigator.clipboard.writeText(text);
+  await navigator.clipboard.writeText(cardUrl);
+  return 'copied';
 }

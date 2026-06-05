@@ -127,6 +127,7 @@ export default function BoothCommitteePage() {
   const [membersLoading, setMembersLoading] = useState(false);
   const [selectedBooth, setSelectedBooth] = useState<string | null>(null);
   const [cardActionId, setCardActionId] = useState<string | null>(null);
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -572,7 +573,13 @@ export default function BoothCommitteePage() {
     if (!cardContext) return;
     setCardActionId(member._id);
     try {
-      await shareMemberCard(member, cardContext, window.location.href);
+      const result = await shareMemberCard(member, cardContext);
+      if (result === 'copied') {
+        setShareNotice(
+          isHi ? 'कार्ड लिंक कॉपी हो गया' : 'Card link copied to clipboard'
+        );
+        setTimeout(() => setShareNotice(null), 3000);
+      }
     } finally {
       setCardActionId(null);
     }
@@ -685,6 +692,12 @@ export default function BoothCommitteePage() {
   return (
     <div className={cn(notoSans.className, 'min-h-screen bg-[#f8f9fa] dark:bg-background')}>
       <Header />
+
+      {shareNotice && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-lg bg-foreground text-background text-sm shadow-lg">
+          {shareNotice}
+        </div>
+      )}
 
       <div className="border-b border-border/60 bg-white dark:bg-card pt-24 sm:pt-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 sm:pt-8 pb-5">
