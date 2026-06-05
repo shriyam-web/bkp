@@ -42,6 +42,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm font-medium">
               <li><Link href={`/${locale}/about`} className="hover:text-red-600 transition-colors flex items-center gap-2"><ArrowRight className="h-3 w-3" /> {locale === 'hi' ? 'हमारे बारे में' : 'About Us'}</Link></li>
               <li><Link href={`/${locale}/leadership`} className="hover:text-red-600 transition-colors flex items-center gap-2"><ArrowRight className="h-3 w-3" /> {locale === 'hi' ? 'नेतृत्व' : 'Leadership'}</Link></li>
+              <li><Link href={`/${locale}/booth-committee`} className="hover:text-red-600 transition-colors flex items-center gap-2"><ArrowRight className="h-3 w-3" /> {locale === 'hi' ? 'बूथ समिति' : 'Booth Committee'}</Link></li>
               <li><Link href={`/${locale}/manifesto`} className="hover:text-red-600 transition-colors flex items-center gap-2"><ArrowRight className="h-3 w-3" /> {locale === 'hi' ? 'घोषणापत्र' : 'Manifesto'}</Link></li>
               <li><Link href={`/${locale}/join`} className="hover:text-red-600 transition-colors flex items-center gap-2"><ArrowRight className="h-3 w-3" /> {locale === 'hi' ? 'शामिल हों' : 'Join Us'}</Link></li>
             </ul>

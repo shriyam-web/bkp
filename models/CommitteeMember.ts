@@ -21,13 +21,15 @@ const CommitteeMemberSchema = new mongoose.Schema({
     postalCode: { type: String },
     country: { type: String, default: 'India' },
   },
-  state: { type: String }, // For state and district committee members
-  district: { type: String }, // For district committee members
+  state: { type: String },
+  district: { type: String },
+  constituency: { type: String }, // Legislative assembly name (booth committee)
+  booth: { type: String }, // Booth number/name (booth committee)
   mobileNumber: { type: String },
   email: { type: String },
   type: {
     type: String,
-    enum: ['NATIONAL', 'STATE', 'RASHTRIYA_PARISHAD', 'RASHTRIYA_KAARYASAMITI', 'DISTRICT'],
+    enum: ['NATIONAL', 'STATE', 'RASHTRIYA_PARISHAD', 'RASHTRIYA_KAARYASAMITI', 'DISTRICT', 'BOOTH'],
     required: true,
   },
   order: { type: Number, default: 0 },

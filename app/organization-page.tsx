@@ -1,6 +1,7 @@
 'use client';
 
-import { Building2, Users, Briefcase, Shield, BarChart3 } from 'lucide-react';
+import Link from 'next/link';
+import { Building2, Users, Briefcase, Shield, BarChart3, Vote, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -50,6 +51,15 @@ export default function OrganizationPage() {
         ? 'जिला स्तर पर पार्टी की गतिविधियों और संगठन का संचालन।'
         : 'Conducting party activities and organization at the district level.',
     },
+    {
+      icon: Vote,
+      title: locale === 'hi' ? 'बूथ स्तर समिति' : 'Booth Level Committee',
+      colorClasses: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
+      description: locale === 'hi'
+        ? 'प्रत्येक मतदान केंद्र (बूथ) पर 1–15 सदस्यों की समिति।'
+        : 'A committee of 1–15 members at every polling booth.',
+      href: `/${locale}/booth-committee`,
+    },
   ];
 
   return (
@@ -88,8 +98,8 @@ export default function OrganizationPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {structure.map((item, index) => {
               const Icon = item.icon;
-              return (
-                <Card key={index} className="hover:shadow-lg transition-shadow bg-card">
+              const card = (
+                <Card className={`hover:shadow-lg transition-shadow bg-card h-full ${'href' in item && item.href ? 'hover:border-orange-500/30' : ''}`}>
                   <CardContent className="pt-8">
                     <div className={`h-12 w-12 rounded-lg flex items-center justify-center mb-6 ${item.colorClasses}`}>
                       <Icon className="h-6 w-6" />
@@ -100,8 +110,19 @@ export default function OrganizationPage() {
                     <p className="text-muted-foreground">
                       {item.description}
                     </p>
+                    {'href' in item && item.href && (
+                      <span className="inline-flex items-center gap-1 mt-4 text-sm font-bold text-orange-600">
+                        {locale === 'hi' ? 'खोलें' : 'Open Console'}
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                    )}
                   </CardContent>
                 </Card>
+              );
+              return 'href' in item && item.href ? (
+                <Link key={index} href={item.href}>{card}</Link>
+              ) : (
+                <div key={index}>{card}</div>
               );
             })}
           </div>
@@ -165,6 +186,22 @@ export default function OrganizationPage() {
                     {locale === 'hi' ? 'सभी जिलों में' : 'In all districts'}
                   </p>
                 </div>
+
+                <div className="flex justify-center">
+                  <div className="w-1 h-8 bg-muted-foreground/30"></div>
+                </div>
+
+                <Link
+                  href={`/${locale}/booth-committee`}
+                  className="block py-4 bg-orange-50 dark:bg-orange-900/30 rounded-lg border-2 border-orange-600 text-center hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors"
+                >
+                  <h4 className="font-bold text-orange-600 dark:text-orange-400">
+                    {locale === 'hi' ? 'बूथ स्तर समिति' : 'Booth Level Committee'}
+                  </h4>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {locale === 'hi' ? 'प्रत्येक मतदान केंद्र पर 1–15 सदस्य' : '1–15 members at every polling booth'}
+                  </p>
+                </Link>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout, X } from 'lucide-react';
+import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout, X, Vote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import NewsCard from '@/components/NewsCard';
@@ -664,6 +664,29 @@ export default function HomePage() {
                     </Button>
                   </Link>
                 </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-orange-500 to-orange-700 rounded-3xl p-8 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group">
+                <Vote className="absolute -right-6 -bottom-6 h-40 w-40 text-white/10 group-hover:scale-110 transition-transform duration-700" />
+                <div className="relative z-10 max-w-2xl">
+                  <div className="inline-block px-3 py-1 bg-white/20 text-[10px] font-bold tracking-widest uppercase rounded-full mb-3">
+                    {locale === 'hi' ? 'जमीनी स्तर' : 'Grassroots Level'}
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">
+                    {locale === 'hi' ? 'बूथ स्तर समिति' : 'Booth Level Committee'}
+                  </h3>
+                  <p className="text-orange-100 leading-relaxed">
+                    {locale === 'hi'
+                      ? 'राज्य → विधानसभा → बूथ → समिति सदस्य। भारत के 4,000+ विधानसभा क्षेत्रों में बूथ स्तर पर संगठन।'
+                      : 'State → Assembly → Booth → Committee members. Organizing at 4,000+ assembly constituencies across India.'}
+                  </p>
+                </div>
+                <Link href={`/${locale}/booth-committee`} className="relative z-10 shrink-0">
+                  <Button className="bg-white text-orange-700 hover:bg-orange-50 font-bold px-8 h-12">
+                    {locale === 'hi' ? 'बूथ समिति खोलें' : 'Open Booth Console'}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Users, Send, Globe, MapPin, Building2, Target, ChevronDown } from 'lucide-react';
+import { Users, Send, Globe, MapPin, Building2, Target, ChevronDown, Vote } from 'lucide-react';
 import { useState } from 'react';
 
 export default function AdminDashboard() {
@@ -10,6 +10,7 @@ export default function AdminDashboard() {
     'National Level': true,
     'State Level': true,
     'District Level': true,
+    'Booth Level': true,
     'Communications': true
   });
 
@@ -63,6 +64,14 @@ export default function AdminDashboard() {
       category: 'District Level'
     },
     {
+      href: '/admin/booth-committee',
+      title: 'Booth Level Committee',
+      description: 'Manage legislative assemblies, booths, and booth committee members.',
+      icon: Vote,
+      color: 'orange',
+      category: 'Booth Level'
+    },
+    {
       href: '/admin/emailing',
       title: 'Email Center',
       description: 'Send targeted emails to members and committees.',
@@ -78,10 +87,11 @@ export default function AdminDashboard() {
     orange: { bg: 'bg-orange-50', icon: 'bg-orange-100 text-orange-600', hover: 'hover:text-orange-600' },
     green: { bg: 'bg-green-50', icon: 'bg-green-100 text-green-600', hover: 'hover:text-green-600' },
     cyan: { bg: 'bg-cyan-50', icon: 'bg-cyan-100 text-cyan-600', hover: 'hover:text-cyan-600' },
+    orange: { bg: 'bg-orange-50', icon: 'bg-orange-100 text-orange-600', hover: 'hover:text-orange-600' },
     red: { bg: 'bg-red-50', icon: 'bg-red-100 text-red-600', hover: 'hover:text-red-600' }
   };
 
-  const categories = ['National Level', 'State Level', 'District Level', 'Communications'];
+  const categories = ['National Level', 'State Level', 'District Level', 'Booth Level', 'Communications'];
 
   return (
     <div>
@@ -106,7 +116,7 @@ export default function AdminDashboard() {
 
         {expandedCategories['Members'] && (
           <div className="space-y-8 ml-2">
-            {['National Level', 'State Level', 'District Level'].map((category) => {
+            {['National Level', 'State Level', 'District Level', 'Booth Level'].map((category) => {
               const categoryItems = navigationItems.filter(item => item.category === category);
               if (categoryItems.length === 0) return null;
 

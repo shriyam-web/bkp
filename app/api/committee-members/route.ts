@@ -9,11 +9,15 @@ export async function GET(request: Request) {
     const type = searchParams.get('type');
     const state = searchParams.get('state');
     const district = searchParams.get('district');
+    const constituency = searchParams.get('constituency');
+    const booth = searchParams.get('booth');
     
     const query: any = {};
     if (type) query.type = type;
     if (state) query.state = state;
     if (district) query.district = district;
+    if (constituency) query.constituency = constituency;
+    if (booth) query.booth = booth;
     
     const members = await CommitteeMember.find(query).sort({ order: 1, createdAt: -1 });
     

@@ -8,7 +8,7 @@ const CldUploadWidget = dynamic(() => import('next-cloudinary').then(mod => mod.
 
 interface MemberFormProps {
   initialData?: any;
-  type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT';
+  type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT' | 'BOOTH';
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -40,6 +40,8 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
     image: '',
     state: '',
     district: '',
+    constituency: '',
+    booth: '',
     type: type,
     order: 0,
     mobileNumber: '',
@@ -54,6 +56,8 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [assemblies, setAssemblies] = useState<{ _id: string; name: { en: string }; constituencyNumber?: number }[]>([]);
+  const [assembliesLoading, setAssembliesLoading] = useState(false);
 
   useEffect(() => {
     if (initialData) {
@@ -61,6 +65,8 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
         ...initialData,
         state: initialData.state || '',
         district: initialData.district || '',
+        constituency: initialData.constituency || '',
+        booth: initialData.booth || '',
         mobileNumber: initialData.mobileNumber || '',
         email: initialData.email || '',
         address: initialData.address || {
@@ -73,6 +79,28 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
       });
     }
   }, [initialData]);
+
+  useEffect(() => {
+    if (type !== 'BOOTH' || !formData.state) {
+      setAssemblies([]);
+      return;
+    }
+    const fetchAssemblies = async () => {
+      setAssembliesLoading(true);
+      try {
+        const res = await fetch(
+          `/api/legislative-assemblies?state=${encodeURIComponent(formData.state)}`
+        );
+        const data = await res.json();
+        setAssemblies(data.success ? data.data : []);
+      } catch {
+        setAssemblies([]);
+      } finally {
+        setAssembliesLoading(false);
+      }
+    };
+    fetchAssemblies();
+  }, [type, formData.state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,13 +206,19 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
             </div>
           </div>
 
-          {(type === 'STATE' || type === 'DISTRICT') && (
+          {(type === 'STATE' || type === 'DISTRICT' || type === 'BOOTH') && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
                 <select
                   value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      state: e.target.value,
+                      constituency: type === 'BOOTH' ? '' : formData.constituency,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   required
                 >
@@ -207,6 +241,44 @@ export default function MemberForm({ initialData, type, onClose, onSuccess }: Me
                     required
                   />
                 </div>
+              )}
+
+              {type === 'BOOTH' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Legislative Assembly
+                    </label>
+                    <select
+                      value={formData.constituency}
+                      onChange={(e) => setFormData({ ...formData, constituency: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      required
+                      disabled={!formData.state || assembliesLoading}
+                    >
+                      <option value="">
+                        {assembliesLoading ? 'Loading assemblies...' : 'Select Assembly'}
+                      </option>
+                      {assemblies.map((a) => (
+                        <option key={a._id} value={a.name.en}>
+                          {a.constituencyNumber ? `#${a.constituencyNumber} - ` : ''}
+                          {a.name.en}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Booth</label>
+                    <input
+                      type="text"
+                      value={formData.booth}
+                      onChange={(e) => setFormData({ ...formData, booth: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      placeholder="e.g. Booth 142"
+                      required
+                    />
+                  </div>
+                </>
               )}
             </div>
           )}

@@ -5,7 +5,7 @@ import { Plus, Pencil, Trash2, Search } from 'lucide-react';
 import MemberForm from './MemberForm';
 
 interface MemberListProps {
-  type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT';
+  type: 'NATIONAL' | 'STATE' | 'RASHTRIYA_PARISHAD' | 'RASHTRIYA_KAARYASAMITI' | 'DISTRICT' | 'BOOTH';
   title: string;
 }
 
@@ -53,8 +53,13 @@ export default function MemberList({ type, title }: MemberListProps) {
     member.name.hi.includes(search) ||
     member.position.en.toLowerCase().includes(search.toLowerCase()) ||
     (member.state && member.state.toLowerCase().includes(search.toLowerCase())) ||
-    (member.district && member.district.toLowerCase().includes(search.toLowerCase()))
+    (member.district && member.district.toLowerCase().includes(search.toLowerCase())) ||
+    (member.constituency && member.constituency.toLowerCase().includes(search.toLowerCase())) ||
+    (member.booth && member.booth.toLowerCase().includes(search.toLowerCase()))
   );
+
+  const colSpan =
+    type === 'BOOTH' ? 8 : type === 'DISTRICT' ? 6 : type === 'STATE' ? 5 : 4;
 
   return (
     <div>
@@ -92,8 +97,12 @@ export default function MemberList({ type, title }: MemberListProps) {
               <tr>
                 <th className="px-6 py-4">Name</th>
                 <th className="px-6 py-4">Position</th>
-                {(type === 'STATE' || type === 'DISTRICT') && <th className="px-6 py-4">State</th>}
+                {(type === 'STATE' || type === 'DISTRICT' || type === 'BOOTH') && (
+                  <th className="px-6 py-4">State</th>
+                )}
                 {type === 'DISTRICT' && <th className="px-6 py-4">District</th>}
+                {type === 'BOOTH' && <th className="px-6 py-4">Assembly</th>}
+                {type === 'BOOTH' && <th className="px-6 py-4">Booth</th>}
                 <th className="px-6 py-4">Order</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -101,13 +110,13 @@ export default function MemberList({ type, title }: MemberListProps) {
             <tbody className="divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={type === 'DISTRICT' ? 6 : (type === 'STATE' ? 5 : 4)} className="px-6 py-8 text-center">
+                  <td colSpan={colSpan} className="px-6 py-8 text-center">
                     Loading...
                   </td>
                 </tr>
               ) : filteredMembers.length === 0 ? (
                 <tr>
-                  <td colSpan={type === 'DISTRICT' ? 6 : (type === 'STATE' ? 5 : 4)} className="px-6 py-8 text-center">
+                  <td colSpan={colSpan} className="px-6 py-8 text-center">
                     No members found.
                   </td>
                 </tr>
@@ -122,7 +131,7 @@ export default function MemberList({ type, title }: MemberListProps) {
                       <div>{member.position.en}</div>
                       <div className="text-xs text-gray-500">{member.position.hi}</div>
                     </td>
-                    {(type === 'STATE' || type === 'DISTRICT') && (
+                    {(type === 'STATE' || type === 'DISTRICT' || type === 'BOOTH') && (
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           {member.state}
@@ -133,6 +142,20 @@ export default function MemberList({ type, title }: MemberListProps) {
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                           {member.district}
+                        </span>
+                      </td>
+                    )}
+                    {type === 'BOOTH' && (
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                          {member.constituency}
+                        </span>
+                      </td>
+                    )}
+                    {type === 'BOOTH' && (
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          {member.booth}
                         </span>
                       </td>
                     )}
