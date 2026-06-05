@@ -87,7 +87,6 @@ export default function AdminDashboard() {
     orange: { bg: 'bg-orange-50', icon: 'bg-orange-100 text-orange-600', hover: 'hover:text-orange-600' },
     green: { bg: 'bg-green-50', icon: 'bg-green-100 text-green-600', hover: 'hover:text-green-600' },
     cyan: { bg: 'bg-cyan-50', icon: 'bg-cyan-100 text-cyan-600', hover: 'hover:text-cyan-600' },
-    orange: { bg: 'bg-orange-50', icon: 'bg-orange-100 text-orange-600', hover: 'hover:text-orange-600' },
     red: { bg: 'bg-red-50', icon: 'bg-red-100 text-red-600', hover: 'hover:text-red-600' }
   };
 

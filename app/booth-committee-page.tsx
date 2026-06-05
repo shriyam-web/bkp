@@ -540,7 +540,7 @@ export default function BoothCommitteePage() {
         <div className="divide-y divide-border/50 max-h-[280px] overflow-y-auto">
           {currentStep === 'state' &&
             scopedGlobalResults.states
-              .filter((s) => !filteredStates.includes(s))
+              .filter((s) => !(filteredStates as readonly string[]).includes(s))
               .map((state) => (
                 <button
                   key={`state-${state}`}
