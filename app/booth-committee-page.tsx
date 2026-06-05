@@ -621,25 +621,29 @@ export default function BoothCommitteePage() {
     <div className={cn(notoSans.className, 'min-h-screen bg-[#f8f9fa] dark:bg-background')}>
       <Header />
 
-      <div className="border-b border-border/60 bg-white dark:bg-card pt-24 sm:pt-28 sticky top-0 sm:top-[65px] z-40 shadow-sm shadow-black/[0.03]">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-8">
+      <div className="border-b border-border/60 bg-white dark:bg-card pt-24 sm:pt-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6 sm:pt-8 pb-5">
           <p className="text-[13px] font-normal text-muted-foreground mb-1">
             {isHi ? 'संगठन डायरेक्टरी' : 'Organization directory'}
           </p>
           <h1 className="text-xl sm:text-2xl font-medium text-foreground tracking-tight">
             {isHi ? 'बूथ स्तर समिति' : 'Booth Level Committee'}
           </h1>
+          <p className="text-[12px] font-light text-muted-foreground mt-2">
+            {isHi
+              ? 'राज्य, विधानसभा, बूथ और सदस्य — एक ही खोज से'
+              : 'Filter by state, assembly, booth, or member from one search'}
+          </p>
+        </div>
 
-          <div className="mt-5">
+        <div className="sticky top-16 sm:top-[65px] z-40 bg-white dark:bg-card border-y border-border/60 shadow-sm shadow-black/[0.03]">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3">
             <GlobalSearchBar />
-            <p className="text-[12px] font-light text-muted-foreground mt-2">
-              {isHi
-                ? 'राज्य, विधानसभा, बूथ और सदस्य — एक ही खोज से'
-                : 'Filter by state, assembly, booth, or member from one search'}
-            </p>
           </div>
+        </div>
 
-          <div className="mt-5 flex items-center gap-0 overflow-x-auto pb-1">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 pb-6 sm:pb-8 pt-5">
+          <div className="flex items-center gap-0 overflow-x-auto pb-1">
             {STEPS.map((step, index) => {
               const isActive = index === currentStepIndex;
               const isDone = index < currentStepIndex;
