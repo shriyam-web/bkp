@@ -10,6 +10,15 @@ const gallerySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    media_type: {
+      type: String,
+      enum: ['image', 'video', 'banner'],
+      default: 'image',
+    },
+    category: {
+      type: String,
+      default: 'general',
+    },
     order: {
       type: Number,
       required: true,

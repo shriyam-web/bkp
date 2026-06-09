@@ -2,18 +2,19 @@
 
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import PageIntro from '@/components/PageIntro';
 import { useTranslations } from '@/lib/TranslationContext';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 
 export default function ContactPage() {
-  const { t, locale } = useTranslations();
+  const { locale } = useTranslations();
+  const isHi = locale === 'hi';
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -36,208 +37,192 @@ export default function ContactPage() {
 
       if (!response.ok) throw new Error('Failed to submit');
 
-      toast.success(locale === 'hi' ? 'संदेश भेजा गया!' : 'Message sent successfully!', {
-        description: locale === 'hi' ? 'हम जल्द ही आपसे संपर्क करेंगे।' : 'We will get back to you soon.',
+      toast.success(isHi ? 'संदेश भेजा गया' : 'Message sent', {
+        description: isHi ? 'हम जल्द ही आपसे संपर्क करेंगे।' : 'We will get back to you soon.',
       });
 
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-      });
-    } catch (error) {
-      toast.error(locale === 'hi' ? 'संदेश भेजने में विफल' : 'Failed to send message', {
-        description: locale === 'hi' ? 'कृपया बाद में फिर से प्रयास करें।' : 'Please try again later.',
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch {
+      toast.error(isHi ? 'भेजने में विफल' : 'Failed to send', {
+        description: isHi ? 'कृपया बाद में पुनः प्रयास करें।' : 'Please try again later.',
       });
     } finally {
       setLoading(false);
     }
   };
 
+  const contactItems = [
+    {
+      icon: MapPin,
+      label: isHi ? 'पता' : 'Address',
+      value: '141, Dhansua PO Central Jail Fatehgarh Farrukhabad, 209602, Uttar Pradesh, India',
+      href: undefined,
+    },
+    {
+      icon: Phone,
+      label: isHi ? 'फोन' : 'Phone',
+      value: '+91 7376264269',
+      href: 'tel:+917376264269',
+    },
+    {
+      icon: Mail,
+      label: isHi ? 'ईमेल' : 'Email',
+      value: 'bahujankrantipartyma@gmail.com',
+      href: 'mailto:bahujankrantipartyma@gmail.com',
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <Toaster />
       <Header />
 
-      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
-        </div>
+      <PageIntro
+        title={isHi ? 'संपर्क करें' : 'Contact Us'}
+        subtitle={isHi ? 'बहुजन क्रांति पार्टी' : 'Bahujan Kranti Party'}
+        description={
+          isHi
+            ? 'प्रश्न, सुझाव या सहयोग — हम आपकी बात सुनने के लिए उपलब्ध हैं।'
+            : 'Questions, suggestions, or collaboration — we are here to listen.'
+        }
+      />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
-              {locale === 'hi' ? 'संपर्क केंद्र' : 'CONTACT HUB'}
-            </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
-              {locale === 'hi' ? 'संपर्क करें' : 'Contact Us'} <br />
-              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
-                {locale === 'hi' ? 'हम आपकी सुन रहे हैं' : 'WE ARE LISTENING'}
-              </span>
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
-              {locale === 'hi'
-                ? 'हम आपकी चिंताओं को सुनने और आपके प्रश्नों का उत्तर देने के लिए यहां हैं'
-                : 'We\'re here to listen to your concerns and answer your questions'
-              }
-            </p>
-          </div>
-        </div>
-      </section>
+      <section className="py-12 sm:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14">
+            <div className="lg:col-span-2 space-y-6">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  {isHi ? 'संपर्क जानकारी' : 'Contact Information'}
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                  {isHi
+                    ? 'सीधे कॉल या ईमेल करें, या फॉर्म भरें।'
+                    : 'Call or email directly, or fill out the form.'}
+                </p>
+              </div>
 
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">
-                {locale === 'hi' ? 'संपर्क में रहें' : 'Get in Touch'}
-              </h2>
-              <p className="text-muted-foreground mb-8">
-                {locale === 'hi'
-                  ? 'प्रश्न हैं, सुझाव हैं, या शामिल होना चाहते हैं? हम आपकी सुनना पसंद करेंगे। फॉर्म भरें और हमारी टीम जल्दी से जल्दी जवाब देगी।'
-                  : 'Have questions, suggestions, or want to get involved? We\'d love to hear from you. Fill out the form and our team will respond as soon as possible.'
-                }
-              </p>
-
-              <div className="space-y-6">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
-                        <MapPin className="h-6 w-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'पता' : 'Address'}</h3>
-                        <p className="text-muted-foreground">
-                          141, Dhansua PO Central Jail Fatehgarh Farrukhabad, 209602, Uttar Pradesh, India
-                        </p>
-                      </div>
+              <div className="space-y-4">
+                {contactItems.map(({ icon: Icon, label, value, href }) => (
+                  <div key={label} className="flex gap-3">
+                    <div className="h-9 w-9 rounded border border-border flex items-center justify-center shrink-0">
+                      <Icon className="h-4 w-4 text-red-600" />
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
-                        <Phone className="h-6 w-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'फोन' : 'Phone'}</h3>
-                        <p className="text-muted-foreground">
-                          +91 7376264269
-                        </p>
-                      </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        {label}
+                      </p>
+                      {href ? (
+                        <a
+                          href={href}
+                          className="text-sm text-foreground hover:text-red-600 transition-colors break-all"
+                        >
+                          {value}
+                        </a>
+                      ) : (
+                        <p className="text-sm text-foreground leading-relaxed">{value}</p>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
-                        <Mail className="h-6 w-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg mb-1">{locale === 'hi' ? 'ईमेल' : 'Email'}</h3>
-                        <p className="text-muted-foreground">
-                          bahujankrantipartyma@gmail.com
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div>
-              <Card>
-                <CardContent className="pt-6">
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        {locale === 'hi' ? 'पूरा नाम *' : 'Full Name *'}
-                      </label>
-                      <Input
-                        id="name"
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder={locale === 'hi' ? 'आपका नाम' : 'Your name'}
-                      />
-                    </div>
+            <div className="lg:col-span-3">
+              <form
+                onSubmit={handleSubmit}
+                className="border border-border rounded-lg p-5 sm:p-6 bg-card space-y-4"
+              >
+                <h2 className="text-lg font-semibold text-foreground mb-2">
+                  {isHi ? 'संदेश भेजें' : 'Send a Message'}
+                </h2>
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
-                        {locale === 'hi' ? 'ईमेल पता *' : 'Email Address *'}
-                      </label>
-                      <Input
-                        id="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium mb-1.5">
+                      {isHi ? 'पूरा नाम' : 'Full Name'} *
+                    </label>
+                    <Input
+                      id="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder={isHi ? 'आपका नाम' : 'Your name'}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium mb-1.5">
+                      {isHi ? 'ईमेल' : 'Email'} *
+                    </label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
 
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                        {locale === 'hi' ? 'फोन नंबर' : 'Phone Number'}
-                      </label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+91 1234567890"
-                      />
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium mb-1.5">
+                      {isHi ? 'फोन' : 'Phone'}
+                    </label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+91"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="subject" className="block text-sm font-medium mb-1.5">
+                      {isHi ? 'विषय' : 'Subject'} *
+                    </label>
+                    <Input
+                      id="subject"
+                      type="text"
+                      required
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      placeholder={isHi ? 'विषय लिखें' : 'Subject'}
+                    />
+                  </div>
+                </div>
 
-                    <div>
-                      <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                        {locale === 'hi' ? 'विषय *' : 'Subject *'}
-                      </label>
-                      <Input
-                        id="subject"
-                        type="text"
-                        required
-                        value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        placeholder={locale === 'hi' ? 'यह किसके बारे में है?' : 'What is this regarding?'}
-                      />
-                    </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium mb-1.5">
+                    {isHi ? 'संदेश' : 'Message'} *
+                  </label>
+                  <Textarea
+                    id="message"
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder={isHi ? 'अपना संदेश लिखें...' : 'Write your message...'}
+                  />
+                </div>
 
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium mb-2">
-                        {locale === 'hi' ? 'संदेश *' : 'Message *'}
-                      </label>
-                      <Textarea
-                        id="message"
-                        required
-                        rows={5}
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder={locale === 'hi' ? 'आपका संदेश...' : 'Your message...'}
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700"
-                      disabled={loading}
-                    >
-                      {loading ? (locale === 'hi' ? 'भेज रहे हैं...' : 'Sending...') : (locale === 'hi' ? 'संदेश भेजें' : 'Send Message')}
-                      <Send className="ml-2 h-4 w-4" />
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+                <Button
+                  type="submit"
+                  className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
+                  disabled={loading}
+                >
+                  {loading
+                    ? isHi
+                      ? 'भेज रहे हैं...'
+                      : 'Sending...'
+                    : isHi
+                      ? 'संदेश भेजें'
+                      : 'Send Message'}
+                  <Send className="ml-2 h-4 w-4" />
+                </Button>
+              </form>
             </div>
           </div>
         </div>

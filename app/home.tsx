@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, HandHeart, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout, X, Vote } from 'lucide-react';
+import { ArrowRight, Heart, Users, Lightbulb, TrendingUp, BookOpen, Quote, Shield, Globe, Award, ChevronDown, Scale, MapPin, Flag, Briefcase, Building2, Sprout, X, Vote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import NewsCard from '@/components/NewsCard';
 import EventCard from '@/components/EventCard';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PoliticalCarousel from '@/components/PoliticalCarousel';
+import SectionHeading from '@/components/SectionHeading';
 import { useTranslations } from '@/lib/TranslationContext';
 
 interface News {
@@ -342,22 +342,21 @@ export default function HomePage() {
         <div className="absolute inset-0 z-0 h-full w-full">
           <PoliticalCarousel />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent z-5" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-transparent z-[1]" />
 
-        {/* Decorative Elements */}
         <div className="absolute top-20 right-[10%] w-64 h-64 bg-red-600/20 rounded-full blur-3xl animate-pulse z-0" />
         <div className="absolute bottom-20 right-[20%] w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-bounce duration-[10000ms] z-0" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-sm font-bold text-red-500 ring-1 ring-inset ring-white/20 mb-8 backdrop-blur-md animate-fade-in">
+            <div className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-sm font-bold text-red-500 ring-1 ring-inset ring-white/20 mb-8 backdrop-blur-md">
               <span className="flex h-3 w-3 rounded-full bg-red-600 mr-3 animate-ping" />
               {locale === 'hi' ? 'परिवर्तन की लहर' : 'A MOVEMENT FOR CHANGE'}
             </div>
 
             <h1 className="text-3xl font-black tracking-tight text-white sm:text-5xl mb-6 leading-tight drop-shadow-xl">
               {locale === 'hi' ? 'बहुजन क्रांति पार्टी' : 'BAHUJAN KRANTI'} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-600 animate-gradient-x italic">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-blue-600 italic">
                 {locale === 'hi' ? '(मार्क्सवाद-अंबेडकरवाद)' : 'PARTY (MARXWAAD-AMBEDKARWAAD)'}
               </span>
             </h1>
@@ -391,14 +390,12 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 animate-bounce flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
           <span className="text-[10px] font-black tracking-[0.2em] text-white uppercase">{locale === 'hi' ? 'नीचे देखें' : 'Scroll Down'}</span>
           <ChevronDown className="h-6 w-6 text-white" />
         </div>
       </section>
 
-      {/* Stats Section */}
       <section className="relative z-20 -mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
@@ -418,170 +415,151 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-b from-red-50 to-background dark:from-red-950/20 dark:to-background">
+      {/* Core values — numbered grid */}
+      <section className="py-16 border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
-              {t('home.values', 'Our Core Values')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {locale === 'hi' ? 'सिद्धांत जो हम राष्ट्र के लिए हर निर्णय में लागू करते हैं' : 'Principles that guide every decision we make for the nation'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <SectionHeading
+            title={t('home.values', 'Our Core Values')}
+            description={locale === 'hi' ? 'सिद्धांत जो हम राष्ट्र के लिए हर निर्णय में लागू करते हैं' : 'Principles that guide every decision we make for the nation'}
+            className="mb-10"
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border rounded-md overflow-hidden border border-border">
             {values.map((value, index) => (
-              <Card key={index} className="group border-none shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden bg-card">
-                <CardContent className="pt-8 pb-8 flex flex-col items-center text-center relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-950/30 text-red-600 mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
-                    <value.icon className="h-8 w-8" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-foreground">{value.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{value.description}</p>
-                </CardContent>
-              </Card>
+              <div key={index} className="bg-card p-6 sm:p-8 group hover:bg-muted/40 transition-colors">
+                <span className="text-3xl font-bold text-red-600/30 group-hover:text-red-600/60 transition-colors tabular-nums">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mt-3 text-lg font-semibold text-foreground">{value.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{value.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Ideology Section */}
-      <section className="py-20 bg-gray-900 text-white overflow-hidden relative">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-red-600 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold sm:text-4xl mb-4 bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent inline-block">
-              {locale === 'hi' ? 'हमारी वैचारिक बुनियाद' : 'Our Ideological Foundations'}
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              {locale === 'hi' ? 'डॉ. बी.आर. अंबेडकर और कार्ल मार्क्स की दूरदर्शी सोच से प्रेरित' : 'Guided by the visionary thinking of Dr. B.R. Ambedkar and Karl Marx'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/10 relative">
-              <Quote className="absolute top-8 right-8 h-12 w-12 text-white/10" />
-              <div className="flex items-center gap-4 mb-8">
-                <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-red-500">
-                  <img src="/ambedkar.jpg" alt="Dr. B.R. Ambedkar" className="h-full w-full object-cover" />
-                </div>
+      {/* Ideology — editorial quote panels */}
+      <section className="py-16 bg-[#0f172a] text-white border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            title={locale === 'hi' ? 'हमारी वैचारिक बुनियाद' : 'Our Ideological Foundations'}
+            description={locale === 'hi' ? 'डॉ. बी.आर. अंबेडकर और कार्ल मार्क्स की दूरदर्शी सोच से प्रेरित' : 'Guided by Dr. B.R. Ambedkar and Karl Marx'}
+            className="mb-10 [&_h2]:text-white [&_p]:text-slate-400"
+          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <blockquote className="border-l-4 border-red-600 pl-6 py-4">
+              <div className="flex items-center gap-4 mb-5">
+                <img src="/ambedkar.jpg" alt="Dr. B.R. Ambedkar" className="h-14 w-14 rounded-md object-cover" />
                 <div>
-                  <h3 className="text-xl font-bold">Dr. B.R. Ambedkar</h3>
-                  <p className="text-red-400 text-sm">{locale === 'hi' ? 'संविधान निर्माता' : 'Architect of Indian Constitution'}</p>
+                  <cite className="not-italic text-base font-semibold">Dr. B.R. Ambedkar</cite>
+                  <p className="text-sm text-slate-400">{locale === 'hi' ? 'संविधान निर्माता' : 'Architect of the Constitution'}</p>
                 </div>
               </div>
-              <p className="text-2xl font-medium leading-relaxed italic text-gray-200">
-                "{locale === 'hi' ? 'शिक्षित बनो, संगठित रहो, संघर्ष करो।' : 'Educate, Agitate, Organize.'}"
+              <p className="text-xl sm:text-2xl font-medium leading-snug text-slate-100">
+                &ldquo;{locale === 'hi' ? 'शिक्षित बनो, संगठित रहो, संघर्ष करो।' : 'Educate, Agitate, Organize.'}&rdquo;
               </p>
-            </div>
-
-            <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/10 relative">
-              <Quote className="absolute top-8 right-8 h-12 w-12 text-white/10" />
-              <div className="flex items-center gap-4 mb-8">
-                <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-blue-500 bg-gray-800 flex items-center justify-center">
-                  <Users className="h-8 w-8 text-blue-500" />
+            </blockquote>
+            <blockquote className="border-l-4 border-[#FACC15] pl-6 py-4">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="h-14 w-14 rounded-md bg-slate-800 flex items-center justify-center">
+                  <Quote className="h-6 w-6 text-[#FACC15]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">Karl Marx</h3>
-                  <p className="text-blue-400 text-sm">{locale === 'hi' ? 'दार्शनिक और अर्थशास्त्री' : 'Philosopher & Economist'}</p>
+                  <cite className="not-italic text-base font-semibold">Karl Marx</cite>
+                  <p className="text-sm text-slate-400">{locale === 'hi' ? 'दार्शनिक और अर्थशास्त्री' : 'Philosopher & Economist'}</p>
                 </div>
               </div>
-              <p className="text-2xl font-medium leading-relaxed italic text-gray-200">
-                "{locale === 'hi' ? 'दुनिया के मजदूरों एक हो जाओ, तुम्हारे पास खोने के लिए कुछ नहीं है सिवाय अपनी बेड़ियों के।' : 'Workers of the world unite; you have nothing to lose but your chains.'}"
+              <p className="text-xl sm:text-2xl font-medium leading-snug text-slate-100">
+                &ldquo;{locale === 'hi' ? 'दुनिया के मजदूरों एक हो जाओ — तुम्हारे पास खोने के लिए कुछ नहीं है सिवाय अपनी बेड़ियों के।' : 'Workers of the world unite; you have nothing to lose but your chains.'}&rdquo;
               </p>
-            </div>
+            </blockquote>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-background">
+      {/* Initiatives — bento grid */}
+      <section className="py-16 border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
-              {locale === 'hi' ? 'मुख्य पहल' : 'Key Initiatives'}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {locale === 'hi' ? 'प्रत्येक भारतीय को उन्नत करने के लिए डिजाइन किए गए परिवर्तनकारी कार्यक्रम' : 'Transformative programs designed to uplift every Indian'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <SectionHeading
+            title={locale === 'hi' ? 'मुख्य पहल' : 'Key Initiatives'}
+            description={locale === 'hi' ? 'प्रत्येक भारतीय को उन्नत करने के लिए परिवर्तनकारी कार्यक्रम' : 'Transformative programs designed to uplift every Indian'}
+            className="mb-10"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {initiatives.map((initiative, index) => (
-              <div
+              <button
                 key={index}
-                className="group relative overflow-hidden rounded-2xl bg-card p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-border"
+                type="button"
+                onClick={() => setSelectedTopic({
+                  title: initiative.title,
+                  description: initiative.description,
+                  points: initiative.points,
+                  color: initiative.color,
+                  icon: initiative.icon,
+                })}
+                className={`group text-left border border-border rounded-md p-6 bg-card hover:border-red-600/50 hover:bg-muted/30 transition-colors ${
+                  index === 0 ? 'md:col-span-2 lg:col-span-2' : ''
+                }`}
               >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${initiative.color} opacity-0 group-hover:opacity-10 rounded-bl-full transition-opacity duration-500`} />
-                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${initiative.color} mb-6 shadow-lg shadow-gray-200 dark:shadow-none group-hover:scale-110 transition-transform duration-300`}>
-                  <initiative.icon className="h-8 w-8 text-white" />
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-red-600/10 text-red-600">
+                    <initiative.icon className="h-5 w-5" />
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-foreground">{initiative.title}</h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">{initiative.description}</p>
-                <button 
-                  onClick={() => setSelectedTopic({
-                    title: initiative.title,
-                    description: initiative.description,
-                    points: initiative.points,
-                    color: initiative.color,
-                    icon: initiative.icon
-                  })}
-                  className="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 transition-colors group-hover:translate-x-2 transition-transform duration-300"
-                >
-                  {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
-              </div>
+                <h3 className={`mt-4 font-semibold text-foreground ${index === 0 ? 'text-xl' : 'text-base'}`}>
+                  {initiative.title}
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                  {initiative.description}
+                </p>
+              </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Vision for Bharat Section */}
-      <section className="py-20 bg-muted/30">
+      {/* Manifesto preview */}
+      <section className="py-16 bg-muted/20 border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground sm:text-5xl mb-6">
-              {locale === 'hi' ? 'भारत के लिए हमारा संकल्प' : 'Our Commitment to Bharat'}
-            </h2>
-            <div className="w-24 h-1.5 bg-red-600 mx-auto rounded-full mb-6" />
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-medium">
-              {locale === 'hi'
-                ? 'बहुजन क्रांति पार्टी के घोषणा पत्र के मुख्य स्तंभ जो एक सशक्त और समृद्ध राष्ट्र की नींव रखते हैं।'
-                : 'The core pillars of Bahujan Kranti Party\'s manifesto that lay the foundation for a strong and prosperous nation.'}
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+            <SectionHeading
+              title={locale === 'hi' ? 'भारत के लिए हमारा संकल्प' : 'Our Commitment to Bharat'}
+              description={locale === 'hi'
+                ? 'घोषणा पत्र के मुख्य स्तंभ — एक सशक्त राष्ट्र की नींव'
+                : 'Core pillars of our manifesto for a strong and prosperous nation'}
+            />
+            <Link href={`/${locale}/manifesto`}>
+              <Button variant="outline" size="sm" className="shrink-0">
+                {locale === 'hi' ? 'पूरा घोषणापत्र' : 'Full Manifesto'}
+                <ArrowRight className="ml-2 h-3.5 w-3.5" />
+              </Button>
+            </Link>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="divide-y divide-border border border-border rounded-md overflow-hidden bg-card">
             {manifestoItems.map((item, index) => (
-              <div key={index} className="bg-card rounded-3xl p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-border group">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <item.icon className="h-8 w-8" />
+              <button
+                key={index}
+                type="button"
+                onClick={() => setSelectedTopic({
+                  title: item.title,
+                  description: item.description,
+                  points: item.points,
+                  color: item.color,
+                  icon: item.icon,
+                })}
+                className="w-full flex items-start gap-4 p-5 sm:p-6 text-left hover:bg-muted/40 transition-colors group"
+              >
+                <span className="text-sm font-bold text-red-600 tabular-nums w-6 shrink-0 pt-0.5">
+                  {index + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-foreground group-hover:text-red-600 transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                 </div>
-                <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-red-600 transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed font-medium mb-6">
-                  {item.description}
-                </p>
-                <button 
-                  onClick={() => setSelectedTopic({
-                    title: item.title,
-                    description: item.description,
-                    points: item.points,
-                    color: item.color,
-                    icon: item.icon
-                  })}
-                  className="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 transition-colors group-hover:translate-x-2 transition-transform duration-300"
-                >
-                  {locale === 'hi' ? 'विवरण देखें' : 'Learn More'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
-              </div>
+                <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </button>
             ))}
           </div>
         </div>
@@ -607,7 +585,6 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* President Card - Featured */}
             <div className="lg:col-span-1 bg-card rounded-3xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 group">
               <div className="aspect-[4/5] relative overflow-hidden">
                 <img src="/president.jpg" alt="National President" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -621,7 +598,7 @@ export default function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-muted-foreground italic mb-6">
-                  "{locale === 'hi' ? 'हमारा मिशन हर नागरिक को सशक्त बनाना और सामाजिक न्याय सुनिश्चित करना है।' : 'Our mission is to empower every citizen and ensure social justice.'}"
+                  &ldquo;{locale === 'hi' ? 'हमारा मिशन हर नागरिक को सशक्त बनाना और सामाजिक न्याय सुनिश्चित करना है।' : 'Our mission is to empower every citizen and ensure social justice.'}&rdquo;
                 </p>
                 <Link href={`/${locale}/leadership?memberId=president`}>
                   <Button variant="ghost" className="w-full justify-between hover:bg-red-50 dark:hover:bg-accent hover:text-red-600 group/btn">
@@ -632,7 +609,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Other Leaders / Cards placeholder */}
             <div className="flex flex-col gap-8 lg:col-span-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
                 <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 text-white flex flex-col justify-between h-full relative overflow-hidden group">
@@ -694,26 +670,21 @@ export default function HomePage() {
       </section>
 
       {news.length > 0 && (
-        <section className="py-16 bg-muted/30">
+        <section className="py-16 border-b border-border">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-end mb-12">
-              <div>
-                <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
-                  {t('news.title', 'Latest News')}
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                  {locale === 'hi' ? 'हमारी हाल की गतिविधियों और घोषणाओं के साथ अपडेट रहें' : 'Stay updated with our recent activities and announcements'}
-                </p>
-              </div>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+              <SectionHeading
+                title={t('news.title', 'Latest News')}
+                description={locale === 'hi' ? 'हाल की गतिविधियों और घोषणाओं के साथ अपडेट रहें' : 'Stay updated with recent activities and announcements'}
+              />
               <Link href={`/${locale}/news`}>
-                <Button variant="outline" className="hidden sm:flex">
-                  {locale === 'hi' ? 'सभी समाचार देखें' : 'View All News'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="shrink-0 hidden sm:flex">
+                  {locale === 'hi' ? 'सभी समाचार' : 'View All News'}
+                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>
-
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {news.map((item) => (
                 <NewsCard key={item._id} id={item._id} {...item} />
               ))}
@@ -723,26 +694,21 @@ export default function HomePage() {
       )}
 
       {events.length > 0 && (
-        <section className="py-16 bg-background">
+        <section className="py-16 border-b border-border">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-end mb-12">
-              <div>
-                <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
-                  {t('events.title', 'Upcoming Events')}
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                  {locale === 'hi' ? 'हमारे कार्यक्रमों में शामिल हों और परिवर्तन का हिस्सा बनें' : 'Join us at our events and be part of the change'}
-                </p>
-              </div>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+              <SectionHeading
+                title={t('events.title', 'Upcoming Events')}
+                description={locale === 'hi' ? 'कार्यक्रमों में शामिल हों और परिवर्तन का हिस्सा बनें' : 'Join our events and be part of the change'}
+              />
               <Link href={`/${locale}/events`}>
-                <Button variant="outline" className="hidden sm:flex">
-                  {locale === 'hi' ? 'सभी कार्यक्रम देखें' : 'View All Events'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="shrink-0 hidden sm:flex">
+                  {locale === 'hi' ? 'सभी कार्यक्रम' : 'View All Events'}
+                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>
-
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => (
                 <EventCard key={event._id} {...event} />
               ))}
@@ -751,102 +717,77 @@ export default function HomePage() {
         </section>
       )}
 
-      <section className="py-24 bg-gradient-to-br from-red-700 via-red-600 to-blue-700 text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
-        </div>
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {/* Newsletter + join CTA */}
+      <section className="py-16 bg-[#0f172a] text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <div>
-              <h2 className="text-4xl font-extrabold sm:text-5xl mb-6 leading-tight">
-                {locale === 'hi' ? 'परिवर्तन का हिस्सा बनें' : 'Be the Change You Want to See'}
-              </h2>
-              <p className="text-xl mb-8 text-white/90 leading-relaxed max-w-xl">
-                {locale === 'hi'
-                  ? 'हमारे न्यूज़लेटर की सदस्यता लें और हमारी गतिविधियों, आगामी कार्यक्रमों और हमारे मिशन में आप कैसे योगदान कर सकते हैं, इसके बारे में नियमित अपडेट प्राप्त करें।'
-                  : 'Subscribe to our newsletter and receive regular updates about our activities, upcoming events, and how you can contribute to our mission.'}
+              <p className="text-sm font-semibold uppercase tracking-wide text-[#FACC15] mb-3">
+                {locale === 'hi' ? 'जुड़ें' : 'Stay Connected'}
               </p>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-sm font-medium">{locale === 'hi' ? 'हमारे बढ़ते समुदाय में शामिल हों' : 'Join our growing community'}</span>
-                </div>
+              <h2 className="text-2xl font-bold sm:text-3xl leading-tight mb-4">
+                {locale === 'hi' ? 'परिवर्तन का हिस्सा बनें' : 'Be Part of the Change'}
+              </h2>
+              <p className="text-slate-400 leading-relaxed mb-6">
+                {locale === 'hi'
+                  ? 'न्यूज़लेटर की सदस्यता लें — गतिविधियों, कार्यक्रमों और मिशन में योगदान के तरीकों के बारे में अपडेट पाएं।'
+                  : 'Subscribe for updates on activities, events, and ways to contribute to our mission.'}
+              </p>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <Link href={`/${locale}/join`} className="text-[#FACC15] hover:underline font-medium">
+                  {t('join.title', 'Become a Member')} →
+                </Link>
+                <Link href={`/${locale}/contact`} className="text-slate-400 hover:text-white transition-colors">
+                  {t('contact.title', 'Get in Touch')} →
+                </Link>
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl">
+            <div className="border border-slate-700 rounded-md p-6 sm:p-8 bg-slate-900/50">
               {subscribed ? (
-                <div className="text-center py-8 animate-fade-in">
-                  <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20 text-green-400 mb-6">
-                    <Award className="h-10 w-10" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">
+                <div className="text-center py-4">
+                  <Award className="h-10 w-10 text-[#FACC15] mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">
                     {locale === 'hi' ? 'सदस्यता सफल!' : 'Subscribed Successfully!'}
                   </h3>
-                  <p className="text-white/70">
-                    {locale === 'hi' 
-                      ? 'धन्यवाद! अब आप हमारे न्यूज़लेटर के लिए नामांकित हैं।' 
-                      : 'Thank you for joining! You are now enrolled in our newsletter.'}
+                  <p className="text-sm text-slate-400">
+                    {locale === 'hi' ? 'धन्यवाद! आप न्यूज़लेटर के लिए नामांकित हैं।' : 'Thank you! You are enrolled in our newsletter.'}
                   </p>
-                  <Button 
-                    variant="link" 
-                    className="mt-6 text-white/50 hover:text-white"
+                  <button
+                    type="button"
+                    className="mt-4 text-sm text-slate-500 hover:text-white"
                     onClick={() => setSubscribed(false)}
                   >
                     {locale === 'hi' ? 'एक और ईमेल जोड़ें' : 'Add another email'}
-                  </Button>
+                  </button>
                 </div>
               ) : (
-                <form className="space-y-4" onSubmit={handleSubscribe}>
-                  <div>
-                    <label htmlFor="email-address" className="sr-only">Email address</label>
-                    <input
-                      id="email-address"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      className="w-full rounded-2xl border-0 bg-white px-6 py-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-500 text-lg disabled:opacity-50"
-                      placeholder={locale === 'hi' ? 'अपना ईमेल दर्ज करें' : 'Enter your email'}
-                      disabled={submitting}
-                    />
-                  </div>
-                  <Button 
+                <form className="space-y-3" onSubmit={handleSubscribe}>
+                  <label htmlFor="email-address" className="sr-only">Email address</label>
+                  <input
+                    id="email-address"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className="w-full rounded-md border border-slate-600 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-red-600 disabled:opacity-50"
+                    placeholder={locale === 'hi' ? 'अपना ईमेल दर्ज करें' : 'Enter your email'}
+                    disabled={submitting}
+                  />
+                  <Button
                     type="submit"
-                    size="lg" 
-                    className="w-full bg-red-600 hover:bg-red-700 text-white h-14 rounded-2xl text-lg font-bold transition-all shadow-lg shadow-red-900/20 disabled:opacity-70"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white h-11 rounded-md disabled:opacity-70"
                     disabled={submitting}
                   >
-                    {submitting ? (
-                      <span className="flex items-center gap-2">
-                        <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        {locale === 'hi' ? 'प्रक्रिया जारी है...' : 'Processing...'}
-                      </span>
-                    ) : (
-                      locale === 'hi' ? 'अभी सदस्यता लें' : 'Subscribe Now'
-                    )}
+                    {submitting
+                      ? (locale === 'hi' ? 'प्रक्रिया जारी है...' : 'Processing...')
+                      : (locale === 'hi' ? 'सदस्यता लें' : 'Subscribe')}
                   </Button>
-                  <p className="text-xs text-center text-white/60">
-                    {locale === 'hi'
-                      ? 'हम आपकी गोपनीयता का सम्मान करते हैं। कभी भी अनसब्सक्राइब करें।'
-                      : 'We respect your privacy. Unsubscribe at any time.'}
+                  <p className="text-xs text-center text-slate-500">
+                    {locale === 'hi' ? 'कभी भी अनसब्सक्राइब करें।' : 'Unsubscribe at any time.'}
                   </p>
                 </form>
               )}
-
-              <div className="mt-8 pt-8 border-t border-white/10 flex justify-center gap-6">
-                <Link href={`/${locale}/join`}>
-                  <Button variant="link" className="text-white hover:text-red-300 p-0 h-auto font-bold underline decoration-2 underline-offset-4">
-                    {t('join.title', 'Become a Member')}
-                  </Button>
-                </Link>
-                <Link href={`/${locale}/contact`}>
-                  <Button variant="link" className="text-white hover:text-red-300 p-0 h-auto font-bold underline decoration-2 underline-offset-4">
-                    {t('contact.title', 'Get in Touch')}
-                  </Button>
-                </Link>
-              </div>
             </div>
           </div>
         </div>
@@ -854,64 +795,57 @@ export default function HomePage() {
 
       <Footer />
       
-      {/* Detailed Info Modal */}
       {selectedTopic && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 transition-all animate-in fade-in duration-300">
-          <div 
-            className="bg-card rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 relative border border-border"
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4"
+          onClick={() => setSelectedTopic(null)}
+        >
+          <div
+            className="bg-card rounded-md w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-border relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`h-2 w-full bg-gradient-to-r ${selectedTopic.color}`} />
-            <button 
+            <div className="h-1 bg-red-600" />
+            <button
               onClick={() => setSelectedTopic(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground transition-colors z-10"
+              className="absolute top-3 right-3 p-1.5 rounded-md hover:bg-muted text-muted-foreground"
+              aria-label="Close"
             >
               <X className="h-5 w-5" />
             </button>
-            
-            <div className="p-8 md:p-10">
-              <div className="flex items-center gap-6 mb-8">
-                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${selectedTopic.color} shadow-lg text-white`}>
-                  <selectedTopic.icon className="h-8 w-8" />
+
+            <div className="p-6 sm:p-8">
+              <div className="flex items-start gap-4 mb-6 pr-8">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-red-600/10 text-red-600">
+                  <selectedTopic.icon className="h-5 w-5" />
                 </div>
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-foreground">{selectedTopic.title}</h3>
-                </div>
+                <h3 className="text-xl font-bold text-foreground">{selectedTopic.title}</h3>
               </div>
-              
-              <div className="space-y-6">
-                <p className="text-lg text-muted-foreground leading-relaxed font-medium">
-                  {selectedTopic.description}
-                </p>
-                
-                <div className="bg-muted rounded-2xl p-6 md:p-8 border border-border">
-                  <h4 className="text-sm font-bold tracking-widest text-muted-foreground uppercase mb-4">
-                    {locale === 'hi' ? 'मुख्य बिंदु' : 'KEY HIGHLIGHTS'}
-                  </h4>
-                  <ul className="space-y-4">
-                    {selectedTopic.points.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-4">
-                        <div className={`h-6 w-6 rounded-full bg-gradient-to-br ${selectedTopic.color} flex-shrink-0 flex items-center justify-center mt-0.5`}>
-                          <div className="h-1.5 w-1.5 rounded-full bg-white" />
-                        </div>
-                        <span className="text-foreground font-medium leading-relaxed">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="pt-4 flex justify-end">
-                  <Button 
-                    onClick={() => setSelectedTopic(null)}
-                    className={`bg-gradient-to-r ${selectedTopic.color} text-white px-8 h-12 rounded-full font-bold shadow-lg hover:scale-105 transition-transform`}
-                  >
-                    {locale === 'hi' ? 'ठीक है' : 'Got it'}
-                  </Button>
-                </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                {selectedTopic.description}
+              </p>
+
+              <div className="border border-border rounded-md p-5 bg-muted/30">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                  {locale === 'hi' ? 'मुख्य बिंदु' : 'Key Highlights'}
+                </h4>
+                <ul className="space-y-3">
+                  {selectedTopic.points.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm">
+                      <span className="text-red-600 font-bold shrink-0">{idx + 1}.</span>
+                      <span className="text-foreground leading-relaxed">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-6 flex justify-end">
+                <Button onClick={() => setSelectedTopic(null)} className="bg-red-600 hover:bg-red-700 text-white">
+                  {locale === 'hi' ? 'ठीक है' : 'Got it'}
+                </Button>
               </div>
             </div>
           </div>
-          <div className="absolute inset-0 z-[-1]" onClick={() => setSelectedTopic(null)} />
         </div>
       )}
     </div>

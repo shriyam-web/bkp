@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Users, CheckCircle2, Copy } from 'lucide-react';
+import { CheckCircle2, Copy, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import PageIntro from '@/components/PageIntro';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -171,214 +172,172 @@ export default function JoinPage() {
       <Toaster />
       <Header />
 
-      <section className="relative overflow-hidden bg-muted/30 pt-32 pb-20 border-b border-border">
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-red-500/5 rounded-full blur-[120px]" />
-          <div className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-blue-500/5 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center rounded-full bg-red-50 dark:bg-red-950/30 px-3 py-1 text-[10px] font-bold tracking-[0.2em] text-red-600 border border-red-100 dark:border-red-900/50 mb-6 uppercase">
-              {locale === 'hi' ? 'सदस्यता' : 'MEMBERSHIP'}
-            </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl mb-6 leading-tight">
-              {locale === 'hi' ? 'हमारे आंदोलन में शामिल हों' : 'Join Our Movement'} <br />
-              <span className="text-muted-foreground font-medium text-3xl sm:text-5xl">
-                {locale === 'hi' ? 'परिवर्तन का हिस्सा बनें' : 'BE THE CHANGE'}
-              </span>
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl font-normal leading-relaxed border-l-2 border-red-600/40 pl-6">
-              {locale === 'hi'
-                ? 'एक सदस्य बनें और सभी के लिए एक बेहतर भारत बनाने में हमारी मदद करें'
-                : 'Become a member and help us build a better India for all'
-              }
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageIntro
+        title={locale === 'hi' ? 'हमारे आंदोलन में शामिल हों' : 'Join Our Movement'}
+        subtitle={locale === 'hi' ? 'सदस्यता' : 'Membership'}
+        description={locale === 'hi'
+          ? 'एक सदस्य बनें और सभी के लिए एक बेहतर भारत बनाने में हमारी मदद करें। सदस्यता निःशुल्क है।'
+          : 'Become a member and help us build a better India for all. Membership is free.'}
+      />
 
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {showConfirmation ? (
-            <div className="max-w-2xl mx-auto" ref={confirmationRef} tabIndex={-1}>
-              <Card className="border-2 border-green-500 bg-card">
-                <CardContent className="pt-12 pb-12 text-center">
-                  <div className="flex justify-center mb-6">
-                    <div className="h-20 w-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="h-12 w-12 text-green-600" />
-                    </div>
-                  </div>
-                  <h2 className="text-3xl font-bold text-foreground mb-4">
-                    {locale === 'hi'
-                      ? 'बहुजन क्रांति पार्टी में स्वागत है!'
-                      : 'Welcome to Bahujan Kranti Party!'}
+            <div className="max-w-xl mx-auto" ref={confirmationRef} tabIndex={-1}>
+              <div className="border border-border rounded-md overflow-hidden bg-card">
+                <div className="h-1 bg-green-600" />
+                <div className="p-8 sm:p-10 text-center">
+                  <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto mb-5" />
+                  <h2 className="text-2xl font-bold text-foreground mb-2">
+                    {locale === 'hi' ? 'स्वागत है!' : 'Welcome!'}
                   </h2>
-                  <p className="text-lg text-muted-foreground mb-8">
+                  <p className="text-sm text-muted-foreground mb-8">
                     {locale === 'hi'
-                      ? 'आपने सफलतापूर्वक बहुजन क्रांति पार्टी की सदस्यता के लिए पंजीकृत किया गया है।'
+                      ? 'आपने सफलतापूर्वक बहुजन क्रांति पार्टी की सदस्यता के लिए पंजीकृत किया है।'
                       : 'You have successfully registered for Bahujan Kranti Party membership.'}
                   </p>
 
-                  <Card className="bg-muted border-2 border-border mb-8">
-                    <CardContent className="pt-6 pb-6">
-                      <p className="text-center text-foreground font-bold mb-4">
-                        {locale === 'hi'
-                          ? '⚠️ कृपया आपना सदस्य ID नोट कर लें ⚠️'
-                          : '⚠️ Please Note Down Your Member ID ⚠️'}
-                      </p>
-                      <p className="text-muted-foreground mb-3">
-                        {locale === 'hi' ? 'आपका सदस्य ID:' : 'Your Member ID:'}
-                      </p>
-                      <div className="flex items-center justify-center gap-3">
-                        <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 tracking-widest border-2 border-blue-600 dark:border-blue-400 px-4 py-2 rounded">
-                          {memberId}
-                        </p>
-                        <button
-                          onClick={copyMemberId}
-                          className="p-2 hover:bg-accent rounded-md transition-colors"
-                          title={locale === 'hi' ? 'कॉपी करें' : 'Copy'}
-                        >
-                          <Copy className="h-5 w-5 text-muted-foreground" />
-                        </button>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-4 mb-8">
-                    <p className="text-sm text-blue-900 dark:text-blue-400 font-semibold mb-2">
-                      {locale === 'hi' ? '⭐ महत्वपूर्ण:' : '⭐ Important:'}
+                  <div className="border border-border rounded-md p-6 bg-muted/30 mb-6">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-red-600 mb-3">
+                      {locale === 'hi' ? 'आपका सदस्य ID — सुरक्षित रखें' : 'Your Member ID — Save This'}
                     </p>
-                    <p className="text-sm text-blue-800 dark:text-blue-300">
-                      {locale === 'hi'
-                        ? 'कृपया अपने सदस्य ID को अपने नोटबुक में, मोबाइल में, या किसी सुरक्षित स्थान पर नोट कर लें। यह भविष्य के सभी संदर्भों के लिए आवश्यक होगा।'
-                        : 'Please save your member ID in your notebook, mobile, or any safe place. You will need it for all future references.'}
-                    </p>
+                    <div className="flex items-center justify-center gap-2">
+                      <p className="text-2xl sm:text-3xl font-bold text-foreground tracking-wider font-mono">
+                        {memberId}
+                      </p>
+                      <button
+                        onClick={copyMemberId}
+                        className="p-2 hover:bg-muted rounded-md transition-colors"
+                        title={locale === 'hi' ? 'कॉपी करें' : 'Copy'}
+                      >
+                        <Copy className="h-4 w-4 text-muted-foreground" />
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <Button
-                      onClick={resetToSelection}
-                      className="w-full bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700"
-                    >
+                  <p className="text-xs text-muted-foreground mb-8 text-left border-l-2 border-[#FACC15] pl-3">
+                    {locale === 'hi'
+                      ? 'इस ID को नोटबुक या मोबाइल में सुरक्षित रखें — भविष्य के सभी संदर्भों के लिए आवश्यक है।'
+                      : 'Save this ID somewhere safe — you will need it for all future references.'}
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button onClick={resetToSelection} className="flex-1 bg-red-600 hover:bg-red-700">
                       {locale === 'hi' ? 'किसी और को आमंत्रित करें' : 'Invite Someone Else'}
                     </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => window.print()}
-                    >
-                      {locale === 'hi' ? 'यह पृष्ठ प्रिंट करें' : 'Print This Page'}
+                    <Button variant="outline" className="flex-1" onClick={() => window.print()}>
+                      {locale === 'hi' ? 'प्रिंट करें' : 'Print'}
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           ) : !showForm ? (
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-foreground mb-4">
-                  {t('join.selectMembershipTitle')}
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                  {t('join.selectMembershipSubtitle')}
+            <div className="max-w-3xl mx-auto">
+              <div className="mb-8">
+                <p className="text-sm text-muted-foreground mb-1">
+                  {locale === 'hi' ? 'चरण 1 / 2' : 'Step 1 of 2'}
                 </p>
+                <h2 className="text-xl font-bold text-foreground">{t('join.selectMembershipTitle')}</h2>
+                <p className="mt-1 text-sm text-muted-foreground">{t('join.selectMembershipSubtitle')}</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Normal Membership */}
-                <Card className="flex flex-col h-full border-2 hover:border-blue-500 transition-colors cursor-pointer bg-card" onClick={() => handleSelectMembership('Normal Membership')}>
-                  <CardContent className="pt-8 flex-grow flex flex-col items-center text-center">
-                    <div className="h-16 w-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-6">
-                      <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4 text-foreground">{t('join.normalMembershipLabel')}</h3>
-                    <p className="text-muted-foreground mb-8 flex-grow">
-                      {t('join.normalMembershipDesc')}
-                    </p>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                      {t('join.selectButton')}
-                    </Button>
-                  </CardContent>
-                </Card>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleSelectMembership('Normal Membership')}
+                  className="group text-left border border-border rounded-md p-6 bg-card hover:border-red-600/50 hover:bg-muted/30 transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      {locale === 'hi' ? 'सामान्य' : 'Standard'}
+                    </span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-red-600 transition-colors" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{t('join.normalMembershipLabel')}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t('join.normalMembershipDesc')}</p>
+                </button>
 
-                {/* Active Membership */}
-                <Card className="flex flex-col h-full border-2 hover:border-red-500 transition-colors cursor-pointer bg-card" onClick={() => handleSelectMembership('Active Membership')}>
-                  <CardContent className="pt-8 flex-grow flex flex-col items-center text-center">
-                    <div className="h-16 w-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-6">
-                      <Users className="h-8 w-8 text-red-600 dark:text-red-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4 text-foreground">{t('join.activeMembershipLabel')}</h3>
-                    <p className="text-muted-foreground mb-8 flex-grow">
-                      {t('join.activeMembershipDesc')}
-                    </p>
-                    <Button className="w-full bg-red-600 hover:bg-red-700">
-                      {t('join.selectButton')}
-                    </Button>
-                  </CardContent>
-                </Card>
+                <button
+                  type="button"
+                  onClick={() => handleSelectMembership('Active Membership')}
+                  className="group text-left border-2 border-red-600/30 rounded-md p-6 bg-card hover:border-red-600 hover:bg-muted/30 transition-colors relative"
+                >
+                  <div className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-semibold uppercase text-red-600">
+                    <Sparkles className="h-3 w-3" />
+                    {locale === 'hi' ? 'अनुशंसित' : 'Recommended'}
+                  </div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-red-600">
+                      {locale === 'hi' ? 'सक्रिय' : 'Active'}
+                    </span>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-red-600 transition-colors" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{t('join.activeMembershipLabel')}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t('join.activeMembershipDesc')}</p>
+                </button>
               </div>
+
+              <p className="mt-6 text-center text-xs text-muted-foreground">
+                {locale === 'hi' ? 'कोई सदस्यता शुल्क नहीं · सभी के लिए खुला' : 'No membership fees · Open to all'}
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-              <div>
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
-                    <Users className="h-6 w-6 text-red-600 dark:text-red-400" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-foreground">
-                    {locale === 'hi' ? 'हमसे क्यों जुड़ें?' : 'Why Join Us?'}
-                  </h2>
-                </div>
-
-                <p className="text-muted-foreground mb-8">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
+              <div className="lg:col-span-2">
+                <p className="text-sm text-muted-foreground mb-1">
+                  {locale === 'hi' ? 'चरण 2 / 2' : 'Step 2 of 2'}
+                </p>
+                <h2 className="text-xl font-bold text-foreground mb-4">
+                  {locale === 'hi' ? 'हमसे क्यों जुड़ें?' : 'Why Join Us?'}
+                </h2>
+                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                   {locale === 'hi'
-                    ? 'बहुजन क्रांति पार्टी से जुड़कर, आप हमारे राष्ट्र में सकारात्मक परिवर्तन लाने के लिए समर्पित एक आंदोलन का हिस्सा बनते हैं। आपकी आवाज महत्वपूर्ण है, और एक साथ हम भारत के भविष्य को आकार दे सकते हैं।'
-                    : 'By joining Bahujan Kranti Party, you become part of a movement dedicated to creating positive change in our nation. Your voice matters, and together we can shape the future of India.'
-                  }
+                    ? 'बहुजन क्रांति पार्टी से जुड़कर, आप सकारात्मक परिवर्तन लाने के लिए समर्पित एक आंदोलन का हिस्सा बनते हैं।'
+                    : 'By joining Bahujan Kranti Party, you become part of a movement dedicated to creating positive change.'}
                 </p>
 
-                <div className="space-y-4 mb-8">
+                <ul className="space-y-3 mb-6">
                   {benefits.map((benefit, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                    <li key={index} className="flex items-start gap-2.5 text-sm">
+                      <span className="text-red-600 font-bold shrink-0">{index + 1}.</span>
                       <span className="text-muted-foreground">{benefit}</span>
-                    </div>
+                    </li>
                   ))}
+                </ul>
+
+                <div className="border border-border rounded-md p-4 bg-muted/30 mb-6">
+                  <p className="text-sm font-semibold text-foreground">
+                    {locale === 'hi' ? 'सदस्यता निःशुल्क' : 'Membership is Free'}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {locale === 'hi'
+                      ? 'कोई शुल्क नहीं — हर कोई भाग ले सकता है।'
+                      : 'No fees — everyone can participate.'}
+                  </p>
                 </div>
 
-                <Card className="bg-muted/50 border-border">
-                  <CardContent className="pt-6">
-                    <h3 className="text-lg font-semibold mb-2 text-foreground">{locale === 'hi' ? 'सदस्यता निःशुल्क है' : 'Membership is Free'}</h3>
-                    <p className="text-muted-foreground">
-                      {locale === 'hi'
-                        ? 'कोई सदस्यता शुल्क नहीं है। हम एक मजबूत, समावेशी आंदोलन बनाने में विश्वास करते हैं जहां हर कोई अपनी वित्तीय स्थिति की परवाह किए बिना भाग ले सके।'
-                        : 'There are no membership fees. We believe in building a strong, inclusive movement where everyone can participate regardless of their financial status.'
-                      }
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Button 
-                  variant="outline" 
-                  className="mt-8"
+                <button
+                  type="button"
                   onClick={() => setShowForm(false)}
+                  className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {locale === 'hi' ? '← सदस्यता प्रकार बदलें' : '← Change Membership Type'}
-                </Button>
+                  <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
+                  {locale === 'hi' ? 'सदस्यता प्रकार बदलें' : 'Change membership type'}
+                </button>
               </div>
 
-              <div>
+              <div className="lg:col-span-3">
                 {formData.membershipType === 'Active Membership' ? (
-                  <Card className="bg-card">
-                    <CardContent className="pt-6">
-                      <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-center mb-2 text-red-600 dark:text-red-400">
-                          {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
+                  <Card className="bg-card border border-border rounded-md overflow-hidden">
+                    <div className="h-1 bg-red-600" />
+                    <CardContent className="pt-6 pb-8">
+                      <div className="mb-6 pb-4 border-b border-border">
+                        <h2 className="text-lg font-bold text-foreground">
+                          {locale === 'hi' ? 'सक्रिय सदस्यता आवेदन' : 'Active Membership Application'}
                         </h2>
-                        <p className="text-center text-sm text-muted-foreground mb-6">
-                          {locale === 'hi' ? '(मार्क्सवाद – अम्बेडकरवाद)' : '(Marxism - Ambedkarism)'}
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी · (मार्क्सवाद – अम्बेडकरवाद)' : 'Bahujan Kranti Party · (Marxism – Ambedkarism)'}
                         </p>
                       </div>
 
@@ -581,7 +540,7 @@ export default function JoinPage() {
 
                         <Button
                           type="submit"
-                          className="w-full bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700 mt-8"
+                          className="w-full bg-red-600 hover:bg-red-700 mt-8"
                           disabled={loading}
                         >
                           {loading ? (locale === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting...') : (locale === 'hi' ? 'आवेदन जमा करें' : 'Submit Application')}
@@ -590,14 +549,15 @@ export default function JoinPage() {
                     </CardContent>
                   </Card>
                 ) : (
-                  <Card className="bg-card">
-                    <CardContent className="pt-6">
-                      <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-center mb-2 text-blue-600 dark:text-blue-400">
-                          {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
+                  <Card className="bg-card border border-border rounded-md overflow-hidden">
+                    <div className="h-1 bg-red-600" />
+                    <CardContent className="pt-6 pb-8">
+                      <div className="mb-6 pb-4 border-b border-border">
+                        <h2 className="text-lg font-bold text-foreground">
+                          {locale === 'hi' ? 'सामान्य सदस्यता आवेदन' : 'Normal Membership Application'}
                         </h2>
-                        <p className="text-center text-sm text-muted-foreground mb-6">
-                          {locale === 'hi' ? '(मार्क्सवाद – अम्बेडकरवाद)' : '(Marxism - Ambedkarism)'}
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी · (मार्क्सवाद – अम्बेडकरवाद)' : 'Bahujan Kranti Party · (Marxism – Ambedkarism)'}
                         </p>
                       </div>
 
@@ -798,7 +758,7 @@ export default function JoinPage() {
 
                         <Button
                           type="submit"
-                          className="w-full bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700 mt-8"
+                          className="w-full bg-red-600 hover:bg-red-700 mt-8"
                           disabled={loading}
                         >
                           {loading ? (locale === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting...') : (locale === 'hi' ? 'आवेदन जमा करें' : 'Submit Application')}
@@ -814,81 +774,49 @@ export default function JoinPage() {
       </section>
 
       {showPledgeModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <Card className="max-w-3xl w-full max-h-[90vh] overflow-y-auto bg-card border-border shadow-2xl">
-            <CardContent className="pt-8 bg-card">
-              <h2 className="text-2xl font-bold text-center mb-6 text-red-600 dark:text-red-400">
-                {locale === 'hi' ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-card border border-border rounded-md">
+            <div className="h-1 bg-red-600" />
+            <CardContent className="pt-6 pb-6">
+              <h2 className="text-lg font-bold text-foreground mb-1">
+                {locale === 'hi' ? 'घोषणापत्र (शपथ)' : 'Declaration (Pledge)'}
               </h2>
+              <p className="text-xs text-muted-foreground mb-5">
+                {locale === 'hi' ? 'जमा करने से पहले कृपया पढ़ें और स्वीकार करें' : 'Please read and accept before submitting'}
+              </p>
 
-              <div className="bg-muted p-6 rounded-lg mb-8 text-sm leading-relaxed space-y-4 max-h-80 overflow-y-auto border border-border">
+              <div className="bg-[#0f172a] p-5 rounded-md mb-6 text-sm leading-relaxed space-y-3 max-h-64 overflow-y-auto">
                 {formData.membershipType === 'Normal Membership' ? (
                   locale === 'hi' ? (
                     <>
-                      <p className="text-gray-700 font-semibold">
-                        घोषणापत्र (शपथ) - सदस्यता प्रपत्र
-                      </p>
-                      <p className="text-gray-700">
-                        मैं बहुजन क्रांति पार्टी के लक्ष्यों तथा उद्देश्यों को स्वीकार करता/करती हूँ और उसके संविधान का पालन करने तथा पार्टी के फैसलों को वफादारी से मानने की शपथ लेता/लेती हूँ।
-                      </p>
-                      <p className="text-gray-700">
-                        मैं समाजवाद के आदर्शों पर चलने की चेष्टा करूँगा/करूँगी और इस पार्टी तथा शोषित जनता के हितों को अपने निजी हितों से ऊपर रखूँगा/रखूँगी।
-                      </p>
-                      <p className="text-gray-700">
-                        मैं मजदूर वर्ग, मेहनतकश जनता तथा सर्वहारा वर्ग की आजीवन सेवा करूँगा/करूँगी।
-                      </p>
+                      <p className="text-[#FACC15] font-semibold text-xs uppercase tracking-wide">सदस्यता प्रपत्र</p>
+                      <p className="text-slate-300">मैं बहुजन क्रांति पार्टी के लक्ष्यों तथा उद्देश्यों को स्वीकार करता/करती हूँ और उसके संविधान का पालन करने तथा पार्टी के फैसलों को वफादारी से मानने की शपथ लेता/लेती हूँ।</p>
+                      <p className="text-slate-300">मैं समाजवाद के आदर्शों पर चलने की चेष्टा करूँगा/करूँगी और इस पार्टी तथा शोषित जनता के हितों को अपने निजी हितों से ऊपर रखूँगा/रखूँगी।</p>
+                      <p className="text-slate-300">मैं मजदूर वर्ग, मेहनतकश जनता तथा सर्वहारा वर्ग की आजीवन सेवा करूँगा/करूँगी।</p>
                     </>
                   ) : (
                     <>
-                      <p className="text-gray-700 font-semibold">
-                        Declaration (Pledge) - Membership Form
-                      </p>
-                      <p className="text-gray-700">
-                        I accept the goals and objectives of Bahujan Kranti Party and pledge to follow its constitution and loyally uphold the party&apos;s decisions.
-                      </p>
-                      <p className="text-gray-700">
-                        I will strive to follow the ideals of socialism and place the interests of this party and the exploited masses above my personal interests.
-                      </p>
-                      <p className="text-gray-700">
-                        I will dedicate my life to the service of the working class, the laboring masses, and the proletariat.
-                      </p>
+                      <p className="text-[#FACC15] font-semibold text-xs uppercase tracking-wide">Membership Form</p>
+                      <p className="text-slate-300">I accept the goals and objectives of Bahujan Kranti Party and pledge to follow its constitution and loyally uphold the party&apos;s decisions.</p>
+                      <p className="text-slate-300">I will strive to follow the ideals of socialism and place the interests of this party and the exploited masses above my personal interests.</p>
+                      <p className="text-slate-300">I will dedicate my life to the service of the working class, the laboring masses, and the proletariat.</p>
                     </>
                   )
                 ) : locale === 'hi' ? (
                   <>
-                    <p className="text-gray-700 font-semibold">
-                      {locale === 'hi' ? 'घोषणापत्र (Pledge)' : 'Declaration (Pledge)'}
-                    </p>
-                    <p className="text-gray-700">
-                      मैं कर्तव्य निष्ठा से प्रमाणित करता/करती हूँ कि मेरा सामाजिक, समतावादी, जातिवाद, छुआ-छूत, क्षेत्रवाद, ऊँच-नीच के विरुद्ध मानव/मानवीय एवं मानव समाज की समानता, स्वतंत्रता, भाईचारे में पूर्ण आस्था रखता/रखती हूँ।
-                    </p>
-                    <p className="text-gray-700">
-                      मैं भारत में सामाजिक, आर्थिक, राजनीतिक शोषण, उत्पीड़न का मुख्य कारण रहा है।
-                    </p>
-                    <p className="text-gray-700">
-                      उत्पीड़न-शोषणवादी, राजनीतिक व्यवस्था को समाप्त करने के लिए समतावादी व्यवस्था लाने के लिए तन, मन, धन से प्रयास करूँगा/करूँगी।
-                    </p>
-                    <p className="text-gray-700">
-                      यह भी वचन देता/देती हूँ कि भारत के किसी भी न्यायालय में किसी भी अपराध या अवमानना करने के लिए न तो आरोपी ठहराया गया है, न ही कोई मुझे सजा दी गई है और न ही मुझे किसी न्यायालय द्वारा अपराधी घोषित किया गया है।
-                    </p>
+                    <p className="text-[#FACC15] font-semibold text-xs uppercase tracking-wide">घोषणापत्र</p>
+                    <p className="text-slate-300">मैं कर्तव्य निष्ठा से प्रमाणित करता/करती हूँ कि मेरा सामाजिक, समतावादी, जातिवाद, छुआ-छूत, क्षेत्रवाद, ऊँच-नीच के विरुद्ध मानव समाज की समानता, स्वतंत्रता, भाईचारे में पूर्ण आस्था रखता/रखती हूँ।</p>
+                    <p className="text-slate-300">मैं भारत में सामाजिक, आर्थिक, राजनीतिक शोषण, उत्पीड़न का मुख्य कारण रहा है।</p>
+                    <p className="text-slate-300">उत्पीड़न-शोषणवादी राजनीतिक व्यवस्था को समाप्त करने के लिए समतावादी व्यवस्था लाने के लिए तन, मन, धन से प्रयास करूँगा/करूँगी।</p>
+                    <p className="text-slate-300">यह भी वचन देता/देती हूँ कि भारत के किसी भी न्यायालय में किसी भी अपराध के लिए न तो आरोपी ठहराया गया है, न ही कोई मुझे सजा दी गई है।</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-gray-700 font-semibold">
-                      Declaration (Pledge)
-                    </p>
-                    <p className="text-gray-700">
-                      I solemnly affirm that I have complete faith in social equality, equality and brotherhood of human society, against casteism, untouchability, regionalism, and discrimination.
-                    </p>
-                    <p className="text-gray-700">
-                      I understand that social, economic, and political exploitation and oppression are the main causes of suffering in India.
-                    </p>
-                    <p className="text-gray-700">
-                      I commit to strive with body, mind, and resources to end this oppressive system and establish an egalitarian order.
-                    </p>
-                    <p className="text-gray-700">
-                      I declare that I have not been charged with or convicted of any crime or contempt of court in any court in India.
-                    </p>
+                    <p className="text-[#FACC15] font-semibold text-xs uppercase tracking-wide">Declaration</p>
+                    <p className="text-slate-300">I solemnly affirm that I have complete faith in social equality and brotherhood of human society, against casteism, untouchability, regionalism, and discrimination.</p>
+                    <p className="text-slate-300">I understand that social, economic, and political exploitation and oppression are the main causes of suffering in India.</p>
+                    <p className="text-slate-300">I commit to strive with body, mind, and resources to end this oppressive system and establish an egalitarian order.</p>
+                    <p className="text-slate-300">I declare that I have not been charged with or convicted of any crime or contempt of court in any court in India.</p>
                   </>
                 )}
               </div>
@@ -936,7 +864,7 @@ export default function JoinPage() {
                 <Button
                   onClick={submitMembership}
                   disabled={!pledgeAccepted || !informationConfirmed || loading}
-                  className="bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700"
+                  className="bg-red-600 hover:bg-red-700"
                 >
                   {loading ? (locale === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting...') : (locale === 'hi' ? 'जमा करें' : 'Submit')}
                 </Button>

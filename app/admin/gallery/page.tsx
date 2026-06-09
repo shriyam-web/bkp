@@ -1,24 +1,37 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Image as ImageIcon, Trash2, Loader2, Plus, ArrowUp, ArrowDown, Upload } from 'lucide-react';
+import { Image as ImageIcon, Trash2, Loader2, Plus, ArrowUp, ArrowDown, Pencil, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import dynamic from 'next/dynamic';
-
-const CldUploadWidget = dynamic(() => import('next-cloudinary').then(mod => mod.CldUploadWidget), { ssr: false });
+import MediaUploadWidget from '@/components/MediaUploadWidget';
+import MediaDisplay from '@/components/MediaDisplay';
+import { MEDIA_TYPES, MediaType } from '@/lib/media';
 
 interface GalleryItem {
   _id: string;
   title: string;
   image_url: string;
+  media_type: MediaType;
+  category: string;
   order: number;
 }
+
+const CATEGORIES = [
+  { value: 'general', label: 'General' },
+  { value: 'events', label: 'Events' },
+  { value: 'rallies', label: 'Rallies' },
+  { value: 'banners', label: 'Banners' },
+  { value: 'campaigns', label: 'Campaigns' },
+];
 
 export default function GalleryPage() {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [title, setTitle] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [mediaType, setMediaType] = useState<MediaType>('image');
+  const [category, setCategory] = useState('general');
   const [order, setOrder] = useState(0);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -37,7 +50,7 @@ export default function GalleryPage() {
       if (data.success) {
         setGallery(data.data || []);
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'Error',
         description: 'Failed to load gallery',
@@ -48,6 +61,25 @@ export default function GalleryPage() {
     }
   };
 
+  const resetForm = () => {
+    setTitle('');
+    setImageUrl('');
+    setMediaType('image');
+    setCategory('general');
+    setOrder(0);
+    setEditingId(null);
+  };
+
+  const handleEdit = (item: GalleryItem) => {
+    setEditingId(item._id);
+    setTitle(item.title);
+    setImageUrl(item.image_url);
+    setMediaType(item.media_type || 'image');
+    setCategory(item.category || 'general');
+    setOrder(item.order);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -55,34 +87,39 @@ export default function GalleryPage() {
     if (!imageUrl) {
       toast({
         title: 'Error',
-        description: 'Please upload a photo first',
+        description: 'Please upload media first',
         variant: 'destructive',
       });
       setLoading(false);
       return;
     }
 
+    const payload = {
+      title,
+      image_url: imageUrl,
+      media_type: mediaType,
+      category,
+      order: parseInt(order.toString()),
+    };
+
     try {
-      const res = await fetch('/api/gallery', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          image_url: imageUrl,
-          order: parseInt(order.toString()),
-        }),
-      });
+      const res = await fetch(
+        editingId ? `/api/gallery?id=${editingId}` : '/api/gallery',
+        {
+          method: editingId ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await res.json();
 
       if (data.success) {
         toast({
           title: 'Success!',
-          description: 'Photo added to gallery successfully.',
+          description: editingId ? 'Media updated successfully.' : 'Media added to gallery.',
         });
-        setTitle('');
-        setImageUrl('');
-        setOrder(0);
+        resetForm();
         fetchGallery();
       } else {
         throw new Error(data.error);
@@ -90,7 +127,7 @@ export default function GalleryPage() {
     } catch (error: any) {
       toast({
         title: 'Error',
-        description: error.message || 'Failed to add photo',
+        description: error.message || 'Failed to save media',
         variant: 'destructive',
       });
     } finally {
@@ -99,7 +136,7 @@ export default function GalleryPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this photo?')) return;
+    if (!confirm('Are you sure you want to delete this item?')) return;
 
     setDeleting(id);
     try {
@@ -107,10 +144,8 @@ export default function GalleryPage() {
       const data = await res.json();
 
       if (data.success) {
-        toast({
-          title: 'Success!',
-          description: 'Photo deleted.',
-        });
+        toast({ title: 'Success!', description: 'Item deleted.' });
+        if (editingId === id) resetForm();
         fetchGallery();
       } else {
         throw new Error(data.error);
@@ -118,7 +153,7 @@ export default function GalleryPage() {
     } catch (error: any) {
       toast({
         title: 'Error',
-        description: error.message || 'Failed to delete photo',
+        description: error.message || 'Failed to delete item',
         variant: 'destructive',
       });
     } finally {
@@ -126,8 +161,8 @@ export default function GalleryPage() {
     }
   };
 
-  const handleReorderUp = async (item: GalleryItem) => {
-    const newOrder = item.order - 1;
+  const handleReorder = async (item: GalleryItem, direction: 'up' | 'down') => {
+    const newOrder = direction === 'up' ? item.order - 1 : item.order + 1;
     setUpdatingOrder(item._id);
 
     try {
@@ -137,51 +172,16 @@ export default function GalleryPage() {
         body: JSON.stringify({
           title: item.title,
           image_url: item.image_url,
+          media_type: item.media_type || 'image',
+          category: item.category || 'general',
           order: newOrder,
         }),
       });
 
       const data = await res.json();
-
-      if (data.success) {
-        fetchGallery();
-      } else {
-        throw new Error(data.error);
-      }
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: 'Failed to reorder',
-        variant: 'destructive',
-      });
-    } finally {
-      setUpdatingOrder(null);
-    }
-  };
-
-  const handleReorderDown = async (item: GalleryItem) => {
-    const newOrder = item.order + 1;
-    setUpdatingOrder(item._id);
-
-    try {
-      const res = await fetch(`/api/gallery?id=${item._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: item.title,
-          image_url: item.image_url,
-          order: newOrder,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        fetchGallery();
-      } else {
-        throw new Error(data.error);
-      }
-    } catch (error: any) {
+      if (data.success) fetchGallery();
+      else throw new Error(data.error);
+    } catch {
       toast({
         title: 'Error',
         description: 'Failed to reorder',
@@ -200,82 +200,90 @@ export default function GalleryPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Form */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-4">
-            <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-              <Plus className="h-5 w-5" />
-              Add Photo
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                {editingId ? <Pencil className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                {editingId ? 'Edit Media' : 'Add Media'}
+              </h2>
+              {editingId && (
+                <button
+                  onClick={resetForm}
+                  className="text-gray-500 hover:text-gray-700 p-1"
+                  title="Cancel edit"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              )}
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Title
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  placeholder="e.g., Event Photo"
+                  placeholder="e.g., Rally at Delhi"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Photo
-                </label>
-                {imageUrl ? (
-                  <div className="relative aspect-video mb-2 group">
-                    <img
-                      src={imageUrl}
-                      alt="Preview"
-                      className="w-full h-full object-cover rounded-lg border border-gray-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setImageUrl('')}
-                      className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <CldUploadWidget
-                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                    onSuccess={(result: any) => {
-                      if (result.event === 'success') {
-                        setImageUrl(result.info.secure_url);
-                      }
-                    }}
-                  >
-                    {({ open }) => (
-                      <button
-                        type="button"
-                        onClick={() => open()}
-                        className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-gray-500 hover:text-blue-600"
-                      >
-                        <Upload className="h-8 w-8" />
-                        <span>Upload from device</span>
-                      </button>
-                    )}
-                  </CldUploadWidget>
-                )}
+                <label className="block text-sm font-medium text-gray-700 mb-1">Media Type</label>
+                <select
+                  value={mediaType}
+                  onChange={(e) => {
+                    setMediaType(e.target.value as MediaType);
+                    setImageUrl('');
+                  }}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                >
+                  {MEDIA_TYPES.map((t) => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Display Order
+                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                >
+                  {CATEGORIES.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {mediaType === 'video' ? 'Video' : mediaType === 'banner' ? 'Banner' : 'Photo'}
                 </label>
+                <MediaUploadWidget
+                  mediaUrl={imageUrl}
+                  mediaType={mediaType}
+                  onMediaChange={(url, type) => {
+                    setImageUrl(url);
+                    setMediaType(type);
+                  }}
+                  onClear={() => setImageUrl('')}
+                  label={`Upload ${mediaType}`}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
                 <input
                   type="number"
                   value={order}
                   onChange={(e) => setOrder(parseInt(e.target.value))}
                   min="0"
-                  placeholder="0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">Lower numbers appear first</p>
               </div>
@@ -288,12 +296,12 @@ export default function GalleryPage() {
                 {loading ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    Adding...
+                    Saving...
                   </>
                 ) : (
                   <>
-                    <Plus className="h-5 w-5" />
-                    Add to Gallery
+                    {editingId ? <Pencil className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                    {editingId ? 'Update Media' : 'Add to Gallery'}
                   </>
                 )}
               </button>
@@ -301,48 +309,62 @@ export default function GalleryPage() {
           </div>
         </div>
 
-        {/* Grid */}
         <div className="lg:col-span-2">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold mb-6">All Photos</h2>
+            <h2 className="text-xl font-semibold mb-6">All Media</h2>
 
             {fetching ? (
               <div className="flex justify-center py-12">
                 <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
               </div>
             ) : gallery.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">No photos in gallery yet.</p>
+              <p className="text-gray-500 text-center py-8">No media in gallery yet.</p>
             ) : (
               <div className="space-y-3 max-h-[700px] overflow-y-auto">
-                {gallery.map((item, index) => (
+                {gallery.map((item) => (
                   <div
                     key={item._id}
-                    className="border border-gray-200 rounded-lg p-4 flex gap-4 items-center hover:shadow-md transition-shadow"
+                    className={`border rounded-lg p-4 flex gap-4 items-center hover:shadow-md transition-shadow ${
+                      editingId === item._id ? 'border-blue-400 bg-blue-50' : 'border-gray-200'
+                    }`}
                   >
-                    <div className="flex-shrink-0">
-                      <span className="bg-gray-200 text-gray-700 font-semibold px-3 py-1 rounded-full text-sm">
-                        #{item.order}
-                      </span>
+                    <span className="bg-gray-200 text-gray-700 font-semibold px-3 py-1 rounded-full text-sm flex-shrink-0">
+                      #{item.order}
+                    </span>
+
+                    <div className="h-20 w-20 flex-shrink-0 rounded-lg overflow-hidden">
+                      <MediaDisplay
+                        url={item.image_url}
+                        type={item.media_type || 'image'}
+                        alt={item.title}
+                        className="h-20 w-20 object-cover"
+                        showPlayIcon={item.media_type === 'video'}
+                        controls={false}
+                      />
                     </div>
 
-                    <img
-                      src={item.image_url}
-                      alt={item.title}
-                      className="h-20 w-20 object-cover rounded-lg flex-shrink-0"
-                    />
-
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 truncate">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 truncate">
-                        {item.image_url}
-                      </p>
+                      <h3 className="font-semibold text-gray-900 truncate">{item.title}</h3>
+                      <div className="flex gap-2 mt-1">
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full capitalize">
+                          {item.media_type || 'image'}
+                        </span>
+                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full capitalize">
+                          {item.category || 'general'}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex gap-1 flex-shrink-0">
                       <button
-                        onClick={() => handleReorderUp(item)}
+                        onClick={() => handleEdit(item)}
+                        className="text-gray-600 hover:text-blue-600 p-1"
+                        title="Edit"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleReorder(item, 'up')}
                         disabled={updatingOrder === item._id}
                         className="text-blue-600 hover:text-blue-700 disabled:opacity-50 p-1"
                         title="Move up"
@@ -354,16 +376,12 @@ export default function GalleryPage() {
                         )}
                       </button>
                       <button
-                        onClick={() => handleReorderDown(item)}
+                        onClick={() => handleReorder(item, 'down')}
                         disabled={updatingOrder === item._id}
                         className="text-blue-600 hover:text-blue-700 disabled:opacity-50 p-1"
                         title="Move down"
                       >
-                        {updatingOrder === item._id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <ArrowDown className="h-4 w-4" />
-                        )}
+                        <ArrowDown className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(item._id)}

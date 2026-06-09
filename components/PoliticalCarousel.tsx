@@ -17,7 +17,7 @@ export default function PoliticalCarousel() {
 
   useEffect(() => {
     if (!isAutoplay) return;
-    
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
     }, 5000);
@@ -41,7 +41,7 @@ export default function PoliticalCarousel() {
   };
 
   return (
-    <div className="relative w-full h-full bg-gray-900" style={{ height: '600px' }}>
+    <div className="relative w-full h-full min-h-[700px] bg-gray-900">
       <div className="relative w-full h-full">
         {CAROUSEL_IMAGES.map((image, index) => (
           <div

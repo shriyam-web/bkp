@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Gallery from '@/models/Gallery';
+import { isAdminAuthenticated, unauthorizedResponse } from '@/lib/admin-auth';
 
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
 
-    const gallery = await Gallery.find({}).sort({ order: 1 }).lean();
+    const { searchParams } = new URL(request.url);
+    const mediaType = searchParams.get('media_type');
+    const category = searchParams.get('category');
+
+    const filter: Record<string, string> = {};
+    if (mediaType) filter.media_type = mediaType;
+    if (category) filter.category = category;
+
+    const gallery = await Gallery.find(filter).sort({ order: 1 }).lean();
 
     return NextResponse.json(
       { success: true, data: gallery },
@@ -22,10 +31,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isAdminAuthenticated()) return unauthorizedResponse();
+
   try {
     await dbConnect();
 
-    const { title, image_url, order } = await request.json();
+    const { title, image_url, media_type, category, order } = await request.json();
 
     if (!title || !image_url) {
       return NextResponse.json(
@@ -37,6 +48,8 @@ export async function POST(request: NextRequest) {
     const newGallery = await Gallery.create({
       title,
       image_url,
+      media_type: media_type || 'image',
+      category: category || 'general',
       order: order || 0,
     });
 
@@ -54,6 +67,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
+  if (!isAdminAuthenticated()) return unauthorizedResponse();
+
   try {
     await dbConnect();
 
@@ -67,11 +82,11 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { title, image_url, order } = await request.json();
+    const { title, image_url, media_type, category, order } = await request.json();
 
     const updatedGallery = await Gallery.findByIdAndUpdate(
       id,
-      { title, image_url, order },
+      { title, image_url, media_type, category, order },
       { new: true }
     );
 
@@ -96,6 +111,8 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  if (!isAdminAuthenticated()) return unauthorizedResponse();
+
   try {
     await dbConnect();
 

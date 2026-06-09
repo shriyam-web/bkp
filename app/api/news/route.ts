@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import News from '@/models/News';
+import { isAdminAuthenticated, unauthorizedResponse } from '@/lib/admin-auth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,10 +23,12 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isAdminAuthenticated()) return unauthorizedResponse();
+
   try {
     await dbConnect();
 
-    const { title, excerpt, image_url } = await request.json();
+    const { title, excerpt, content, image_url, media_type, attachments } = await request.json();
 
     if (!title || !excerpt || !image_url) {
       return NextResponse.json(
@@ -37,7 +40,10 @@ export async function POST(request: NextRequest) {
     const newNews = await News.create({
       title,
       excerpt,
+      content: content || '',
       image_url,
+      media_type: media_type || 'image',
+      attachments: attachments || [],
       published_at: new Date(),
     });
 
@@ -54,7 +60,53 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function PUT(request: NextRequest) {
+  if (!isAdminAuthenticated()) return unauthorizedResponse();
+
+  try {
+    await dbConnect();
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Missing id parameter' },
+        { status: 400 }
+      );
+    }
+
+    const { title, excerpt, content, image_url, media_type, attachments } = await request.json();
+
+    const updatedNews = await News.findByIdAndUpdate(
+      id,
+      { title, excerpt, content, image_url, media_type, attachments },
+      { new: true }
+    );
+
+    if (!updatedNews) {
+      return NextResponse.json(
+        { success: false, error: 'News not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, data: updatedNews },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error('Error updating news:', error);
+    return NextResponse.json(
+      { success: false, error: error.message || 'Failed to update news' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(request: NextRequest) {
+  if (!isAdminAuthenticated()) return unauthorizedResponse();
+
   try {
     await dbConnect();
 
