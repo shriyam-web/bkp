@@ -289,7 +289,7 @@ export default function PressReleasePage() {
                 <CldUploadWidget
                   uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                   options={{ resourceType: 'auto', sources: ['local', 'url'], multiple: false }}
-                  onSuccess={(result: { event: string; info: { secure_url: string; resource_type?: string } }) => {
+                  onSuccess={(result) => {
                     if (result.event === 'success') {
                       const type: MediaType =
                         result.info.resource_type === 'video' ? 'video' : 'image';

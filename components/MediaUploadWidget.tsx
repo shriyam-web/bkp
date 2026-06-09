@@ -55,7 +55,7 @@ export default function MediaUploadWidget({
         sources: ['local', 'url', 'camera'],
         multiple: false,
       }}
-      onSuccess={(result: { event: string; info: { secure_url: string; resource_type?: string } }) => {
+      onSuccess={(result) => {
         if (result.event === 'success') {
           const detectedType: MediaType =
             result.info.resource_type === 'video' ? 'video' : mediaType;
