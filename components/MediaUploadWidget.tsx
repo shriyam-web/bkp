@@ -56,10 +56,11 @@ export default function MediaUploadWidget({
         multiple: false,
       }}
       onSuccess={(result) => {
-        if (result.event === 'success') {
+        const info = result.info;
+        if (result.event === 'success' && info) {
           const detectedType: MediaType =
-            result.info.resource_type === 'video' ? 'video' : mediaType;
-          onMediaChange(result.info.secure_url, detectedType);
+            info.resource_type === 'video' ? 'video' : mediaType;
+          onMediaChange(info.secure_url, detectedType);
         }
       }}
     >

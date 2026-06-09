@@ -290,12 +290,13 @@ export default function PressReleasePage() {
                   uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                   options={{ resourceType: 'auto', sources: ['local', 'url'], multiple: false }}
                   onSuccess={(result) => {
-                    if (result.event === 'success') {
+                    const info = result.info;
+                    if (result.event === 'success' && info) {
                       const type: MediaType =
-                        result.info.resource_type === 'video' ? 'video' : 'image';
+                        info.resource_type === 'video' ? 'video' : 'image';
                       setAttachments((prev) => [
                         ...prev,
-                        { type, url: result.info.secure_url, title: '' },
+                        { type, url: info.secure_url, title: '' },
                       ]);
                     }
                   }}
