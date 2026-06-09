@@ -291,7 +291,7 @@ export default function PressReleasePage() {
                   options={{ resourceType: 'auto', sources: ['local', 'url'], multiple: false }}
                   onSuccess={(result) => {
                     const info = result.info;
-                    if (result.event === 'success' && info) {
+                    if (result.event === 'success' && info && typeof info !== 'string') {
                       const type: MediaType =
                         info.resource_type === 'video' ? 'video' : 'image';
                       setAttachments((prev) => [

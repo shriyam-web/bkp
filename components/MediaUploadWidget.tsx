@@ -57,7 +57,7 @@ export default function MediaUploadWidget({
       }}
       onSuccess={(result) => {
         const info = result.info;
-        if (result.event === 'success' && info) {
+        if (result.event === 'success' && info && typeof info !== 'string') {
           const detectedType: MediaType =
             info.resource_type === 'video' ? 'video' : mediaType;
           onMediaChange(info.secure_url, detectedType);
