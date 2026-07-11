@@ -69,10 +69,10 @@ export function pickCanonicalBoothLabels(
   }
 
   const canonical = new Map<string, string>();
-  for (const [key, variants] of counts) {
+  Array.from(counts.entries()).forEach(([key, variants]) => {
     let best = '';
     let bestCount = -1;
-    for (const [label, count] of variants) {
+    Array.from(variants.entries()).forEach(([label, count]) => {
       if (
         count > bestCount ||
         (count === bestCount && label.localeCompare(best) < 0)
@@ -80,8 +80,8 @@ export function pickCanonicalBoothLabels(
         best = label;
         bestCount = count;
       }
-    }
+    });
     canonical.set(key, best);
-  }
+  });
   return canonical;
 }

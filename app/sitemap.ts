@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { i18n } from '@/i18n.config';
 import { absoluteUrl } from '@/lib/site';
-import { PAGE_SEO, languageAlternates, localePath } from '@/lib/seo';
+import { PAGE_SEO, localePath } from '@/lib/seo';
 import dbConnect from '@/lib/mongodb';
 import News from '@/models/News';
 
@@ -17,9 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: now,
         changeFrequency: page.changeFrequency || 'monthly',
         priority: page.priority ?? 0.7,
-        alternates: {
-          languages: languageAlternates(page.path),
-        },
       });
     }
   }
@@ -40,15 +37,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         now;
 
       for (const locale of i18n.locales) {
-        const path = `/${locale}/news/${id}`;
         entries.push({
-          url: absoluteUrl(path),
+          url: absoluteUrl(`/${locale}/news/${id}`),
           lastModified,
           changeFrequency: 'weekly',
           priority: 0.65,
-          alternates: {
-            languages: languageAlternates(`/news/${id}`),
-          },
         });
       }
     }
