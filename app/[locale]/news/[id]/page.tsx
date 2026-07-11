@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { Locale } from '@/i18n.config';
 import { TranslationProvider } from '@/lib/TranslationContext';
 import NewsDetailPage from '@/app/news-detail-page';
-import { absoluteUrl } from '@/lib/site';
+import { buildArticleMetadata } from '@/lib/seo';
 import en from '@/public/locales/en.json';
 import hi from '@/public/locales/hi.json';
 import dbConnect from '@/lib/mongodb';
@@ -28,29 +28,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       };
     }
 
-    const url = absoluteUrl(`/${params.locale}/news/${params.id}`);
     const description = article.excerpt || article.content?.slice(0, 160) || '';
+    const publishedTime =
+      article.published_at?.toISOString?.() || String(article.published_at || '');
 
-    return {
+    return buildArticleMetadata({
+      locale: params.locale,
+      path: `/news/${params.id}`,
       title: article.title,
       description,
-      openGraph: {
-        title: article.title,
-        description,
-        url,
-        type: 'article',
-        publishedTime: article.published_at?.toISOString?.() || String(article.published_at),
-        images: article.image_url
-          ? [{ url: article.image_url, alt: article.title }]
-          : [],
-      },
-      twitter: {
-        card: article.image_url ? 'summary_large_image' : 'summary',
-        title: article.title,
-        description,
-        images: article.image_url ? [article.image_url] : [],
-      },
-    };
+      image: article.image_url,
+      publishedTime,
+    });
   } catch {
     return { title: 'Press Release' };
   }

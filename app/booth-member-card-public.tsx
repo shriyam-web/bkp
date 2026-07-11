@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useTranslations } from '@/lib/TranslationContext';
 import { isBoothIncharge, type BoothCardMember } from '@/lib/booth-member-card';
+import { formatMemberAddress } from '@/lib/format-address';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -24,15 +25,7 @@ export default function BoothMemberCardPublic({ member }: Props) {
   const getText = (obj: { en: string; hi: string }) =>
     isHi && obj.hi ? obj.hi : obj.en;
 
-  const formatAddress = () =>
-    [
-      member.address?.street,
-      member.address?.city,
-      member.address?.state,
-      member.address?.postalCode,
-    ]
-      .filter(Boolean)
-      .join(', ');
+  const formatAddress = () => formatMemberAddress(member.address);
 
   const incharge = isBoothIncharge(member);
 

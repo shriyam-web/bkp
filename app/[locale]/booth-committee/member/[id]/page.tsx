@@ -6,6 +6,7 @@ import BoothMemberCardPublic from '@/app/booth-member-card-public';
 import { getBoothMemberById } from '@/lib/booth-member';
 import { isBoothIncharge } from '@/lib/booth-member-card';
 import { absoluteUrl } from '@/lib/site';
+import { languageAlternates } from '@/lib/seo';
 import en from '@/public/locales/en.json';
 import hi from '@/public/locales/hi.json';
 
@@ -92,6 +93,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: pageUrl,
+      languages: languageAlternates(`/booth-committee/member/${params.id}`),
     },
   };
 }

@@ -1,6 +1,35 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import CommitteeMember from '@/models/CommitteeMember';
+import {
+  boothKey,
+  normalizeBoothLabel,
+  pickCanonicalBoothLabels,
+} from '@/lib/normalize-booth';
+
+async function healBoothLabels(
+  members: Array<{ _id: unknown; booth?: string | null }>
+) {
+  const canonical = pickCanonicalBoothLabels(members.map((m) => m.booth));
+  const ops: Promise<unknown>[] = [];
+
+  for (const member of members) {
+    if (!member.booth) continue;
+    const target = canonical.get(boothKey(member.booth));
+    if (!target || member.booth === target) continue;
+    member.booth = target;
+    ops.push(
+      CommitteeMember.updateOne(
+        { _id: member._id },
+        { $set: { booth: target } }
+      )
+    );
+  }
+
+  if (ops.length > 0) {
+    await Promise.allSettled(ops);
+  }
+}
 
 export async function GET(request: Request) {
   try {
@@ -11,16 +40,36 @@ export async function GET(request: Request) {
     const district = searchParams.get('district');
     const constituency = searchParams.get('constituency');
     const booth = searchParams.get('booth');
-    
-    const query: any = {};
+
+    const query: Record<string, unknown> = {};
     if (type) query.type = type;
     if (state) query.state = state;
     if (district) query.district = district;
     if (constituency) query.constituency = constituency;
-    if (booth) query.booth = booth;
-    
+
+    const normalizedBooth = normalizeBoothLabel(booth);
+    if (normalizedBooth) {
+      // Match exact + common near-duplicates for this booth
+      query.$or = [
+        { booth: normalizedBooth },
+        { booth: new RegExp(`^\\s*${normalizedBooth.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i') },
+      ];
+    }
+
     const members = await CommitteeMember.find(query).sort({ order: 1, createdAt: -1 });
-    
+
+    if (type === 'BOOTH' || members.some((m) => m.type === 'BOOTH' && m.booth)) {
+      await healBoothLabels(members);
+    }
+
+    // If booth filter was used, also include members that normalize to the same key
+    // after healing (already healed in place). Filter client-safe:
+    if (normalizedBooth) {
+      const key = boothKey(normalizedBooth);
+      const filtered = members.filter((m) => boothKey(m.booth) === key);
+      return NextResponse.json(filtered);
+    }
+
     return NextResponse.json(members);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch members' }, { status: 500 });
@@ -31,9 +80,10 @@ export async function POST(request: Request) {
   try {
     await dbConnect();
     const body = await request.json();
-    console.log('POST request received with body:', JSON.stringify(body, null, 2));
+    if (typeof body.booth === 'string') {
+      body.booth = normalizeBoothLabel(body.booth);
+    }
     const member = await CommitteeMember.create(body);
-    console.log('Created member:', JSON.stringify(member, null, 2));
     return NextResponse.json(member, { status: 201 });
   } catch (error) {
     console.error('POST error:', error);

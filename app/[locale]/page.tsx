@@ -1,4 +1,5 @@
-import { Locale, i18n } from '@/i18n.config';
+import { Locale } from '@/i18n.config';
+import { createLocalePageMetadata } from '@/lib/seo';
 import { TranslationProvider } from '@/lib/TranslationContext';
 import HomePage from '@/app/home';
 import en from '@/public/locales/en.json';
@@ -25,3 +26,4 @@ export default function LocalePage({ params }: Props) {
     </TranslationProvider>
   );
 }
+export const generateMetadata = createLocalePageMetadata('home');

@@ -38,7 +38,7 @@ export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitch
         variant === 'dark' &&
           'px-2.5 py-1.5 rounded-md border border-slate-600 bg-slate-800 text-slate-200 hover:border-[#FACC15]/50 hover:text-[#FACC15]',
         variant === 'pill' &&
-          'px-4 py-2 rounded-full border border-slate-600 bg-slate-800/80 text-slate-200 hover:bg-slate-700'
+          'px-3 py-1.5 rounded-full border border-white/15 bg-white/10 text-white hover:bg-white/15 text-[11px]'
       )}
       title={currentLocale === 'en' ? 'हिन्दी में बदलें' : 'Switch to English'}
     >

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { normalizeBoothLabel } from '@/lib/normalize-booth';
 
 const CommitteeMemberSchema = new mongoose.Schema({
   name: {
@@ -35,5 +36,28 @@ const CommitteeMemberSchema = new mongoose.Schema({
   },
   order: { type: Number, default: 0 },
 }, { timestamps: true });
+
+function applyBoothNormalization(update: Record<string, unknown> | null | undefined) {
+  if (!update || typeof update !== 'object') return;
+  const set = (update.$set && typeof update.$set === 'object'
+    ? (update.$set as Record<string, unknown>)
+    : update) as Record<string, unknown>;
+
+  if (typeof set.booth === 'string') {
+    set.booth = normalizeBoothLabel(set.booth);
+  }
+}
+
+CommitteeMemberSchema.pre('save', function (next) {
+  if (typeof this.booth === 'string') {
+    this.booth = normalizeBoothLabel(this.booth);
+  }
+  next();
+});
+
+CommitteeMemberSchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function (next) {
+  applyBoothNormalization(this.getUpdate() as Record<string, unknown>);
+  next();
+});
 
 export default mongoose.models.CommitteeMember || mongoose.model('CommitteeMember', CommitteeMemberSchema);

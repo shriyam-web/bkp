@@ -1,4 +1,6 @@
 import { Locale } from '@/i18n.config';
+import { createLocalePageMetadata } from '@/lib/seo';
+
 import { TranslationProvider } from '@/lib/TranslationContext';
 import JoinPage from '@/app/join-page';
 import en from '@/public/locales/en.json';
@@ -25,3 +27,4 @@ export default function LocaleJoinPage({ params }: Props) {
     </TranslationProvider>
   );
 }
+export const generateMetadata = createLocalePageMetadata('join');

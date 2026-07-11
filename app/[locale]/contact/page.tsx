@@ -1,4 +1,6 @@
 import { Locale } from '@/i18n.config';
+import { createLocalePageMetadata } from '@/lib/seo';
+
 import { TranslationProvider } from '@/lib/TranslationContext';
 import ContactPage from '@/app/contact-page';
 import en from '@/public/locales/en.json';
@@ -25,3 +27,4 @@ export default function LocaleContactPage({ params }: Props) {
     </TranslationProvider>
   );
 }
+export const generateMetadata = createLocalePageMetadata('contact');

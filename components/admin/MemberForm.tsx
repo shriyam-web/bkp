@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { X, Upload, Trash2, Search } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { normalizeBoothLabel } from '@/lib/normalize-booth';
 
 const CldUploadWidget = dynamic(() => import('next-cloudinary').then(mod => mod.CldUploadWidget), { ssr: false });
 
@@ -156,10 +157,18 @@ export default function MemberForm({
 
       console.log('Submitting form data:', formData);
 
+      const payload = {
+        ...formData,
+        booth:
+          type === 'BOOTH' && typeof formData.booth === 'string'
+            ? normalizeBoothLabel(formData.booth)
+            : formData.booth,
+      };
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const responseData = await res.json();
@@ -400,10 +409,19 @@ export default function MemberForm({
                       type="text"
                       value={formData.booth}
                       onChange={(e) => setFormData({ ...formData, booth: e.target.value })}
+                      onBlur={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          booth: normalizeBoothLabel(prev.booth),
+                        }))
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      placeholder="e.g. Booth 142"
+                      placeholder="e.g. 310 Milkya Pappri"
                       required
                     />
+                    <p className="mt-1 text-xs text-gray-500">
+                      Use booth number + name exactly (e.g. 87 Bilsari). Extra spaces are cleaned automatically.
+                    </p>
                   </div>
                   <div className="md:col-span-2">
                     <label className="flex items-center gap-2 cursor-pointer">

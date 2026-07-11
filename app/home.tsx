@@ -566,26 +566,26 @@ export default function HomePage() {
       </section>
 
       {/* Leadership Preview */}
-      <section className="py-24 bg-muted/20 overflow-hidden">
+      <section className="py-12 sm:py-24 bg-muted/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
-            <div className="text-center md:text-left">
-              <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 sm:mb-16 gap-4 sm:gap-6">
+            <div className="min-w-0">
+              <h2 className="text-2xl font-bold text-foreground sm:text-4xl mb-2 sm:mb-4">
                 {locale === 'hi' ? 'हमारा नेतृत्व' : 'Our Leadership'}
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl">
+              <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl">
                 {locale === 'hi' ? 'एक समृद्ध और न्यायपूर्ण भारत के लिए आंदोलन का नेतृत्व करने वाले समर्पित क्रांतिकारी' : 'Dedicated revolutionaries leading the movement for a prosperous and just India'}
               </p>
             </div>
-            <Link href={`/${locale}/leadership`}>
-              <Button variant="outline" className="rounded-full px-8 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all">
+            <Link href={`/${locale}/leadership`} className="shrink-0 w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto rounded-full px-6 sm:px-8 border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all">
                 {locale === 'hi' ? 'सभी नेताओं से मिलें' : 'Meet All Leaders'}
               </Button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-1 bg-card rounded-3xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 group">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+            <div className="lg:col-span-1 bg-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 group min-w-0">
               <div className="aspect-[4/5] relative overflow-hidden">
                 <img src="/president.jpg" alt="National President" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
@@ -609,60 +609,67 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-8 lg:col-span-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 text-white flex flex-col justify-between h-full relative overflow-hidden group">
-                  <Users className="absolute -right-8 -bottom-8 h-48 w-48 text-white/10 group-hover:scale-110 transition-transform duration-700" />
-                  <div>
-                    <h3 className="text-2xl font-bold mb-4">{locale === 'hi' ? 'राष्ट्रीय समिति' : 'National Committee'}</h3>
-                    <p className="text-blue-100 leading-relaxed">
+            <div className="flex flex-col gap-4 sm:gap-8 lg:col-span-2 min-w-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
+                <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden group min-w-0">
+                  <Users className="absolute -right-8 -bottom-8 h-32 w-32 sm:h-48 sm:w-48 text-white/10 group-hover:scale-110 transition-transform duration-700 pointer-events-none" />
+                  <div className="relative z-10">
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{locale === 'hi' ? 'राष्ट्रीय समिति' : 'National Committee'}</h3>
+                    <p className="text-blue-100 leading-relaxed text-sm sm:text-base">
                       {locale === 'hi' ? 'पार्टी की केंद्रीय निर्णय लेने वाली संस्था जो हमारे मिशन का मार्गदर्शन करती है।' : 'The central decision-making body of the party guiding our national mission.'}
                     </p>
                   </div>
-                  <Link href={`/${locale}/leadership`}>
-                    <Button className="w-fit bg-white text-blue-800 hover:bg-blue-50 mt-8">
+                  <Link href={`/${locale}/leadership`} className="relative z-10 mt-6 sm:mt-8">
+                    <Button className="w-full sm:w-fit bg-white text-blue-800 hover:bg-blue-50">
                       {locale === 'hi' ? 'समिति देखें' : 'View Committee'}
                     </Button>
                   </Link>
                 </div>
 
-                <div className="bg-gradient-to-br from-red-600 to-red-800 rounded-3xl p-8 text-white flex flex-col justify-between h-full relative overflow-hidden group">
-                  <Shield className="absolute -right-8 -bottom-8 h-48 w-48 text-white/10 group-hover:scale-110 transition-transform duration-700" />
-                  <div>
-                    <h3 className="text-2xl font-bold mb-4">{locale === 'hi' ? 'राज्य नेतृत्व' : 'State Leadership'}</h3>
-                    <p className="text-red-100 leading-relaxed">
+                <div className="bg-gradient-to-br from-red-600 to-red-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden group min-w-0">
+                  <Shield className="absolute -right-8 -bottom-8 h-32 w-32 sm:h-48 sm:w-48 text-white/10 group-hover:scale-110 transition-transform duration-700 pointer-events-none" />
+                  <div className="relative z-10">
+                    <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{locale === 'hi' ? 'राज्य नेतृत्व' : 'State Leadership'}</h3>
+                    <p className="text-red-100 leading-relaxed text-sm sm:text-base">
                       {locale === 'hi' ? 'जमीनी स्तर पर बदलाव लाने के लिए भारत के प्रत्येक राज्य में हमारे समर्पित प्रतिनिधि।' : 'Our dedicated representatives in every state of India working for grassroots change.'}
                     </p>
                   </div>
-                  <Link href={`/${locale}/leadership`}>
-                    <Button className="w-fit bg-white text-red-800 hover:bg-red-50 mt-8">
+                  <Link href={`/${locale}/leadership`} className="relative z-10 mt-6 sm:mt-8">
+                    <Button className="w-full sm:w-fit bg-white text-red-800 hover:bg-red-50">
                       {locale === 'hi' ? 'राज्यों का चयन करें' : 'Select State'}
                     </Button>
                   </Link>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-orange-500 to-orange-700 rounded-3xl p-8 text-white flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group">
-                <Vote className="absolute -right-6 -bottom-6 h-40 w-40 text-white/10 group-hover:scale-110 transition-transform duration-700" />
-                <div className="relative z-10 max-w-2xl">
-                  <div className="inline-block px-3 py-1 bg-white/20 text-[10px] font-bold tracking-widest uppercase rounded-full mb-3">
-                    {locale === 'hi' ? 'जमीनी स्तर' : 'Grassroots Level'}
+              <div className="bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl sm:rounded-3xl p-5 sm:p-8 text-white relative overflow-hidden group min-w-0">
+                <Vote className="absolute -right-4 -bottom-4 h-24 w-24 sm:h-36 sm:w-36 text-white/10 pointer-events-none" />
+                <div className="relative z-10 flex flex-col gap-4 sm:gap-5">
+                  <div className="min-w-0">
+                    <div className="inline-block px-2.5 py-1 bg-white/20 text-[10px] font-bold tracking-widest uppercase rounded-full mb-2.5">
+                      {locale === 'hi' ? 'जमीनी स्तर' : 'Grassroots Level'}
+                    </div>
+                    <h3 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-3 break-words">
+                      {locale === 'hi' ? 'बूथ स्तर समिति' : 'Booth Level Committee'}
+                    </h3>
+                    <p className="text-orange-100 leading-relaxed text-sm break-words">
+                      {locale === 'hi'
+                        ? 'राज्य → विधानसभा → बूथ → समिति सदस्य। भारत के 4,000+ विधानसभा क्षेत्रों में बूथ स्तर पर संगठन।'
+                        : 'State → Assembly → Booth → Committee members. Organizing at 4,000+ assembly constituencies across India.'}
+                    </p>
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">
-                    {locale === 'hi' ? 'बूथ स्तर समिति' : 'Booth Level Committee'}
-                  </h3>
-                  <p className="text-orange-100 leading-relaxed">
-                    {locale === 'hi'
-                      ? 'राज्य → विधानसभा → बूथ → समिति सदस्य। भारत के 4,000+ विधानसभा क्षेत्रों में बूथ स्तर पर संगठन।'
-                      : 'State → Assembly → Booth → Committee members. Organizing at 4,000+ assembly constituencies across India.'}
-                  </p>
+                  <Link
+                    href={`/${locale}/booth-committee`}
+                    className="block w-full min-w-0"
+                  >
+                    <Button className="w-full max-w-full bg-white text-orange-700 hover:bg-orange-50 font-bold h-11 px-4 text-sm sm:text-base whitespace-normal">
+                      <span className="truncate">
+                        {locale === 'hi' ? 'बूथ समिति खोलें' : 'Open Booth Console'}
+                      </span>
+                      <ArrowRight className="ml-2 h-4 w-4 shrink-0" />
+                    </Button>
+                  </Link>
                 </div>
-                <Link href={`/${locale}/booth-committee`} className="relative z-10 shrink-0">
-                  <Button className="bg-white text-orange-700 hover:bg-orange-50 font-bold px-8 h-12">
-                    {locale === 'hi' ? 'बूथ समिति खोलें' : 'Open Booth Console'}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>

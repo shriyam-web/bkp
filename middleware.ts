@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
   // Check for admin routes
   if (pathname.startsWith('/admin')) {
     const isAuthenticated = request.cookies.get('admin_session');
-    
+
     if (pathname === '/admin/login') {
       if (isAuthenticated) {
         return NextResponse.redirect(new URL('/admin/dashboard', request.url));
@@ -18,15 +18,19 @@ export function middleware(request: NextRequest) {
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
-    
+
     return NextResponse.next();
   }
 
-  const pathnameHasLocale = i18n.locales.some(
+  const matchedLocale = i18n.locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  if (pathnameHasLocale) return;
+  if (matchedLocale) {
+    const response = NextResponse.next();
+    response.headers.set('x-locale', matchedLocale);
+    return response;
+  }
 
   const locale = i18n.defaultLocale;
   return NextResponse.redirect(
@@ -35,5 +39,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|public|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico)).*)',],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|public|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico|xml|txt)).*)',
+  ],
 };

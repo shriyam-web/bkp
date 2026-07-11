@@ -106,6 +106,20 @@ export default function Header() {
     };
   }, [menuOpen]);
 
+  // Close overlay when route changes
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
+
   const hrefFor = (path: string) => `/${locale}${path}`;
 
   const isActive = (href: string) => {
@@ -215,94 +229,101 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* Full-screen mobile menu */}
+      {/* Mobile menu — 2-col grid fits one screen; no clip, no forced scroll */}
       <div
         className={cn(
-          'lg:hidden fixed inset-0 z-[100] transition-all duration-300 ease-out',
-          menuOpen ? 'visible opacity-100' : 'invisible opacity-0 pointer-events-none'
+          'lg:hidden fixed inset-0 z-[100]',
+          menuOpen ? 'pointer-events-auto' : 'pointer-events-none'
         )}
         aria-hidden={!menuOpen}
       >
-        <div
+        {/* Backdrop */}
+        <button
+          type="button"
+          aria-label={isHi ? 'मेनू बंद करें' : 'Close menu'}
+          onClick={() => setMenuOpen(false)}
           className={cn(
-            'absolute inset-0 flex flex-col bg-[#0f172a] text-white transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
-            menuOpen ? 'translate-y-0' : 'translate-y-full'
+            'absolute inset-0 bg-black/50 transition-opacity duration-200',
+            menuOpen ? 'opacity-100' : 'opacity-0'
+          )}
+        />
+
+        {/* Panel */}
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={isHi ? 'नेविगेशन मेनू' : 'Navigation menu'}
+          className={cn(
+            'absolute inset-x-0 top-0 flex max-h-[100dvh] flex-col bg-[#0f172a] text-white shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
+            'min-h-[min(100dvh,100%)] h-[100dvh]',
+            menuOpen ? 'translate-y-0' : '-translate-y-full'
           )}
         >
-          <div className="h-1 bg-red-600 shrink-0" />
+          <div className="h-0.5 shrink-0 bg-red-600" />
 
-          {/* Menu header */}
-          <div className="flex items-start justify-between px-5 pt-5 pb-4 shrink-0">
-            <BrandLogo locale={locale} inverted />
+          <div className="flex shrink-0 items-center justify-between gap-3 px-4 py-3">
+            <div className="min-w-0">
+              <p className="truncate text-[15px] font-semibold leading-tight tracking-tight text-white">
+                {isHi ? 'बहुजन क्रान्ति पार्टी' : 'Bahujan Kranti Party'}
+              </p>
+              <p className="mt-0.5 truncate text-[10px] leading-none tracking-wide text-red-400">
+                {isHi ? 'मार्क्सवाद - अम्बेडकरवाद' : 'Marxwaad - Ambedkarwaad'}
+              </p>
+            </div>
             <button
               type="button"
               onClick={() => setMenuOpen(false)}
-              aria-label={isHi ? 'बंद करें' : 'Close menu'}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              aria-label={isHi ? 'बंद करें' : 'Close'}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 hover:bg-white/15"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Scrollable links */}
-          <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-6">
-            {navGroups.map((group) => (
-              <div key={group.id} className="mb-6 last:mb-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-3">
-                  {isHi ? group.label_hi : group.label}
-                </p>
-                <ul className="space-y-2">
-                  {group.items.map((item) => {
-                    const active = isActive(item.href);
-                    return (
-                      <li key={item.key}>
-                        <Link
-                          href={hrefFor(item.href)}
-                          onClick={() => setMenuOpen(false)}
-                          className={cn(
-                            'group flex items-center gap-4 rounded-xl px-4 py-3.5 transition-all active:scale-[0.98]',
-                            active
-                              ? 'bg-red-600 text-white shadow-lg shadow-red-900/30'
-                              : 'bg-white/5 hover:bg-white/10 text-white'
-                          )}
-                        >
-                          <span
-                            className={cn(
-                              'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors',
-                              active ? 'bg-white/20' : 'bg-red-600/20 text-red-400 group-hover:bg-red-600/30'
-                            )}
-                          >
-                            <item.icon className="h-5 w-5" />
-                          </span>
-                          <span className="flex-1 text-base font-semibold">{label(item)}</span>
-                          <ArrowRight
-                            className={cn(
-                              'h-4 w-4 shrink-0 transition-transform',
-                              active ? 'opacity-100' : 'opacity-40 group-hover:translate-x-0.5 group-hover:opacity-70'
-                            )}
-                          />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <nav className="min-h-0 flex-1 px-3 pb-2">
+            <ul className="grid grid-cols-2 gap-1.5">
+              {allItems.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <li key={item.key} className={item.key === 'booth' ? 'col-span-2' : undefined}>
+                    <Link
+                      href={hrefFor(item.href)}
+                      onClick={() => setMenuOpen(false)}
+                      className={cn(
+                        'flex items-center gap-2 rounded-lg px-2.5 py-2.5 transition-colors',
+                        active
+                          ? 'bg-red-600 text-white'
+                          : 'bg-white/[0.06] text-white/95 hover:bg-white/10'
+                      )}
+                    >
+                      <item.icon
+                        className={cn(
+                          'h-4 w-4 shrink-0',
+                          active ? 'text-white' : 'text-red-400'
+                        )}
+                      />
+                      <span className="truncate text-[12.5px] font-semibold leading-snug">
+                        {label(item)}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-          {/* Menu footer */}
-          <div className="shrink-0 border-t border-white/10 bg-[#0a0f1a] px-5 py-4 space-y-3 safe-area-pb">
-            <div className="flex items-center gap-2">
+          <div className="shrink-0 space-y-2 border-t border-white/10 bg-[#0a0f1a] px-3 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="flex items-center justify-between gap-2">
               <LanguageSwitcher variant="pill" />
-              <div className="flex-1" />
-              <ModeToggle />
+              <ModeToggle inverted />
             </div>
-            <Link href={hrefFor('/join')} onClick={() => setMenuOpen(false)}>
-              <Button className="w-full h-12 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-base shadow-xl shadow-red-900/40 gap-2">
-                <Heart className="h-4 w-4 fill-white" />
-                {isHi ? 'आंदोलन में शामिल हों' : 'Join the Movement'}
-                <ArrowRight className="h-4 w-4 ml-auto" />
-              </Button>
+            <Link
+              href={hrefFor('/join')}
+              onClick={() => setMenuOpen(false)}
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-red-600 text-sm font-semibold text-white hover:bg-red-500"
+            >
+              <Heart className="h-3.5 w-3.5 fill-white" />
+              {isHi ? 'आंदोलन में शामिल हों' : 'Join the Movement'}
             </Link>
           </div>
         </div>

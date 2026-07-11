@@ -1,4 +1,6 @@
 import { Locale } from '@/i18n.config';
+import { createLocalePageMetadata } from '@/lib/seo';
+
 import { TranslationProvider } from '@/lib/TranslationContext';
 import BoothCommitteePage from '@/app/booth-committee-page';
 import en from '@/public/locales/en.json';
@@ -20,3 +22,4 @@ export default function LocaleBoothCommitteePage({ params }: Props) {
     </TranslationProvider>
   );
 }
+export const generateMetadata = createLocalePageMetadata('booth-committee');

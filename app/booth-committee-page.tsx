@@ -18,6 +18,8 @@ import {
   Download,
   Share2,
   Star,
+  Filter,
+  UserCheck,
 } from 'lucide-react';
 import { useTranslations } from '@/lib/TranslationContext';
 import { INDIAN_STATES } from '@/lib/indian-states';
@@ -27,6 +29,12 @@ import {
   downloadMemberCard,
   shareMemberCard,
 } from '@/lib/booth-member-card';
+import { formatMemberAddress } from '@/lib/format-address';
+import {
+  uniqueBoothLabels,
+  sameBooth,
+  boothKey,
+} from '@/lib/normalize-booth';
 
 const notoSans = Noto_Sans({
   subsets: ['latin', 'devanagari'],
@@ -76,6 +84,8 @@ interface GlobalResults {
 }
 
 type Step = 'state' | 'assembly' | 'booth' | 'committee';
+type SearchScope = 'all' | 'states' | 'assemblies' | 'booths' | 'members';
+type RoleFilter = 'all' | 'incharge' | 'committee';
 
 const STEPS: Step[] = ['state', 'assembly', 'booth', 'committee'];
 
@@ -128,6 +138,10 @@ export default function BoothCommitteePage() {
   const [selectedBooth, setSelectedBooth] = useState<string | null>(null);
   const [cardActionId, setCardActionId] = useState<string | null>(null);
   const [shareNotice, setShareNotice] = useState<string | null>(null);
+  const [searchScope, setSearchScope] = useState<SearchScope>('all');
+  const [onlyWithData, setOnlyWithData] = useState(true);
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>('all');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -146,16 +160,31 @@ export default function BoothCommitteePage() {
   }, [statesWithData]);
 
   const filteredStates = useMemo(() => {
-    if (!hasSearch) return orderedStates;
+    let list = onlyWithData
+      ? orderedStates.filter((s) => statesWithData.has(s))
+      : orderedStates;
+
+    if (!hasSearch) return list;
+
     const resultStates = new Set<string>();
-    orderedStates.forEach((state) => {
+    list.forEach((state) => {
       if (textMatches(globalSearch, state)) resultStates.add(state);
     });
-    globalResults.states.forEach((s) => resultStates.add(s));
-    globalResults.assemblies.forEach((a) => resultStates.add(a.state));
-    globalResults.members.forEach((m) => m.state && resultStates.add(m.state));
-    return orderedStates.filter((s) => resultStates.has(s));
-  }, [orderedStates, globalSearch, hasSearch, globalResults]);
+    if (searchScope === 'all' || searchScope === 'states') {
+      globalResults.states.forEach((s) => resultStates.add(s));
+      globalResults.assemblies.forEach((a) => resultStates.add(a.state));
+      globalResults.members.forEach((m) => m.state && resultStates.add(m.state));
+    }
+    return list.filter((s) => resultStates.has(s));
+  }, [
+    orderedStates,
+    statesWithData,
+    onlyWithData,
+    globalSearch,
+    hasSearch,
+    globalResults,
+    searchScope,
+  ]);
 
   const filteredAssemblies = useMemo(() => {
     if (!hasSearch) return assemblies;
@@ -189,9 +218,7 @@ export default function BoothCommitteePage() {
   }, [assemblies, globalSearch, hasSearch, globalResults, stateMembers, selectedState, currentStep]);
 
   const availableBooths = useMemo(() => {
-    return Array.from(
-      new Set(assemblyMembers.map((m) => m.booth).filter(Boolean))
-    ) as string[];
+    return uniqueBoothLabels(assemblyMembers.map((m) => m.booth));
   }, [assemblyMembers]);
 
   const filteredBooths = useMemo(() => {
@@ -203,7 +230,7 @@ export default function BoothCommitteePage() {
       if (boothMatchesQuery(globalSearch, booth)) return true;
       return assemblyMembers.some(
         (m) =>
-          m.booth === booth &&
+          sameBooth(m.booth, booth) &&
           textMatches(
             globalSearch,
             m.name?.en,
@@ -217,12 +244,18 @@ export default function BoothCommitteePage() {
 
   const boothMembers = useMemo(() => {
     if (!selectedBooth) return [];
-    return assemblyMembers.filter((m) => m.booth === selectedBooth);
+    return assemblyMembers.filter((m) => sameBooth(m.booth, selectedBooth));
   }, [assemblyMembers, selectedBooth]);
 
   const filteredMembers = useMemo(() => {
-    if (!hasSearch) return boothMembers;
-    return boothMembers.filter((m) =>
+    let list = boothMembers;
+    if (roleFilter === 'incharge') {
+      list = list.filter((m) => isBoothIncharge(m));
+    } else if (roleFilter === 'committee') {
+      list = list.filter((m) => !isBoothIncharge(m));
+    }
+    if (!hasSearch) return list;
+    return list.filter((m) =>
       textMatches(
         globalSearch,
         m.name?.en,
@@ -237,22 +270,32 @@ export default function BoothCommitteePage() {
         m.address?.postalCode
       )
     );
-  }, [boothMembers, globalSearch, hasSearch]);
+  }, [boothMembers, globalSearch, hasSearch, roleFilter]);
 
   const scopedGlobalResults = useMemo(() => {
     if (!hasDeepSearch) return EMPTY_RESULTS;
     const scope = (item: { state?: string }) =>
       !selectedState || item.state === selectedState;
-    return {
-      states: globalResults.states,
-      assemblies: globalResults.assemblies.filter(scope),
-      booths: globalResults.booths.filter(scope),
-      members: globalResults.members.filter(scope),
-    };
-  }, [globalResults, hasDeepSearch, selectedState]);
+    const assemblies =
+      searchScope === 'all' || searchScope === 'assemblies'
+        ? globalResults.assemblies.filter(scope)
+        : [];
+    const booths =
+      searchScope === 'all' || searchScope === 'booths'
+        ? globalResults.booths.filter(scope)
+        : [];
+    const members =
+      searchScope === 'all' || searchScope === 'members'
+        ? globalResults.members.filter(scope)
+        : [];
+    const states =
+      searchScope === 'all' || searchScope === 'states'
+        ? globalResults.states
+        : [];
+    return { states, assemblies, booths, members };
+  }, [globalResults, hasDeepSearch, selectedState, searchScope]);
 
   const showGlobalPanel =
-    currentStep === 'state' &&
     hasDeepSearch &&
     (scopedGlobalResults.assemblies.length > 0 ||
       scopedGlobalResults.booths.length > 0 ||
@@ -270,37 +313,48 @@ export default function BoothCommitteePage() {
   );
 
   const searchPlaceholder = useMemo(() => {
-    if (currentStep === 'assembly') {
+    if (searchScope === 'states') {
+      return isHi ? 'राज्य खोजें...' : 'Search states...';
+    }
+    if (searchScope === 'assemblies') {
       return isHi
         ? 'विधानसभा संख्या या नाम खोजें...'
-        : 'Search by assembly number or name...';
+        : 'Search assembly number or name...';
     }
-    if (currentStep === 'booth') {
-      return isHi
-        ? 'बूथ संख्या या नाम खोजें...'
-        : 'Search by booth number or name...';
+    if (searchScope === 'booths') {
+      return isHi ? 'बूथ संख्या या नाम खोजें...' : 'Search booth number or name...';
     }
-    if (currentStep === 'committee') {
+    if (searchScope === 'members') {
       return isHi
-        ? 'सदस्य का नाम या पद खोजें...'
-        : 'Search member name or post...';
+        ? 'नाम, पद, मोबाइल या पता खोजें...'
+        : 'Search name, post, mobile, or address...';
     }
     return isHi
-      ? 'राज्य, विधानसभा, बूथ या सदस्य खोजें...'
-      : 'Search state, assembly, booth, or member...';
-  }, [currentStep, isHi]);
+      ? 'राज्य, विधानसभा, बूथ, नाम या मोबाइल खोजें...'
+      : 'Search state, assembly, booth, name, or mobile...';
+  }, [searchScope, isHi]);
 
   useEffect(() => {
     const fetchStatesWithData = async () => {
       try {
-        const res = await fetch('/api/legislative-assemblies');
-        const data = await res.json();
-        if (data.success && Array.isArray(data.data)) {
-          const states = new Set<string>(
-            data.data.map((a: LegislativeAssembly) => a.state).filter(Boolean)
-          );
-          setStatesWithData(states);
+        const [assembliesRes, membersRes] = await Promise.all([
+          fetch('/api/legislative-assemblies'),
+          fetch('/api/committee-members?type=BOOTH'),
+        ]);
+        const assembliesData = await assembliesRes.json();
+        const membersData = await membersRes.json();
+        const states = new Set<string>();
+        if (assembliesData.success && Array.isArray(assembliesData.data)) {
+          assembliesData.data.forEach((a: LegislativeAssembly) => {
+            if (a.state) states.add(a.state);
+          });
         }
+        if (Array.isArray(membersData)) {
+          membersData.forEach((m: BoothMember) => {
+            if (m.state) states.add(m.state);
+          });
+        }
+        setStatesWithData(states);
       } catch (error) {
         console.error('Failed to fetch states with assembly data', error);
       } finally {
@@ -311,14 +365,17 @@ export default function BoothCommitteePage() {
   }, []);
 
   useEffect(() => {
-    if (currentStep !== 'state' || !hasDeepSearch) {
+    if (!hasDeepSearch) {
       setGlobalResults(EMPTY_RESULTS);
       return;
     }
     const timer = setTimeout(async () => {
       setGlobalSearching(true);
       try {
-        const params = new URLSearchParams({ q: globalSearch.trim() });
+        const params = new URLSearchParams({
+          q: globalSearch.trim(),
+          scope: searchScope,
+        });
         if (selectedState) params.set('state', selectedState);
         const res = await fetch(`/api/booth-committee/search?${params}`);
         const data = await res.json();
@@ -328,9 +385,24 @@ export default function BoothCommitteePage() {
       } finally {
         setGlobalSearching(false);
       }
-    }, 350);
+    }, 300);
     return () => clearTimeout(timer);
-  }, [globalSearch, hasDeepSearch, selectedState, currentStep]);
+  }, [globalSearch, hasDeepSearch, selectedState, searchScope]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === '/' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement)) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+      if (e.key === 'Escape' && document.activeElement === searchRef.current) {
+        setGlobalSearch('');
+        searchRef.current?.blur();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   useEffect(() => {
     if (!selectedState) {
@@ -531,16 +603,7 @@ export default function BoothCommitteePage() {
     [navigateToBooth]
   );
 
-  const formatAddress = (member: BoothMember) => {
-    return [
-      member.address?.street,
-      member.address?.city,
-      member.address?.state,
-      member.address?.postalCode,
-    ]
-      .filter(Boolean)
-      .join(', ');
-  };
+  const formatAddress = (member: BoothMember) => formatMemberAddress(member.address);
 
   const resultCountLabel = () => {
     if (currentStep === 'state') return filteredStates.length;
@@ -709,13 +772,13 @@ export default function BoothCommitteePage() {
           </h1>
           <p className="text-[12px] font-light text-muted-foreground mt-2">
             {isHi
-              ? 'राज्य, विधानसभा, बूथ और सदस्य — एक ही खोज से'
-              : 'Filter by state, assembly, booth, or member from one search'}
+              ? 'उच्च-स्तरीय खोज: राज्य · विधानसभा · बूथ · सदस्य नाम · मोबाइल'
+              : 'High-level search across states, assemblies, booths, names & mobile'}
           </p>
         </div>
 
         <div className="sticky top-16 sm:top-[65px] z-40 bg-white dark:bg-card border-y border-border/60 shadow-sm shadow-black/[0.03]">
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3 space-y-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 pointer-events-none" />
               <input
@@ -724,7 +787,7 @@ export default function BoothCommitteePage() {
                 value={globalSearch}
                 onChange={(e) => setGlobalSearch(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full pl-9 pr-10 py-2.5 sm:py-3 text-[14px] font-light bg-[#f8f9fa] dark:bg-muted/40 border border-border/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-foreground/15 focus:bg-white dark:focus:bg-card transition-colors"
+                className="w-full pl-9 pr-20 py-2.5 sm:py-3 text-[14px] font-light bg-[#f8f9fa] dark:bg-muted/40 border border-border/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-foreground/15 focus:bg-white dark:focus:bg-card transition-colors"
               />
               <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
                 {globalSearching && (
@@ -740,8 +803,182 @@ export default function BoothCommitteePage() {
                     <X className="h-3.5 w-3.5" />
                   </button>
                 )}
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen((v) => !v)}
+                  className={cn(
+                    'inline-flex items-center gap-1 px-2 py-1 rounded-md text-[12px] font-medium transition-colors',
+                    filtersOpen || onlyWithData !== true || roleFilter !== 'all' || searchScope !== 'all'
+                      ? 'bg-red-600 text-white'
+                      : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+                  )}
+                  aria-expanded={filtersOpen}
+                >
+                  <Filter className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">{isHi ? 'फ़िल्टर' : 'Filters'}</span>
+                </button>
               </div>
             </div>
+
+            {/* Search scope chips */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 -mx-1 px-1">
+              {(
+                [
+                  { id: 'all' as const, en: 'All', hi: 'सभी' },
+                  { id: 'states' as const, en: 'States', hi: 'राज्य' },
+                  { id: 'assemblies' as const, en: 'Assemblies', hi: 'विधानसभा' },
+                  { id: 'booths' as const, en: 'Booths', hi: 'बूथ' },
+                  { id: 'members' as const, en: 'Members', hi: 'सदस्य' },
+                ] as const
+              ).map((scope) => (
+                <button
+                  key={scope.id}
+                  type="button"
+                  onClick={() => setSearchScope(scope.id)}
+                  className={cn(
+                    'shrink-0 px-3 py-1 rounded-full text-[12px] font-medium border transition-colors',
+                    searchScope === scope.id
+                      ? 'bg-foreground text-background border-foreground'
+                      : 'bg-transparent text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground'
+                  )}
+                >
+                  {isHi ? scope.hi : scope.en}
+                </button>
+              ))}
+              <span className="hidden sm:inline text-[11px] text-muted-foreground/60 ml-1 shrink-0">
+                {isHi ? 'खोजने के लिए / दबाएँ' : 'Press / to search'}
+              </span>
+            </div>
+
+            {filtersOpen && (
+              <div className="rounded-lg border border-border/70 bg-[#fafafa] dark:bg-muted/20 p-3 space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setOnlyWithData((v) => !v)}
+                    className={cn(
+                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors',
+                      onlyWithData
+                        ? 'bg-red-600/10 text-red-700 border-red-600/30 dark:text-red-400'
+                        : 'bg-white dark:bg-card text-muted-foreground border-border'
+                    )}
+                  >
+                    <MapPin className="h-3.5 w-3.5" />
+                    {isHi ? 'केवल डेटा वाले राज्य' : 'States with data only'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setRoleFilter((r) => (r === 'incharge' ? 'all' : 'incharge'))
+                    }
+                    className={cn(
+                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors',
+                      roleFilter === 'incharge'
+                        ? 'bg-orange-600/10 text-orange-800 border-orange-600/30 dark:text-orange-300'
+                        : 'bg-white dark:bg-card text-muted-foreground border-border'
+                    )}
+                  >
+                    <UserCheck className="h-3.5 w-3.5" />
+                    {isHi ? 'केवल बूथ प्रभारी' : 'Booth incharge only'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setRoleFilter((r) => (r === 'committee' ? 'all' : 'committee'))
+                    }
+                    className={cn(
+                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors',
+                      roleFilter === 'committee'
+                        ? 'bg-blue-600/10 text-blue-800 border-blue-600/30 dark:text-blue-300'
+                        : 'bg-white dark:bg-card text-muted-foreground border-border'
+                    )}
+                  >
+                    <Users className="h-3.5 w-3.5" />
+                    {isHi ? 'केवल समिति सदस्य' : 'Committee members only'}
+                  </button>
+                </div>
+
+                {statesWithData.size > 0 && currentStep === 'state' && (
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground mb-2">
+                      {isHi ? 'त्वरित राज्य' : 'Quick jump — states with data'}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {orderedStates
+                        .filter((s) => statesWithData.has(s))
+                        .slice(0, 12)
+                        .map((state) => (
+                          <button
+                            key={state}
+                            type="button"
+                            onClick={() => handleStateSelect(state)}
+                            className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-white dark:bg-card border border-border text-foreground hover:border-red-600/40 hover:text-red-700 transition-colors"
+                          >
+                            {state}
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {(globalSearch || searchScope !== 'all' || !onlyWithData || roleFilter !== 'all') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGlobalSearch('');
+                      setSearchScope('all');
+                      setOnlyWithData(true);
+                      setRoleFilter('all');
+                    }}
+                    className="text-[12px] font-medium text-red-600 hover:text-red-700"
+                  >
+                    {isHi ? 'सभी फ़िल्टर साफ़ करें' : 'Clear all filters'}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Active filter summary */}
+            {(hasSearch || selectedState || searchScope !== 'all' || roleFilter !== 'all') && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                {hasSearch && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-[11px] text-foreground">
+                    <Search className="h-3 w-3" />
+                    &ldquo;{globalSearch.trim()}&rdquo;
+                    <button type="button" onClick={() => setGlobalSearch('')} className="ml-0.5 hover:text-red-600">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                )}
+                {searchScope !== 'all' && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-[11px] text-foreground">
+                    {isHi ? 'क्षेत्र' : 'Scope'}: {searchScope}
+                    <button type="button" onClick={() => setSearchScope('all')} className="ml-0.5 hover:text-red-600">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                )}
+                {selectedState && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-[11px] text-foreground">
+                    {selectedState}
+                  </span>
+                )}
+                {roleFilter !== 'all' && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-[11px] text-foreground">
+                    {roleFilter === 'incharge'
+                      ? isHi
+                        ? 'प्रभारी'
+                        : 'Incharge'
+                      : isHi
+                        ? 'सदस्य'
+                        : 'Members'}
+                    <button type="button" onClick={() => setRoleFilter('all')} className="ml-0.5 hover:text-red-600">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -829,17 +1066,29 @@ export default function BoothCommitteePage() {
 
             {showGlobalPanel && (
               <div className="bg-white dark:bg-card border border-border/70 rounded-lg overflow-hidden">
-                <div className="px-4 sm:px-5 py-3 border-b border-border/60 flex items-center justify-between">
+                <div className="px-4 sm:px-5 py-3 border-b border-border/60 flex items-center justify-between gap-2">
                   <p className="text-[13px] font-medium text-foreground">
                     {isHi ? 'खोज परिणाम' : 'Search results'}
                   </p>
-                  <span className="text-[12px] font-light text-muted-foreground">
-                    {isHi ? 'सभी स्तर' : 'All levels'}
+                  <span className="text-[12px] font-light text-muted-foreground truncate">
+                    {[
+                      scopedGlobalResults.states.length &&
+                        `${scopedGlobalResults.states.length} ${isHi ? 'राज्य' : 'states'}`,
+                      scopedGlobalResults.assemblies.length &&
+                        `${scopedGlobalResults.assemblies.length} ${isHi ? 'विधानसभा' : 'assemblies'}`,
+                      scopedGlobalResults.booths.length &&
+                        `${scopedGlobalResults.booths.length} ${isHi ? 'बूथ' : 'booths'}`,
+                      scopedGlobalResults.members.length &&
+                        `${scopedGlobalResults.members.length} ${isHi ? 'सदस्य' : 'members'}`,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </span>
                 </div>
-                <div className="divide-y divide-border/50 max-h-[280px] overflow-y-auto">
+                <div className="divide-y divide-border/50 max-h-[min(50vh,360px)] overflow-y-auto">
                   {scopedGlobalResults.states
-                    .filter((s) => !(filteredStates as readonly string[]).includes(s))
+                    .filter((s) => !(filteredStates as readonly string[]).includes(s) || currentStep !== 'state')
+                    .slice(0, 15)
                     .map((state) => (
                       <button
                         key={`state-${state}`}
@@ -883,12 +1132,15 @@ export default function BoothCommitteePage() {
                       className="w-full flex items-center gap-3 px-4 sm:px-5 py-3 text-left hover:bg-[#fafafa] dark:hover:bg-muted/30 transition-colors"
                     >
                       <Vote className="h-4 w-4 text-muted-foreground/50 shrink-0" />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="text-[14px] font-normal text-foreground truncate">{b.booth}</p>
                         <p className="text-[12px] font-light text-muted-foreground truncate">
                           {b.constituency} · {b.state}
                         </p>
                       </div>
+                      <span className="text-[11px] text-muted-foreground shrink-0">
+                        {b.count}
+                      </span>
                     </button>
                   ))}
                   {scopedGlobalResults.members.map((member) => (
@@ -902,11 +1154,18 @@ export default function BoothCommitteePage() {
                       <div className="min-w-0">
                         <p className="text-[14px] font-normal text-foreground truncate">
                           {getText(member.name)}
+                          {isBoothIncharge(member) && (
+                            <span className="ml-2 text-[10px] font-medium text-orange-700 dark:text-orange-400">
+                              {isHi ? 'प्रभारी' : 'Incharge'}
+                            </span>
+                          )}
                         </p>
                         <p className="text-[12px] font-light text-muted-foreground truncate">
-                          {member.booth && `${member.booth} · `}
-                          {member.constituency}
+                          {getText(member.position)}
+                          {member.booth && ` · ${member.booth}`}
+                          {member.constituency && ` · ${member.constituency}`}
                           {member.state && ` · ${member.state}`}
+                          {member.mobileNumber && ` · ${member.mobileNumber}`}
                         </p>
                       </div>
                     </button>
@@ -1002,9 +1261,11 @@ export default function BoothCommitteePage() {
                 ) : filteredBooths.length > 0 ? (
                   <ul className="divide-y divide-border/50 max-h-[min(55vh,440px)] overflow-y-auto">
                     {filteredBooths.map((booth) => {
-                      const count = assemblyMembers.filter((m) => m.booth === booth).length;
+                      const count = assemblyMembers.filter((m) =>
+                        sameBooth(m.booth, booth)
+                      ).length;
                       return (
-                        <li key={booth}>
+                        <li key={boothKey(booth)}>
                           <button
                             type="button"
                             onClick={() => handleBoothSelect(booth)}
