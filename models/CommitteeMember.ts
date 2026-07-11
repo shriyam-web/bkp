@@ -48,16 +48,22 @@ function applyBoothNormalization(update: Record<string, unknown> | null | undefi
   }
 }
 
-CommitteeMemberSchema.pre('save', function (next) {
+CommitteeMemberSchema.pre('save', function () {
   if (typeof this.booth === 'string') {
     this.booth = normalizeBoothLabel(this.booth);
   }
-  next();
 });
 
-CommitteeMemberSchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function (next) {
+CommitteeMemberSchema.pre('findOneAndUpdate', function () {
   applyBoothNormalization(this.getUpdate() as Record<string, unknown>);
-  next();
+});
+
+CommitteeMemberSchema.pre('updateOne', function () {
+  applyBoothNormalization(this.getUpdate() as Record<string, unknown>);
+});
+
+CommitteeMemberSchema.pre('updateMany', function () {
+  applyBoothNormalization(this.getUpdate() as Record<string, unknown>);
 });
 
 export default mongoose.models.CommitteeMember || mongoose.model('CommitteeMember', CommitteeMemberSchema);
