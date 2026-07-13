@@ -27,6 +27,9 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dbdezv1p4",
     NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default",
+    // Required for signed/chunked large uploads (API key is public; secret stays server-side)
+    NEXT_PUBLIC_CLOUDINARY_API_KEY:
+      process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || process.env.CLOUDINARY_API_KEY || "",
   },
 };
 

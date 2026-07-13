@@ -9,8 +9,8 @@ import MediaDisplay from '@/components/MediaDisplay';
 import { MEDIA_TYPES, MediaType, MediaAttachment } from '@/lib/media';
 import dynamic from 'next/dynamic';
 import {
-  CLOUDINARY_SIGN_ENDPOINT,
   cloudinaryUploadOptions,
+  cloudinaryWidgetAuthProps,
 } from '@/lib/cloudinary-upload';
 
 const CldUploadWidget = dynamic(
@@ -291,7 +291,7 @@ export default function PressReleasePage() {
                   </div>
                 )}
                 <CldUploadWidget
-                  signatureEndpoint={CLOUDINARY_SIGN_ENDPOINT}
+                  {...cloudinaryWidgetAuthProps(true)}
                   options={cloudinaryUploadOptions('auto')}
                   onSuccess={(result) => {
                     const info = result.info;
@@ -311,7 +311,7 @@ export default function PressReleasePage() {
                       onClick={() => open()}
                       className="w-full py-2 border border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors"
                     >
-                      + Add photo or video (up to 200 MB)
+                      + Add photo or video (up to 100 MB)
                     </button>
                   )}
                 </CldUploadWidget>

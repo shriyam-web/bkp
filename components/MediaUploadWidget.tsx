@@ -5,8 +5,8 @@ import { Upload, Trash2 } from 'lucide-react';
 import { MediaType } from '@/lib/media';
 import MediaDisplay from '@/components/MediaDisplay';
 import {
-  CLOUDINARY_SIGN_ENDPOINT,
   cloudinaryUploadOptions,
+  cloudinaryWidgetAuthProps,
   MAX_UPLOAD_BYTES,
 } from '@/lib/cloudinary-upload';
 
@@ -32,6 +32,8 @@ export default function MediaUploadWidget({
 }: MediaUploadWidgetProps) {
   const resourceType = mediaType === 'video' ? 'video' : 'image';
   const maxMb = Math.round(MAX_UPLOAD_BYTES / (1024 * 1024));
+  // Prefer signed uploads for video (larger files / preset size caps)
+  const authProps = cloudinaryWidgetAuthProps(resourceType === 'video');
 
   if (mediaUrl) {
     return (
@@ -56,11 +58,7 @@ export default function MediaUploadWidget({
   return (
     <div className="space-y-2">
       <CldUploadWidget
-        {...(resourceType === 'video'
-          ? { signatureEndpoint: CLOUDINARY_SIGN_ENDPOINT }
-          : process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
-            ? { uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }
-            : {})}
+        {...authProps}
         options={cloudinaryUploadOptions(resourceType)}
         onSuccess={(result) => {
           const info = result.info;
