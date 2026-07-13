@@ -4,6 +4,11 @@ import dynamic from 'next/dynamic';
 import { Upload, Trash2 } from 'lucide-react';
 import { MediaType } from '@/lib/media';
 import MediaDisplay from '@/components/MediaDisplay';
+import {
+  CLOUDINARY_SIGN_ENDPOINT,
+  cloudinaryUploadOptions,
+  MAX_UPLOAD_BYTES,
+} from '@/lib/cloudinary-upload';
 
 const CldUploadWidget = dynamic(
   () => import('next-cloudinary').then((mod) => mod.CldUploadWidget),
@@ -26,6 +31,7 @@ export default function MediaUploadWidget({
   label = 'Upload media',
 }: MediaUploadWidgetProps) {
   const resourceType = mediaType === 'video' ? 'video' : 'image';
+  const maxMb = Math.round(MAX_UPLOAD_BYTES / (1024 * 1024));
 
   if (mediaUrl) {
     return (
@@ -48,32 +54,39 @@ export default function MediaUploadWidget({
   }
 
   return (
-    <CldUploadWidget
-      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-      options={{
-        resourceType,
-        sources: ['local', 'url', 'camera'],
-        multiple: false,
-      }}
-      onSuccess={(result) => {
-        const info = result.info;
-        if (result.event === 'success' && info && typeof info !== 'string') {
-          const detectedType: MediaType =
-            info.resource_type === 'video' ? 'video' : mediaType;
-          onMediaChange(info.secure_url, detectedType);
-        }
-      }}
-    >
-      {({ open }) => (
-        <button
-          type="button"
-          onClick={() => open()}
-          className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-gray-500 hover:text-blue-600"
-        >
-          <Upload className="h-8 w-8" />
-          <span>{label}</span>
-        </button>
-      )}
-    </CldUploadWidget>
+    <div className="space-y-2">
+      <CldUploadWidget
+        {...(resourceType === 'video'
+          ? { signatureEndpoint: CLOUDINARY_SIGN_ENDPOINT }
+          : process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+            ? { uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }
+            : {})}
+        options={cloudinaryUploadOptions(resourceType)}
+        onSuccess={(result) => {
+          const info = result.info;
+          if (result.event === 'success' && info && typeof info !== 'string') {
+            const detectedType: MediaType =
+              info.resource_type === 'video' ? 'video' : mediaType;
+            onMediaChange(info.secure_url, detectedType);
+          }
+        }}
+      >
+        {({ open }) => (
+          <button
+            type="button"
+            onClick={() => open()}
+            className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-gray-500 hover:text-blue-600"
+          >
+            <Upload className="h-8 w-8" />
+            <span>{label}</span>
+          </button>
+        )}
+      </CldUploadWidget>
+      <p className="text-xs text-gray-500 text-center">
+        {mediaType === 'video'
+          ? `Videos up to ${maxMb} MB supported (chunked upload).`
+          : `Files up to ${maxMb} MB supported.`}
+      </p>
+    </div>
   );
 }

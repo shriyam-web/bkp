@@ -8,6 +8,10 @@ import MediaUploadWidget from '@/components/MediaUploadWidget';
 import MediaDisplay from '@/components/MediaDisplay';
 import { MEDIA_TYPES, MediaType, MediaAttachment } from '@/lib/media';
 import dynamic from 'next/dynamic';
+import {
+  CLOUDINARY_SIGN_ENDPOINT,
+  cloudinaryUploadOptions,
+} from '@/lib/cloudinary-upload';
 
 const CldUploadWidget = dynamic(
   () => import('next-cloudinary').then((mod) => mod.CldUploadWidget),
@@ -287,8 +291,8 @@ export default function PressReleasePage() {
                   </div>
                 )}
                 <CldUploadWidget
-                  uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                  options={{ resourceType: 'auto', sources: ['local', 'url'], multiple: false }}
+                  signatureEndpoint={CLOUDINARY_SIGN_ENDPOINT}
+                  options={cloudinaryUploadOptions('auto')}
                   onSuccess={(result) => {
                     const info = result.info;
                     if (result.event === 'success' && info && typeof info !== 'string') {
@@ -307,7 +311,7 @@ export default function PressReleasePage() {
                       onClick={() => open()}
                       className="w-full py-2 border border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors"
                     >
-                      + Add photo or video
+                      + Add photo or video (up to 200 MB)
                     </button>
                   )}
                 </CldUploadWidget>
