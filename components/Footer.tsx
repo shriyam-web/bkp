@@ -12,40 +12,10 @@ import {
   Heart,
   ArrowUpRight,
 } from 'lucide-react';
-import {
-  Playfair_Display,
-  Noto_Serif_Devanagari,
-  Source_Sans_3,
-  Noto_Sans_Devanagari,
-} from 'next/font/google';
 import { useTranslations } from '@/lib/TranslationContext';
 import BrandLogo from '@/components/BrandLogo';
 import ScrollToTop from '@/components/ScrollToTop';
 import { cn } from '@/lib/utils';
-
-const display = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['600', '700'],
-  display: 'swap',
-});
-
-const displayHi = Noto_Serif_Devanagari({
-  subsets: ['devanagari'],
-  weight: ['600', '700'],
-  display: 'swap',
-});
-
-const body = Source_Sans_3({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-const bodyHi = Noto_Sans_Devanagari({
-  subsets: ['devanagari'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
 
 const social = [
   { Icon: Facebook, label: 'Facebook', href: '#' },
@@ -58,8 +28,8 @@ export default function Footer() {
   const { locale } = useTranslations();
   const isHi = locale === 'hi';
   const year = new Date().getFullYear();
-  const type = isHi ? bodyHi.className : body.className;
-  const heading = isHi ? displayHi.className : display.className;
+  const type = isHi ? 'font-noto-sans-hi' : 'font-source-sans';
+  const heading = isHi ? 'font-noto-serif-hi' : 'font-playfair';
 
   const partyLinks = [
     { href: `/${locale}/about`, label: isHi ? 'हमारे बारे में' : 'About' },

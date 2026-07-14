@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { Noto_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
@@ -35,12 +34,6 @@ import {
   sameBooth,
   boothKey,
 } from '@/lib/normalize-booth';
-
-const notoSans = Noto_Sans({
-  subsets: ['latin', 'devanagari'],
-  weight: ['300', '400', '500', '600'],
-  display: 'swap',
-});
 
 interface LegislativeAssembly {
   _id: string;
@@ -753,7 +746,7 @@ export default function BoothCommitteePage() {
   };
 
   return (
-    <div className={cn(notoSans.className, 'min-h-screen bg-[#f8f9fa] dark:bg-background')}>
+    <div className={cn('font-noto-sans', 'min-h-screen bg-[#f8f9fa] dark:bg-background')}>
       <Header />
 
       {shareNotice && (

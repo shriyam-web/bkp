@@ -1,16 +1,10 @@
-import { Playfair_Display, Source_Sans_3 } from 'next/font/google';
+/** Shared admin fonts — CSS classes (no next/font build-time Google fetch). */
+export const adminDisplay = {
+  className: 'font-admin-display',
+  variable: 'font-admin-display',
+};
 
-/** Shared admin fonts — single module avoids HMR CSS link thrashing. */
-export const adminDisplay = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['600', '700'],
-  display: 'swap',
-  variable: '--font-admin-display',
-});
-
-export const adminSans = Source_Sans_3({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-admin-sans',
-});
+export const adminSans = {
+  className: 'font-admin-sans',
+  variable: 'font-admin-sans',
+};
